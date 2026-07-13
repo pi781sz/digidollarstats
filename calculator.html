@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DigiDollar Mint Calculator — DigiDollarStats</title>
+  <meta name="description" content="DigiDollar mint calculator — pick a lock duration and see the collateral ratio, DGB required per $DD, fixed USD debt, and unlock date. Live DGB price. By DGB Signal.">
+  <link rel="canonical" href="https://digidollarstats.com/calculator">
+  <meta name="theme-color" content="#070E0A">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <meta property="og:title" content="DigiDollar Mint Calculator — DigiDollarStats">
+  <meta property="og:description" content="See exactly how much DGB to lock per $DD minted, at every duration tier.">
+  <meta property="og:image" content="https://digidollarstats.com/og-image.png">
+  <meta name="twitter:card" content="summary_large_image">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#070E0A; --card:#0F1D15; --ring:#2B5540; --ring-soft:#193322;
+    --mint:#8FD4B0; --text:#E9F2EC; --muted:#9DB3A6; --amber:#D9B36C;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{
+    background:var(--bg); color:var(--text);
+    font-family:'Space Grotesk',system-ui,sans-serif;
+    min-height:100vh; display:flex; flex-direction:column; align-items:center;
+    padding:26px 16px 50px;
+  }
+  .wrap{width:100%;max-width:540px}
+
+  header{display:flex;align-items:center;gap:11px;margin-bottom:22px}
+  .bars{display:flex;align-items:flex-end;gap:3px;height:24px}
+  .bars span{width:5px;background:linear-gradient(180deg,var(--mint),var(--ring));border-radius:2px}
+  .bars span:nth-child(1){height:7px}.bars span:nth-child(2){height:11px}
+  .bars span:nth-child(3){height:15px}.bars span:nth-child(4){height:20px}
+  .bars span:nth-child(5){height:24px}
+  .brand{font-weight:700;letter-spacing:.04em;font-size:14px}
+  .brand small{display:block;font-weight:400;color:var(--muted);font-size:11.5px}
+
+  h1{font-size:24px;font-weight:700;line-height:1.2;margin-bottom:8px}
+  .sub{color:var(--muted);font-size:14px;line-height:1.5;margin-bottom:20px}
+
+  .card{background:var(--card);border:1px solid var(--ring-soft);border-radius:16px;padding:20px;margin-bottom:16px}
+
+  .modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:18px}
+  .mode{
+    background:var(--bg);border:1px solid var(--ring-soft);color:var(--muted);
+    border-radius:10px;padding:11px 8px;font-family:inherit;font-size:13.5px;
+    font-weight:500;cursor:pointer;
+  }
+  .mode.on{border-color:var(--mint);color:var(--mint);font-weight:700}
+  .mode:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+
+  label{display:block;font-size:12.5px;font-weight:500;letter-spacing:.04em;color:var(--mint);margin-bottom:6px;text-transform:uppercase}
+  .hint{color:var(--muted);text-transform:none;letter-spacing:0;font-weight:400}
+  input[type=text]{
+    width:100%;background:var(--bg);border:1px solid var(--ring-soft);border-radius:10px;
+    color:var(--text);font-family:'JetBrains Mono',monospace;font-size:15px;
+    padding:12px;margin-bottom:16px;
+  }
+  input:focus{outline:2px solid var(--ring);outline-offset:1px}
+  input::placeholder{color:#4E6156}
+
+  .pricestatus{color:var(--muted);font-size:12px;margin:-10px 0 16px;display:flex;justify-content:space-between;align-items:center;gap:8px}
+  .pricestatus .ok{color:var(--mint)}
+  .pricestatus button{background:none;border:none;color:var(--mint);font-family:inherit;font-size:12px;cursor:pointer;padding:2px 0;text-decoration:underline}
+  .pricestatus button:focus-visible{outline:2px solid var(--mint);outline-offset:2px}
+
+  .tierlabel{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:8px}
+  .tierval{font-family:'JetBrains Mono',monospace;font-weight:700;color:var(--mint);font-size:15px}
+  input[type=range]{
+    width:100%;appearance:none;-webkit-appearance:none;height:6px;border-radius:3px;
+    background:linear-gradient(90deg,var(--ring),var(--mint));outline:none;margin:6px 0 4px;
+  }
+  input[type=range]::-webkit-slider-thumb{
+    appearance:none;-webkit-appearance:none;width:24px;height:24px;border-radius:50%;
+    background:var(--mint);border:3px solid var(--card);cursor:pointer;
+  }
+  input[type=range]:focus-visible{outline:2px solid var(--mint);outline-offset:4px}
+  .tiernote{display:flex;justify-content:space-between;color:var(--muted);font-size:11.5px;font-family:'JetBrains Mono',monospace;margin-bottom:4px}
+
+  .results{display:none}
+  .results.show{display:block}
+  .big{
+    text-align:center;padding:6px 0 14px;
+  }
+  .big .k{color:var(--muted);font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px}
+  .big .v{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:clamp(28px,7.5vw,38px);color:var(--mint)}
+  .rows{border-top:1px solid var(--ring-soft)}
+  .row{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--ring-soft);font-size:14px}
+  .row .k{color:var(--muted)}
+  .row .v{font-family:'JetBrains Mono',monospace;font-weight:600;text-align:right}
+
+  .warn{
+    border-left:3px solid var(--amber);padding:10px 0 10px 14px;
+    color:var(--muted);font-size:13px;line-height:1.6;margin-top:16px;
+  }
+  .warn b{color:var(--amber)}
+
+  footer{color:var(--muted);font-size:12px;text-align:center;line-height:1.6;margin-top:6px}
+  footer a{color:var(--mint);text-decoration:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="bars" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+    <div class="brand">DGB SIGNAL<small>DigiDollar Mint Calculator</small></div>
+  </header>
+
+  <h1>How much can you mint?</h1>
+  <p class="sub">Lock DGB as collateral, mint $DD against it. Longer locks need less collateral. All math runs in your browser — nothing is sent anywhere.</p>
+
+  <div class="card">
+    <div class="modes" role="tablist">
+      <button class="mode on" id="modeDGB" role="tab">I have DGB →<br>how much DD?</button>
+      <button class="mode" id="modeDD" role="tab">I want DD →<br>how much DGB?</button>
+    </div>
+
+    <label for="amount" id="amountLabel">DGB to lock</label>
+    <input type="text" id="amount" inputmode="decimal" placeholder="e.g. 10000" autocomplete="off">
+
+    <label for="price">DGB price in USD <span class="hint">(auto-filled, editable)</span></label>
+    <input type="text" id="price" inputmode="decimal" placeholder="e.g. 0.01" autocomplete="off">
+    <div class="pricestatus"><span id="priceStatus">Fetching live price…</span><button id="priceRefresh" type="button">Refresh</button></div>
+
+    <div class="tierlabel">
+      <label style="margin:0">Lock duration</label>
+      <span class="tierval" id="tierText">1 year · 300%</span>
+    </div>
+    <input type="range" id="tier" min="0" max="9" step="1" value="4" aria-label="Lock duration tier">
+    <div class="tiernote"><span>1h · 1000%</span><span>10y · 200%</span></div>
+  </div>
+
+  <div class="card results" id="results">
+    <div class="big">
+      <div class="k" id="resultLabel">You could mint</div>
+      <div class="v" id="resultVal">—</div>
+    </div>
+    <div id="limitNote" style="display:none;text-align:center;color:var(--amber);font-size:13px;margin:-6px 0 12px"></div>
+    <div class="rows">
+      <div class="row"><span class="k">Collateral ratio</span><span class="v" id="rRatio">—</span></div>
+      <div class="row"><span class="k">Collateral value</span><span class="v" id="rCollat">—</span></div>
+      <div class="row"><span class="k">Debt (fixed in USD)</span><span class="v" id="rDebt">—</span></div>
+      <div class="row"><span class="k">To unlock, burn</span><span class="v" id="rBurn">—</span></div>
+      <div class="row"><span class="k">Earliest unlock date</span><span class="v" id="rDate">—</span></div>
+    </div>
+    <p class="warn"><b>Know the deal before you lock:</b> your debt is fixed in USD — you must burn the exact DD amount minted to unlock your collateral, and not before the timelock ends. No margin calls and no forced liquidations, but also <b>no early exit</b>. If you spend your DD, you'll need to reacquire that amount later. This is liquidity against your own coins — not free money.</p>
+  </div>
+
+  <footer>
+    Part of <a href="/">digidollarstats.com</a> · by <a href="https://x.com/dgb_signal">@dgb_signal</a> — independent, not an official DigiByte channel.<br>
+    Estimates only; actual protocol values govern. Not financial advice. DigiDollar mainnet activation pending.
+  </footer>
+</div>
+
+<script>
+  const TIERS = [
+    {label:'1 hour',  ratio:1000, ms:3600e3},
+    {label:'30 days', ratio:500,  ms:30*864e5},
+    {label:'90 days', ratio:400,  ms:90*864e5},
+    {label:'180 days',ratio:350,  ms:180*864e5},
+    {label:'1 year',  ratio:300,  ms:365*864e5},
+    {label:'2 years', ratio:275,  ms:730*864e5},
+    {label:'3 years', ratio:250,  ms:1095*864e5},
+    {label:'5 years', ratio:225,  ms:1825*864e5},
+    {label:'7 years', ratio:212,  ms:2555*864e5},
+    {label:'10 years',ratio:200,  ms:3650*864e5},
+  ];
+
+  const amount = document.getElementById('amount');
+  const price = document.getElementById('price');
+  const tier = document.getElementById('tier');
+  const tierText = document.getElementById('tierText');
+  const results = document.getElementById('results');
+  const modeDGB = document.getElementById('modeDGB');
+  const modeDD = document.getElementById('modeDD');
+  const amountLabel = document.getElementById('amountLabel');
+
+  let mode = 'dgb';
+
+  const fmtUSD = n => '$' + n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const fmtDGB = n => n.toLocaleString('en-US',{maximumFractionDigits:2}) + ' DGB';
+  const fmtDD  = n => n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2}) + ' $DD';
+
+  function setMode(m){
+    mode = m;
+    modeDGB.classList.toggle('on', m==='dgb');
+    modeDD.classList.toggle('on', m==='dd');
+    amountLabel.textContent = m==='dgb' ? 'DGB to lock' : 'DD you want to mint';
+    amount.placeholder = m==='dgb' ? 'e.g. 10000' : 'e.g. 100';
+    calc();
+  }
+  modeDGB.addEventListener('click', ()=>setMode('dgb'));
+  modeDD.addEventListener('click', ()=>setMode('dd'));
+
+  function calc(){
+    const t = TIERS[+tier.value];
+    tierText.textContent = t.label + ' · ' + t.ratio + '%';
+
+    const a = parseFloat(amount.value);
+    const p = parseFloat(price.value);
+    if (!isFinite(a) || a<=0 || !isFinite(p) || p<=0){ results.classList.remove('show'); return; }
+
+    const ratio = t.ratio/100;
+    let dd, dgb;
+    if (mode==='dgb'){ dgb = a; dd = (a*p)/ratio; }
+    else { dd = a; dgb = (a*ratio)/p; }
+
+    const unlock = new Date(Date.now()+t.ms);
+
+    document.getElementById('resultLabel').textContent = mode==='dgb' ? 'You could mint' : 'You would need to lock';
+    document.getElementById('resultVal').textContent = mode==='dgb' ? fmtDD(dd) : fmtDGB(dgb);
+    document.getElementById('rRatio').textContent = t.ratio + '% (' + t.label + ' lock)';
+    document.getElementById('rCollat').textContent = fmtDGB(dgb) + ' ≈ ' + fmtUSD(dgb*p);
+    document.getElementById('rDebt').textContent = fmtUSD(dd);
+    document.getElementById('rBurn').textContent = fmtDD(dd);
+    document.getElementById('rDate').textContent = unlock.toLocaleDateString('en-US',{year:'numeric',month:'short',day:'numeric'});
+    const ln = document.getElementById('limitNote');
+    if (dd < 100){ ln.textContent = '⚠ Below protocol minimum — mints start at $100 per transaction.'; ln.style.display='block'; }
+    else if (dd > 100000){ ln.textContent = '⚠ Above protocol maximum — mints are capped at $100,000 per transaction.'; ln.style.display='block'; }
+    else { ln.style.display='none'; }
+    results.classList.add('show');
+  }
+
+  [amount, price].forEach(el=>el.addEventListener('input', calc));
+  tier.addEventListener('input', calc);
+
+  // ---- live price (CoinGecko), with manual fallback ----
+  const priceStatus = document.getElementById('priceStatus');
+  const priceRefresh = document.getElementById('priceRefresh');
+  let priceEdited = false;
+  price.addEventListener('input', ()=>{ priceEdited = true; priceStatus.textContent = 'Manual price'; });
+
+  async function fetchPrice(force){
+    if (priceEdited && !force) return;
+    priceStatus.textContent = 'Fetching live price…';
+    try{
+      const r = await fetch('https://api.coingecko.com/api/v3/simple/price?ids=digibyte&vs_currencies=usd');
+      if(!r.ok) throw new Error('HTTP '+r.status);
+      const j = await r.json();
+      const p = j?.digibyte?.usd;
+      if(!isFinite(p) || p<=0) throw new Error('bad data');
+      price.value = p;
+      priceEdited = false;
+      priceStatus.innerHTML = '<span class="ok">Live · CoinGecko · ' +
+        new Date().toLocaleTimeString('en-US',{hour:'2-digit',minute:'2-digit'}) + '</span>';
+      calc();
+    }catch(e){
+      priceStatus.textContent = 'Auto-fetch unavailable — enter price manually.';
+    }
+  }
+  priceRefresh.addEventListener('click', ()=>fetchPrice(true));
+  fetchPrice(false);
+</script>
+</body>
+</html>
