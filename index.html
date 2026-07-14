@@ -33,6 +33,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
 <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root{
     --bg:#070E0A; --bg2:#0C1810; --card:#0F1D15; --line:#193322;
@@ -140,6 +141,17 @@
   .pledge .verify{font-size:12.5px;color:var(--muted)}
   .pledge .verify a{color:var(--mint);text-decoration:none}
 
+  .donate .addr{position:relative;cursor:pointer}
+  .donate .addr:hover{border-color:var(--ring)}
+  .copyhint{position:absolute;top:11px;right:11px;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .addr.copied .copyhint{color:var(--mint)}
+  .donate .addr.withqr{display:flex;align-items:center;gap:12px}
+  .qrmini{background:#fff;border-radius:6px;padding:4px;line-height:0;flex-shrink:0}
+  .addrcol{flex:1;min-width:0}
+  .addrcol .val{display:block;word-break:break-all;font-size:12px;color:var(--mint)}
+  .addrcol .copyhint{position:static;display:block;margin-top:8px;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
+  .donate .addr.withqr .tag{position:static;display:block;margin-bottom:4px}
+
   .principles{
     border:1px dashed var(--line);border-radius:14px;padding:15px 17px;
     margin-top:22px;color:var(--muted);font-size:13px;line-height:1.7;
@@ -222,7 +234,10 @@
     <div class="donate">
     <h3>Keep the numbers independent</h3>
     <p>This site is free, has no ads, and never will. If it's useful to you, donations are welcome — sent wallet-to-wallet, held in self-custody. Never expected, always appreciated.</p>
-    <div class="addr"><span class="tag">Donate DGB</span>dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz</div>
+    <div class="addr withqr" id="dgbAddr" role="button" tabindex="0" title="Tap to copy">
+      <div class="qrmini"><div id="dgbqr"></div></div>
+      <div class="addrcol"><span class="tag">Donate DGB</span><span class="val">dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz</span><span class="copyhint" id="dgbHint">Tap to copy</span></div>
+    </div>
     <div class="addr dd-pending"><span class="tag">Donate $DD</span>Available at activation — this site will accept the asset it tracks.</div>
   </div>
 
@@ -315,6 +330,30 @@
   }
   step();
   setInterval(step, 2500);
+
+  // ---- donation QR + copy ----
+  (function(){
+    var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
+    try{
+      new QRCode(document.getElementById("dgbqr"), {
+        text: "digibyte:" + addr, width: 56, height: 56,
+        colorDark: "#0F1D15", colorLight: "#ffffff",
+        correctLevel: QRCode.CorrectLevel.M
+      });
+    }catch(e){}
+    var el = document.getElementById("dgbAddr");
+    var hint = document.getElementById("dgbHint");
+    function copy(){
+      navigator.clipboard.writeText(addr).then(function(){
+        el.classList.add("copied"); hint.textContent = "Copied \u2713";
+        setTimeout(function(){ el.classList.remove("copied"); hint.textContent = "Copy"; }, 1600);
+      }).catch(function(){});
+    }
+    if(el){
+      el.addEventListener("click", copy);
+      el.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); copy(); } });
+    }
+  })();
 </script>
 </body>
 </html>
