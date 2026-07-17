@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>DigiDollar Live Stats — DigiDollarStats</title>
+<meta name="description" content="Live on-chain DigiDollar (DD) statistics: circulating supply, minted, burned, DGB locked. Independent, real data only.">
+<link rel="canonical" href="https://digidollarstats.com/live">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070E0A;--card:#0F1D15;--line:#193322;--ring:#2B5540;--mint:#8FD4B0;--amber:#D9B36C;--text:#E9F2EC;--muted:#9DB3A6}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',sans-serif;min-height:100vh}
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 48px}
+a{color:var(--mint)}
+header{display:flex;align-items:center;gap:12px;padding:6px 0 22px}
+header img{width:44px;height:44px;border-radius:50%}
+header .name{font-size:20px;font-weight:700}
+header .name em{font-style:normal;color:var(--mint)}
+h1{font-size:30px;font-weight:700;margin-bottom:6px}
+.tagline{color:var(--muted);font-size:15px;margin-bottom:18px}
+.badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.06em;padding:7px 12px;border-radius:8px;margin-bottom:16px}
+.badge.wait{background:#4a3c1f;color:var(--amber)}
+.badge.live{background:var(--ring);color:var(--text)}
+.badge.err{background:#4a2323;color:#e0a3a3}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+.hero .label{color:var(--muted);font-size:14px;letter-spacing:.04em;text-transform:uppercase}
+.hero .big{font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;color:var(--mint);margin-top:6px;word-break:break-all}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.stat .label{color:var(--muted);font-size:13px}
+.stat .val{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;margin-top:4px}
+.meta{color:var(--muted);font-size:13px;margin-top:14px;font-family:'JetBrains Mono',monospace}
+.note{color:var(--muted);font-size:14px;line-height:1.55}
+.note b{color:var(--text)}
+footer{color:var(--muted);font-size:13px;text-align:center;margin-top:28px;line-height:1.6;border-top:1px solid var(--line);padding-top:16px}
+@media(min-width:900px){.wrap{padding-top:32px}h1{font-size:34px}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a href="/"><img src="/icon-192.png" alt="DigiDollarStats"></a>
+  <div class="name">DigiDollar<em>Stats</em></div>
+</header>
+
+<h1>DigiDollar — Live Stats</h1>
+<p class="tagline">Real on-chain numbers only. This page never shows simulated data.</p>
+
+<div id="badge" class="badge wait">WAITING FOR PUBLIC DATA SOURCE</div>
+
+<div class="card hero">
+  <div class="label">Circulating DD Supply</div>
+  <div class="big" id="supply">—</div>
+  <div class="meta" id="updated"></div>
+</div>
+
+<div class="grid">
+  <div class="card stat"><div class="label">DGB locked as collateral</div><div class="val" id="locked">—</div></div>
+  <div class="card stat"><div class="label">Open positions</div><div class="val" id="positions">—</div></div>
+  <div class="card stat"><div class="label">System health</div><div class="val" id="health">—</div></div>
+  <div class="card stat"><div class="label">Oracle DGB price</div><div class="val" id="oracle">—</div></div>
+</div>
+
+<div class="card note" id="statusNote">
+  <b>Status:</b> DigiDollar public data endpoints are not yet available.
+  The moment an explorer or public node publishes DD statistics, this page
+  will switch to live data automatically — no redesign needed, just one
+  config line. Until then, no numbers are shown here: real data only.
+</div>
+
+<footer>
+  Independent community project · not an official DigiByte channel<br>
+  @dgb_signal · Not financial advice · <a href="/">Home</a>
+</footer>
+</div>
+
+<script>
+/* ================================================================
+   DATA SOURCE CONFIG — edit this block at activation.
+   Add one or more sources. Each source needs:
+     name : label shown on the page
+     url  : a public JSON endpoint
+     map  : function turning that JSON into the fields below
+   Fields (all optional except supply):
+     supply    — circulating DD in dollars (number)
+     minted    — total DD ever minted (dollars)
+     burned    — total DD burned (dollars)
+     locked    — total DGB locked as collateral (DGB)
+     positions — number of open mint positions
+   Sources are tried in order; first one that works wins.
+   ================================================================ */
+const DATA_SOURCES = [
+  {
+    name: "digibyte.io",
+    url : "https://digibyte.io/api/getdigidollarstats",
+    map : r => ({
+      supply:    r.total_dd_supply / 100,        // endpoint returns cents
+      locked:    r.total_collateral_dgb,          // DGB
+      positions: r.active_positions,
+      health:    r.health_percentage,             // %
+      healthTxt: r.health_status,
+      oracleUsd: r.oracle_price_micro_usd / 1e6   // DGB price in USD
+    })
+  },
+];
+const REFRESH_SECONDS = 60;
+/* ============================================================== */
+
+const $ = id => document.getElementById(id);
+const fmtUSD = n => n==null ? "—" :
+  "$" + Number(n).toLocaleString("en-US",{maximumFractionDigits:0});
+const fmtNum = n => n==null ? "—" : Number(n).toLocaleString("en-US");
+
+function render(d, srcName){
+  $("supply").textContent    = d.supply==null ? "—" :
+    "$" + Number(d.supply).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
+  $("locked").textContent    = d.locked==null ? "—" : fmtNum(Math.round(d.locked))+" DGB";
+  $("positions").textContent = fmtNum(d.positions);
+  $("health").textContent    = d.health==null ? "—" :
+    d.health + "%" + (d.healthTxt ? " · " + d.healthTxt : "");
+  $("oracle").textContent    = d.oracleUsd==null ? "—" : "$" + d.oracleUsd.toFixed(6);
+  const b = $("badge");
+  b.className = "badge live";
+  b.textContent = "LIVE · source: " + srcName;
+  $("updated").textContent = "updated " + new Date().toLocaleTimeString();
+  $("statusNote").innerHTML =
+    "<b>Live data</b> from " + srcName +
+    ", refreshed every " + REFRESH_SECONDS + "s. " +
+    "Numbers are read directly from a public DigiByte data source.";
+}
+
+function showWaiting(failed){
+  const b = $("badge");
+  if (DATA_SOURCES.length === 0){
+    b.className = "badge wait";
+    b.textContent = "WAITING FOR PUBLIC DATA SOURCE";
+  } else {
+    b.className = "badge err";
+    b.textContent = "SOURCE UNREACHABLE — RETRYING";
+    $("statusNote").innerHTML =
+      "<b>Status:</b> configured data source" +
+      (DATA_SOURCES.length>1?"s are":" is") +
+      " currently unreachable. Retrying every " + REFRESH_SECONDS + "s. " +
+      "No cached or simulated numbers are shown.";
+  }
+}
+
+async function tick(){
+  for (const src of DATA_SOURCES){
+    try{
+      const res = await fetch(src.url, {cache:"no-store"});
+      if (!res.ok) continue;
+      const data = src.map(await res.json());
+      if (data && data.supply != null){ render(data, src.name); return; }
+    }catch(e){ /* try next source */ }
+  }
+  showWaiting(true);
+}
+
+tick();
+setInterval(tick, REFRESH_SECONDS*1000);
+</script>
+</body>
+</html>
