@@ -206,6 +206,29 @@
   }
 
 </style>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "DigiDollar ($DD) Live Statistics",
+  "description": "Independent real-time statistics for DigiDollar, the decentralized USD stablecoin native to the DigiByte blockchain: circulating supply, DGB locked as collateral, active positions, system health, and oracle price. Read live from the chain.",
+  "url": "https://digidollarstats.com/",
+  "keywords": ["DigiDollar", "DD", "DigiByte", "DGB", "stablecoin", "supply", "collateral", "oracle"],
+  "isAccessibleForFree": true,
+  "creator": {
+    "@type": "Organization",
+    "name": "DGB Signal",
+    "url": "https://x.com/dgb_signal"
+  },
+  "distribution": {
+    "@type": "DataDownload",
+    "encodingFormat": "application/json",
+    "contentUrl": "https://digidollarstats.com/supply.json"
+  },
+  "license": "https://digidollarstats.com/",
+  "creditText": "Independent community project. Not an official DigiByte channel. Not financial advice."
+}
+</script>
 </head>
 <body>
 <div class="wrap">
@@ -327,7 +350,8 @@
   <footer>
     digidollarstats.com · an independent community project by <a href="https://x.com/dgb_signal">DGB Signal</a><br>
     Not an official DigiByte channel · not affiliated with the DigiByte Core team<br>
-    Data source: digibyte.io public API · on-chain DigiDollar stats · verify independently
+    Data source: digibyte.io public API · on-chain DigiDollar stats · verify independently<br>
+    <a href="/supply.json">supply.json</a> · machine-readable live data
   </footer>
 </div>
 

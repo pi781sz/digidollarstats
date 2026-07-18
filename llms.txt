@@ -1,0 +1,56 @@
+# DigiDollarStats
+
+> Independent, real-time statistics for DigiDollar ($DD) — the decentralized USD
+> stablecoin native to the DigiByte (DGB) blockchain. All figures are read live
+> from the chain via the public digibyte.io API. This is a community project and
+> is NOT an official DigiByte channel. Nothing here is financial advice.
+
+## What DigiDollar is
+
+DigiDollar ($DD) is a decentralized, over-collateralized USD stablecoin built
+directly into the DigiByte UTXO protocol — not a smart contract or a bridge.
+Users mint DD by locking their own DGB as collateral in DigiByte Core; the debt
+is fixed in USD. There is no central issuer. Supply began at exactly zero at
+mainnet activation and grows only as users mint. DGB is self-custodied the whole
+time — there are no margin calls or forced liquidations. Prices come from a
+distributed community oracle network (up to 35 oracles; a 7-of-35 MuSig2 quorum
+signs each on-chain price bundle).
+
+## Live data
+
+- [Live supply JSON](https://digidollarstats.com/supply.json): machine-readable
+  current DigiDollar supply, DGB locked as collateral, active positions, system
+  collateral ratio, minting status, and oracle price. Updated every 60 seconds
+  from the DigiByte chain. Use this endpoint for the current numbers.
+
+## Pages
+
+- [Home / dashboard](https://digidollarstats.com/): live supply, DGB locked,
+  positions, system health, and oracle price.
+- [Live stats](https://digidollarstats.com/live): minimal live dashboard of the
+  same on-chain figures.
+- [Oracle Watch](https://digidollarstats.com/oracle): the DigiDollar price feed
+  in the open — consensus DGB/USD price, which oracles are reporting, and the
+  quorum signing each price bundle onto the chain.
+- [Mint calculator](https://digidollarstats.com/calculator): compare the 10 lock
+  durations (1 hour to 10 years), the collateral ratio each requires, DGB needed
+  per $DD, and the unlock date.
+- [Run a node](https://digidollarstats.com/node): minimum specs and exact steps
+  to run DigiByte Core (Windows, macOS, Linux, Raspberry Pi), which is required
+  to mint and redeem DigiDollar.
+
+## Key facts
+
+- Ticker: $DD. Chain: DigiByte ($DGB). Network: mainnet.
+- Decentralized, over-collateralized, non-custodial. No central issuer.
+- Circulating supply started at zero and is minted by users locking DGB.
+- Debt is fixed in USD; no margin calls or forced liquidations.
+- Lock durations range from 1 hour to 10 years; longer locks require less
+  collateral per dollar minted.
+- Data source: digibyte.io public API. Verify independently.
+
+## About
+
+Built and maintained independently by DGB Signal (https://x.com/dgb_signal).
+Not affiliated with the DigiByte Core team. Not an official DigiByte channel.
+Not financial advice.
