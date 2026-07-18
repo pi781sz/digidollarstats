@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Oracle Watch — DigiDollarStats</title>
+<meta name="description" content="Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.">
+<link rel="canonical" href="https://digidollarstats.com/oracle">
+<meta name="theme-color" content="#070E0A">
+<link rel="icon" href="/favicon.ico">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#070E0A;--card:#0F1D15;--line:#193322;--ring:#2B5540;--mint:#8FD4B0;--amber:#D9B36C;--text:#E9F2EC;--muted:#9DB3A6;--dim:#5f7a6b}
+*{margin:0;padding:0;box-sizing:border-box}
+html{background:var(--bg)}
+body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh}
+.wrap{max-width:820px;margin:0 auto;padding:20px 16px 48px}
+a{color:var(--mint);text-decoration:none}
+header{display:flex;align-items:center;gap:12px;padding:6px 0 22px}
+header img{width:40px;height:40px;border-radius:50%}
+header .name{font-size:19px;font-weight:700}
+header .name em{font-style:normal;color:var(--mint)}
+.crumb{margin-left:auto;font-size:13px;color:var(--muted)}
+h1{font-size:29px;font-weight:700;margin-bottom:6px}
+.tagline{color:var(--muted);font-size:14.5px;line-height:1.6;margin-bottom:18px;max-width:60ch}
+.badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.05em;padding:6px 12px;border-radius:8px;margin-bottom:16px}
+.badge.live{background:var(--ring);color:var(--text)}
+.badge.err{background:#5c2a2a;color:#f0d0d0}
+
+.hero{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:14px;text-align:center}
+.hero .label{color:var(--muted);font-size:13px;letter-spacing:.05em;text-transform:uppercase}
+.hero .big{font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;color:var(--mint);margin-top:6px}
+.hero .meta{color:var(--muted);font-size:12.5px;margin-top:8px;font-family:'JetBrains Mono',monospace}
+
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
+.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px}
+.stat .k{color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
+.stat .v{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;margin-top:5px}
+
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
+.panel h2{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:4px}
+.panel .note{color:var(--dim);font-size:12px;line-height:1.5;margin-bottom:12px}
+
+.orow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
+.orow:last-child{border-bottom:none}
+.oid{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);width:26px;flex-shrink:0}
+.oname{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.opill{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:3px 8px;border-radius:6px;flex-shrink:0}
+.p-onchain{background:var(--ring);color:var(--text)}
+.p-reporting{background:#2a3f31;color:var(--mint)}
+.p-nodata{background:#3a2323;color:#d69b9b}
+.oprice{font-family:'JetBrains Mono',monospace;font-size:12.5px;width:82px;text-align:right;flex-shrink:0;color:var(--muted)}
+.sig{display:inline-block;background:var(--ring);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:4px 9px;border-radius:7px;margin:3px 4px 3px 0}
+.bundlehdr{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--line)}
+.bundlehdr:first-of-type{border-top:none;padding-top:0}
+.bundlehdr b{color:var(--mint);font-weight:700}
+
+footer{color:var(--muted);font-size:12px;text-align:center;line-height:1.6;margin-top:26px;border-top:1px solid var(--line);padding-top:16px}
+@media(max-width:600px){.hero .big{font-size:34px}.grid{grid-template-columns:1fr 1fr}}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <a href="/"><img src="/icon-192.png" alt="DigiDollarStats"></a>
+  <div class="name">DigiDollar<em>Stats</em></div>
+  <div class="crumb"><a href="/">home</a> · oracle watch</div>
+</header>
+
+<h1>Oracle Watch</h1>
+<p class="tagline">The DigiDollar price feed in the open. A distributed network of up to 35 community oracles reports DGB/USD; a 7-of-35 MuSig2 quorum signs each price bundle onto the chain. All data live from mainnet.</p>
+
+<div id="badge" class="badge live">LIVE · MAINNET</div>
+
+<div class="hero">
+  <div class="label">Consensus DGB / USD price</div>
+  <div class="big" id="price">—</div>
+  <div class="meta" id="priceMeta"></div>
+</div>
+
+<div class="grid">
+  <div class="stat"><div class="k">Reporting oracles</div><div class="v" id="reporting">—</div></div>
+  <div class="stat"><div class="k">On-chain this bundle</div><div class="v" id="onchain">—</div></div>
+  <div class="stat"><div class="k">Quorum required</div><div class="v" id="required">—</div></div>
+  <div class="stat"><div class="k">Roster slots</div><div class="v" id="slots">—</div></div>
+</div>
+
+<div class="panel">
+  <h2>Oracle roster</h2>
+  <div class="note">Every configured oracle slot and its current state. <b>On-chain</b> = its price is in the latest signed bundle · <b>Reporting</b> = live but not in the last bundle · <b>No data</b> = silent.</div>
+  <div id="roster"></div>
+</div>
+
+<div class="panel">
+  <h2>Recent signed bundles</h2>
+  <div class="note">Each price bundle committed to the chain, with the quorum of oracles whose MuSig2 signatures signed it.</div>
+  <div id="bundles"></div>
+</div>
+
+<footer>
+  digidollarstats.com · independent community project · not an official DigiByte channel<br>
+  Data source: digibyte.io public API · verify independently · not financial advice
+</footer>
+</div>
+
+<script>
+const PRICES_API  = 'https://digibyte.io/api/getalloracleprices';
+const SIGNERS_API = 'https://digibyte.io/api/getoraclesigners';
+const REFRESH_SECONDS = 60;
+const $ = id => document.getElementById(id);
+const badge = $('badge');
+
+const usd6 = n => '$' + Number(n).toFixed(6);
+function ago(ts){
+  if (!ts) return '';
+  const s = Math.max(0, Math.floor(Date.now()/1000 - ts));
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  return Math.floor(s/3600) + 'h ago';
+}
+function pill(status, source){
+  if (source === 'on-chain') return '<span class="opill p-onchain">on-chain</span>';
+  if (status === 'no_data')  return '<span class="opill p-nodata">no data</span>';
+  return '<span class="opill p-reporting">reporting</span>';
+}
+
+async function refresh(){
+  try{
+    const [pr, sg] = await Promise.all([
+      fetch(PRICES_API, {cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();}),
+      fetch(SIGNERS_API,{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();}).catch(()=>null)
+    ]);
+
+    // consensus price
+    $('price').textContent = usd6(pr.consensus_price_usd || (pr.consensus_price_micro_usd||0)/1e6);
+    $('priceMeta').textContent = 'bundle #' + (pr.last_bundle_height||'—') +
+      ' · ' + ago(pr.last_bundle_time) + ' · updated ' + new Date().toLocaleTimeString();
+
+    // headline stats
+    const oracles = pr.oracles || [];
+    const reporting = oracles.filter(o=>o.status==='reporting').length;
+    const onchain   = oracles.filter(o=>o.price_source==='on-chain').length;
+    $('reporting').textContent = reporting + ' / ' + (pr.total_oracles||oracles.length);
+    $('onchain').textContent   = onchain;
+    $('required').textContent  = (pr.required||'—') + ' of ' + (pr.total_oracles||'—');
+    $('slots').textContent     = (pr.total_oracles||oracles.length);
+
+    // roster
+    $('roster').innerHTML = oracles.map(o =>
+      '<div class="orow">' +
+        '<span class="oid">'+o.oracle_id+'</span>' +
+        '<span class="oname">'+(o.name||('Oracle '+o.oracle_id))+'</span>' +
+        pill(o.status, o.price_source) +
+        '<span class="oprice">'+(o.price_usd?usd6(o.price_usd):'—')+'</span>' +
+      '</div>').join('');
+
+    // bundles
+    if (sg && sg.bundles && sg.bundles.length){
+      $('bundles').innerHTML = sg.bundles.map(b => {
+        const signers = (b.signers||[]).map(s=>'<span class="sig">'+(s.name||('#'+s.oracle_id))+'</span>').join('');
+        return '<div class="bundlehdr">block <b>#'+b.height+'</b> · '+usd6(b.price_usd)+
+               ' · '+(b.signer_count||0)+' signers · '+ago(b.timestamp)+'</div>'+
+               '<div>'+signers+'</div>';
+      }).join('');
+    } else {
+      $('bundles').innerHTML = '<div class="note">Signer data unavailable right now.</div>';
+    }
+
+    badge.textContent = 'LIVE · MAINNET';
+    badge.className = 'badge live';
+  }catch(e){
+    badge.textContent = 'SOURCE UNREACHABLE — RETRYING';
+    badge.className = 'badge err';
+  }
+}
+refresh();
+setInterval(refresh, REFRESH_SECONDS*1000);
+</script>
+</body>
+</html>
