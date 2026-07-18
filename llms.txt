@@ -18,10 +18,10 @@ signs each on-chain price bundle).
 
 ## Live data
 
-- [Live supply JSON](https://digidollarstats.com/supply.json): machine-readable
-  current DigiDollar supply, DGB locked as collateral, active positions, system
-  collateral ratio, minting status, and oracle price. Updated every 60 seconds
-  from the DigiByte chain. Use this endpoint for the current numbers.
+The current DigiDollar figures — circulating supply, DGB locked as collateral,
+active positions, system collateral ratio, minting status, and oracle price —
+are shown live on the pages below, updated every 60 seconds directly from the
+DigiByte chain via the public digibyte.io API.
 
 ## Pages
 
