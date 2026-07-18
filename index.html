@@ -62,6 +62,13 @@
   }
   .demo.live{background:var(--mint);color:#0B160F}
   .demo.err{background:#5c2a2a;color:#f0d0d0}
+  .statuspill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--muted);background:transparent;border:1px solid var(--line);border-radius:99px;padding:5px 11px;line-height:1.4}
+  .statuspill .sdot{width:7px;height:7px;border-radius:50%;background:var(--mint);flex-shrink:0}
+  .statuspill.live .sdot{background:var(--mint)}
+  .statuspill.live{color:var(--mint)}
+  .statuspill.err{color:#e69b9b;border-color:#5c2a2a}
+  .statuspill.err .sdot{background:#e07b7b}
+  @media (prefers-reduced-motion: no-preference){.statuspill.live .sdot{animation:pulse 2s infinite}}
 
   h1{font-size:clamp(26px,7vw,34px);font-weight:700;line-height:1.15;margin-bottom:8px}
   h1 em{font-style:normal;color:var(--mint)}
@@ -97,6 +104,14 @@
   .srow .k{color:var(--muted)}
   .srow .v{font-family:'JetBrains Mono',monospace;font-weight:600;color:var(--mint)}
   .srow .v.warn{color:var(--amber)}
+  .explain{margin-top:12px;font-size:13px}
+  .explain summary{cursor:pointer;color:var(--mint);font-size:12.5px;letter-spacing:.03em;list-style:none;padding:6px 0}
+  .explain summary::-webkit-details-marker{display:none}
+  .explain summary::before{content:"＋ ";color:var(--muted)}
+  .explain[open] summary::before{content:"－ "}
+  .explain ul{list-style:none;margin-top:8px;padding:0}
+  .explain li{color:var(--muted);line-height:1.55;padding:6px 0;border-top:1px solid var(--line)}
+  .explain li b{color:var(--text);font-weight:600}
 
   .sectionhead{display:flex;align-items:center;gap:10px;margin:28px 0 14px}
   .sectionhead h2{font-size:13px;letter-spacing:.14em;text-transform:uppercase;font-weight:700;color:var(--mint)}
@@ -201,7 +216,7 @@
       <div class="brand">DigiDollar<em>Stats</em></div>
       </a>
     </div>
-    <div class="demo live" id="liveBadge">LIVE · MAINNET</div>
+    <div class="statuspill live" id="liveBadge"><span class="sdot"></span><span id="liveTxt">Live</span></div>
   </nav>
 
   <!-- ============ SUPPLY DASHBOARD (main page) ============ -->
@@ -237,6 +252,16 @@
     <div class="srow"><span class="k">Emergency mode</span><span class="v" id="stEmerg">—</span></div>
     <div class="srow"><span class="k">System collateral ratio</span><span class="v" id="stRatio">—</span></div>
     <div class="srow"><span class="k">ERR tier</span><span class="v" id="stErr">—</span></div>
+    <details class="explain">
+      <summary>How to read this panel</summary>
+      <ul>
+        <li><b>Minting</b> — whether new $DD can be minted right now. "Open" is normal; it can freeze automatically if DGB is too volatile.</li>
+        <li><b>Oracle feed</b> — whether the price oracle is publishing. Minting needs a live price to stay safe.</li>
+        <li><b>Emergency mode</b> — the system-wide safety state. "No" is healthy; if ACTIVE, minting halts and redemption rules tighten.</li>
+        <li><b>System collateral ratio</b> — total DGB locked vs total $DD owed. Higher = safer. Anything well above 100% means every $DD is heavily over-backed.</li>
+        <li><b>ERR tier</b> — the current burn multiplier. "Normal (1.0x)" means you burn exactly the $DD you minted to unlock your DGB.</li>
+      </ul>
+    </details>
   </div>
   </div>
 
@@ -358,8 +383,8 @@
       const now = new Date();
       $('updated').textContent = 'live on mainnet · updated ' +
         now.toLocaleTimeString() + ' · refreshes every ' + REFRESH_SECONDS + 's';
-      badge.textContent = 'LIVE · MAINNET';
-      badge.className = 'demo live';
+      document.getElementById('liveTxt').textContent = 'Live';
+      badge.className = 'statuspill live';
 
       history.push(supply);
       labels.push(now.getHours().toString().padStart(2,'0') + ':' +
@@ -367,8 +392,8 @@
       if (history.length > 120){ history.shift(); labels.shift(); }
       chart.update();
     }catch(e){
-      badge.textContent = 'SOURCE UNREACHABLE';
-      badge.className = 'demo err';
+      document.getElementById('liveTxt').textContent = 'Source down';
+      badge.className = 'statuspill err';
       $('updated').textContent = 'data source unreachable — retrying every ' + REFRESH_SECONDS + 's';
     }
   }

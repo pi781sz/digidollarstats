@@ -27,6 +27,11 @@ h1{font-size:29px;font-weight:700;margin-bottom:6px}
 .badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.05em;padding:6px 12px;border-radius:8px;margin-bottom:16px}
 .badge.live{background:var(--ring);color:var(--text)}
 .badge.err{background:#5c2a2a;color:#f0d0d0}
+.statuspill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--mint);background:transparent;border:1px solid var(--line);border-radius:99px;padding:5px 11px;line-height:1.4;margin-bottom:16px}
+.statuspill .sdot{width:7px;height:7px;border-radius:50%;background:var(--mint);flex-shrink:0}
+.statuspill.err{color:#e69b9b;border-color:#5c2a2a}
+.statuspill.err .sdot{background:#e07b7b}
+@media (prefers-reduced-motion: no-preference){.statuspill.live .sdot{animation:opulse 2s infinite}@keyframes opulse{0%,100%{opacity:1}50%{opacity:.35}}}
 
 .hero{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:14px;text-align:center}
 .hero .label{color:var(--muted);font-size:13px;letter-spacing:.05em;text-transform:uppercase}
@@ -71,7 +76,7 @@ footer{color:var(--muted);font-size:12px;text-align:center;line-height:1.6;margi
 <h1>Oracle Watch</h1>
 <p class="tagline">The DigiDollar price feed in the open. A distributed network of up to 35 community oracles reports DGB/USD; a 7-of-35 MuSig2 quorum signs each price bundle onto the chain. All data live from mainnet.</p>
 
-<div id="badge" class="badge live">LIVE · MAINNET</div>
+<div id="badge" class="statuspill live"><span class="sdot"></span><span id="liveTxt">Live</span></div>
 
 <div class="hero">
   <div class="label">Consensus DGB / USD price</div>
@@ -167,11 +172,11 @@ async function refresh(){
       $('bundles').innerHTML = '<div class="note">Signer data unavailable right now.</div>';
     }
 
-    badge.textContent = 'LIVE · MAINNET';
-    badge.className = 'badge live';
+    document.getElementById('liveTxt').textContent = 'Live';
+    badge.className = 'statuspill live';
   }catch(e){
-    badge.textContent = 'SOURCE UNREACHABLE — RETRYING';
-    badge.className = 'badge err';
+    document.getElementById('liveTxt').textContent = 'Source down';
+    badge.className = 'statuspill err';
   }
 }
 refresh();
