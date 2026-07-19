@@ -32,7 +32,6 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root{
@@ -97,7 +96,6 @@
 
   .panel{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:18px;margin-bottom:14px}
   .panel h2{font-size:12.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:12px}
-  canvas{width:100%!important}
 
   .srow{display:flex;justify-content:space-between;align-items:center;padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}
   .srow:last-child{border-bottom:none}
@@ -187,8 +185,6 @@
     .stat{padding:16px}
     .stat .v{font-size:20px}
 
-    /* split row: chart left, status panel right */
-    .split{display:grid;grid-template-columns:1.2fr 1fr;gap:18px;align-items:start}
 
     /* tools/data cards in two columns */
     .toolgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
@@ -255,12 +251,6 @@
     <div class="stat"><div class="k">Oracle DGB price</div><div class="v" id="oracle">—</div></div>
   </div>
 
-  <div class="split">
-  <div class="panel">
-    <h2>Circulating supply · live</h2>
-    <canvas id="chart" height="180"></canvas>
-  </div>
-
   <div class="panel">
     <h2>System status</h2>
     <div class="srow"><span class="k">Minting</span><span class="v" id="stMint">—</span></div>
@@ -278,7 +268,6 @@
         <li><b>ERR tier</b> — the current burn multiplier. "Normal (1.0x)" means you burn exactly the $DD you minted to unlock your DGB.</li>
       </ul>
     </details>
-  </div>
   </div>
 
   <!-- ============ MORE DATA & TOOLS ============ -->
@@ -345,19 +334,6 @@
   const fmt = n => n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
   const fmtInt = n => Math.round(n).toLocaleString('en-US');
 
-  const history = [], labels = [];
-  const chart = new Chart(document.getElementById('chart'), {
-    type:'line',
-    data:{labels:labels,datasets:[{data:history,borderColor:'#8FD4B0',borderWidth:2,
-      backgroundColor:'rgba(43,85,64,.25)',fill:true,pointRadius:0,tension:.35}]},
-    options:{animation:false,responsive:true,
-      plugins:{legend:{display:false},tooltip:{enabled:false}},
-      scales:{
-        x:{ticks:{color:'#9DB3A6',maxTicksLimit:5,font:{family:'JetBrains Mono',size:10}},grid:{display:false}},
-        y:{ticks:{color:'#9DB3A6',font:{family:'JetBrains Mono',size:10},callback:v=>v>=1000?(v/1000)+'k':v},grid:{color:'rgba(25,51,34,.6)'},beginAtZero:false}
-      }}
-  });
-
   const API = 'https://digibyte.io/api/getdigidollarstats';
   const REFRESH_SECONDS = 60;
   const badge = document.getElementById('liveBadge');
@@ -396,11 +372,6 @@
       document.getElementById('liveTxt').textContent = 'Live';
       badge.className = 'statuspill live';
 
-      history.push(supply);
-      labels.push(now.getHours().toString().padStart(2,'0') + ':' +
-                  now.getMinutes().toString().padStart(2,'0'));
-      if (history.length > 120){ history.shift(); labels.shift(); }
-      chart.update();
     }catch(e){
       document.getElementById('liveTxt').textContent = 'Source down';
       badge.className = 'statuspill err';
