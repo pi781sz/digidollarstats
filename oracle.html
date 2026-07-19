@@ -67,6 +67,14 @@ h1{font-size:29px;font-weight:700;margin-bottom:6px}
 footer{color:var(--muted);font-size:12px;text-align:center;line-height:1.6;margin-top:26px;border-top:1px solid var(--line);padding-top:16px}
 @media(max-width:600px){.hero .big{font-size:34px}.grid{grid-template-columns:1fr 1fr}}
 @media(min-width:900px){body{padding:32px 24px 60px}}
+  /* footer nav + contact */
+  .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:13px;line-height:1.5}
+  .footnav a{color:var(--mint);text-decoration:none}
+  .footnav a:hover{text-decoration:underline}
+  .footcontact{margin-bottom:14px;font-size:13px;color:var(--muted)}
+  .footcontact a{color:var(--mint);text-decoration:none}
+  .footcontact a:hover{text-decoration:underline}
+  footer{border-top:1px solid var(--line);padding-top:18px}
 </style>
 </head>
 <body>
@@ -109,6 +117,15 @@ footer{color:var(--muted);font-size:12px;text-align:center;line-height:1.6;margi
 </div>
 
 <footer>
+    <nav class="footnav" aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="/live">Live Stats</a>
+      <a href="/oracle">Oracle Watch</a>
+      <a href="/calculator">Mint Calculator</a>
+      <a href="/planner">Position Planner</a>
+      <a href="/node">Run a Node</a>
+    </nav>
+    <div class="footcontact">Contact <a href="mailto:hello@digidollarstats.com">hello@digidollarstats.com</a></div>
     <a href="/">digidollarstats.com</a> · an independent community project by <a href="https://x.com/dgb_signal">@dgb_signal</a><br>
     Not an official DigiByte channel · not affiliated with the DigiByte Core team<br>
     Data source: digibyte.io public API · verify independently · not financial advice
