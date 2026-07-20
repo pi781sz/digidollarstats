@@ -53,14 +53,33 @@ h1{font-size:32px;font-weight:700;line-height:1.15;margin-bottom:14px}
 .lead b{color:var(--text)}
 
 /* diagram */
-.diagram{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px 18px 18px;margin:22px 0 8px;text-align:center}
-.dgm-stage{position:relative;max-width:440px;margin:0 auto}
-.dgm-svg{display:block;width:100%;height:auto}
-.dgm-badge{position:absolute;width:11%;aspect-ratio:1;top:20%;transform:translate(-50%,-50%);border-radius:50%}
-.dgm-badge.dgb{left:19.5%}
-.dgm-badge.dd{left:80.5%}
-.dgm-cap{color:var(--muted);font-size:13.5px;line-height:1.55;margin-top:16px;max-width:52ch;margin-left:auto;margin-right:auto}
+.diagram{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:54px 14px 20px;margin:22px 0 8px}
+.dgm-row{display:flex;align-items:center;justify-content:center;gap:8px;max-width:440px;margin:0 auto}
+.coin{position:relative;flex:0 0 auto;width:84px;height:84px;border-radius:50%;border:2.5px solid var(--amber);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
+.coin.dd{border-color:var(--mint)}
+.coin-logo{position:absolute;left:50%;bottom:100%;margin-bottom:11px;transform:translateX(-50%);width:38px;height:38px;border-radius:50%;display:block}
+.coin-t{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:19px;line-height:1;color:var(--amber)}
+.coin.dd .coin-t{color:var(--mint)}
+.coin-s{font-size:11px;color:var(--muted);margin-top:5px}
+.dgm-mid{flex:1 1 auto;min-width:60px;max-width:180px}
+.dgm-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--mint);white-space:nowrap;text-align:center}
+.dgm-lbl.muted{color:var(--muted)}
+.dgm-line{position:relative;height:2px;background:var(--mint);margin:7px 0}
+.dgm-line.muted{background:var(--dim)}
+.dgm-line .head{position:absolute;top:50%;transform:translateY(-50%);width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent}
+.dgm-line.right .head{right:-1px;border-left:7px solid var(--mint)}
+.dgm-line.left .head{left:-1px;border-right:7px solid var(--dim)}
+.dgm-cap{color:var(--muted);font-size:13.5px;line-height:1.55;max-width:52ch;margin:18px auto 0;text-align:center}
 .dgm-cap b{color:var(--text)}
+@media(min-width:900px){
+  .diagram{padding:60px 24px 22px}
+  .dgm-row{gap:14px}
+  .coin{width:104px;height:104px}
+  .coin-logo{width:46px;height:46px;margin-bottom:13px}
+  .coin-t{font-size:22px}
+  .coin-s{font-size:12px}
+  .dgm-lbl{font-size:11px}
+}
 
 section{margin-top:34px}
 h2{font-size:21px;font-weight:700;margin-bottom:6px}
@@ -179,27 +198,23 @@ footer a{color:var(--mint)}
 <p class="lead">DigiDollar (<b>$DD</b>) is a decentralized US-dollar stablecoin built directly into the DigiByte blockchain. You create it by locking your own DGB as collateral — there is no bank, no company, and you keep control of your private keys the entire time.</p>
 
 <div class="diagram">
-  <div class="dgm-stage">
-    <svg class="dgm-svg" viewBox="0 0 440 150" role="img" aria-label="Lock DGB as collateral to mint DigiDollar; burn DigiDollar to unlock your DGB.">
-      <!-- DGB coin -->
-      <circle cx="86" cy="76" r="46" fill="none" stroke="#D9B36C" stroke-width="2.5"/>
-      <text x="86" y="80" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="21" font-weight="700" fill="#D9B36C">DGB</text>
-      <text x="86" y="99" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="11.5" fill="#9DB3A6">collateral</text>
-      <!-- upper arrow: lock & mint -->
-      <text x="220" y="54" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11.5" font-weight="700" fill="#8FD4B0" letter-spacing="0.04em">LOCK &amp; MINT</text>
-      <line x1="150" y1="66" x2="286" y2="66" stroke="#8FD4B0" stroke-width="2.2"/>
-      <path d="M286 66 l-9 -4.5 v9 z" fill="#8FD4B0"/>
-      <!-- lower arrow: burn & unlock -->
-      <line x1="290" y1="88" x2="154" y2="88" stroke="#5f7a6b" stroke-width="2.2"/>
-      <path d="M154 88 l9 -4.5 v9 z" fill="#5f7a6b"/>
-      <text x="220" y="106" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="11.5" font-weight="700" fill="#9DB3A6" letter-spacing="0.04em">BURN &amp; UNLOCK</text>
-      <!-- DD coin -->
-      <circle cx="354" cy="76" r="46" fill="none" stroke="#8FD4B0" stroke-width="2.5"/>
-      <text x="354" y="74" text-anchor="middle" font-family="'JetBrains Mono',monospace" font-size="21" font-weight="700" fill="#8FD4B0">$DD</text>
-      <text x="354" y="93" text-anchor="middle" font-family="'Space Grotesk',sans-serif" font-size="11.5" fill="#9DB3A6">= $1.00</text>
-    </svg>
-    <img class="dgm-badge dgb" src="/dgb-coin.png" alt="DigiByte logo" width="48" height="48">
-    <img class="dgm-badge dd" src="/icon-192.png" alt="DigiDollar logo" width="48" height="48">
+  <div class="dgm-row">
+    <div class="coin dgb">
+      <img class="coin-logo" src="/dgb-coin.png" alt="DigiByte logo">
+      <span class="coin-t">DGB</span>
+      <span class="coin-s">collateral</span>
+    </div>
+    <div class="dgm-mid">
+      <div class="dgm-lbl">LOCK &amp; MINT</div>
+      <div class="dgm-line right"><span class="head"></span></div>
+      <div class="dgm-line left muted"><span class="head"></span></div>
+      <div class="dgm-lbl muted">BURN &amp; UNLOCK</div>
+    </div>
+    <div class="coin dd">
+      <img class="coin-logo" src="/icon-192.png" alt="DigiDollar logo">
+      <span class="coin-t">$DD</span>
+      <span class="coin-s">= $1.00</span>
+    </div>
   </div>
   <div class="dgm-cap">Lock DGB as collateral and the protocol mints <b>$DD</b> worth one dollar each. Later, burn the $DD to unlock your DGB. It's fully reversible — and your coins never leave your wallet.</div>
 </div>
