@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
 <title>DigiDollar Live Stats — DigiDollarStats</title>
-<meta name="description" content="Live on-chain DigiDollar (DD) statistics: circulating supply, minted, burned, DGB locked. Independent, real data only.">
+<meta name="description" content="Live on-chain DigiDollar ($DD) stats: circulating supply, DGB locked as collateral, open positions, and system health. Independent, real data only.">
 <link rel="canonical" href="https://digidollarstats.com/live">
 <link rel="icon" href="/favicon.ico">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -202,13 +202,13 @@ function shareStat(kind, btn){
   var has = v && v !== '\u2014';
   var text;
   if (kind === 'supply'){
-    text = has ? 'DigiDollar ($DD) circulating supply right now: ' + v + (v.indexOf('$') === 0 ? '' : ' $DD')
-               : 'Live DigiDollar ($DD) circulating supply';
+    var num = (v.charAt(0) === '$') ? v.slice(1) : v;
+    text = has ? 'There are ' + num + ' $DD in circulation right now, each one backed by locked DGB. Real, verifiable, updated live:'
+               : 'Live DigiDollar ($DD) circulating supply, each unit backed by locked DGB. Real, verifiable, updated live:';
   } else {
-    text = has ? v + ' locked as DigiDollar collateral right now'
-               : 'Live DGB collateral locked for DigiDollar ($DD)';
+    text = has ? "Right now, " + v + " is locked as DigiDollar collateral — and every coin stays in its owner's wallet. Live from the chain:"
+               : "DGB locked as DigiDollar collateral — every coin stays in its owner's wallet. Live from the chain:";
   }
-  text += ' \u2014 real on-chain data';
   var link = document.querySelector('link[rel="canonical"]');
   var url = (link && link.href) || location.href;
   // Mobile: native share sheet (unchanged)
