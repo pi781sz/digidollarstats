@@ -9,13 +9,11 @@
   <link rel="canonical" href="https://digidollarstats.com/">
   <meta name="robots" content="index, follow">
   <meta name="theme-color" content="#070E0A">
-  <!-- favicons -->
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
   <link rel="manifest" href="/site.webmanifest">
-  <!-- Open Graph -->
   <meta property="og:type" content="website">
   <meta property="og:url" content="https://digidollarstats.com/">
   <meta property="og:title" content="DigiDollarStats — Every $DD, accounted for.">
@@ -24,7 +22,6 @@
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta property="og:site_name" content="DigiDollarStats">
-  <!-- Twitter -->
   <meta name="twitter:card" content="summary_large_image">
   <meta name="twitter:title" content="DigiDollarStats — Every $DD, accounted for.">
   <meta name="twitter:description" content="Independent real-time stats for DigiDollar on the DigiByte chain. Live supply, collateral, mint calculator.">
@@ -76,6 +73,7 @@
   .hero{
     background:var(--card);border:1px solid var(--line);
     border-radius:18px;padding:24px 20px;text-align:center;margin-bottom:14px;
+    position:relative;
   }
   .live{display:inline-flex;align-items:center;gap:7px;color:var(--mint);font-size:12px;letter-spacing:.06em;font-weight:500;text-transform:uppercase;margin-bottom:9px}
   .dot{width:8px;height:8px;border-radius:50%;background:var(--mint)}
@@ -87,8 +85,18 @@
   .supply small{font-size:.42em;color:var(--mint);margin-left:6px}
   .updated{color:var(--muted);font-size:12.5px;margin-top:9px}
 
+  /* ===== SHARE BUTTON ===== */
+  .share-btn{
+    position:absolute;top:14px;right:14px;
+    width:34px;height:34px;border-radius:10px;border:1px solid var(--line);
+    background:transparent;color:var(--muted);cursor:pointer;display:flex;
+    align-items:center;justify-content:center;transition:all .2s ease;
+  }
+  .share-btn:hover{border-color:var(--mint);color:var(--mint);background:rgba(143,212,176,.06)}
+  .share-btn svg{width:16px;height:16px}
+
   .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px;position:relative}
   .stat .k{color:var(--muted);font-size:11.5px;letter-spacing:.05em;text-transform:uppercase;margin-bottom:6px;display:flex;align-items:center;gap:6px}
   .coin{width:16px;height:16px;border-radius:50%;flex-shrink:0}
   .stat .v{font-family:'JetBrains Mono',monospace;font-weight:600;font-size:18px}
@@ -171,35 +179,24 @@
     .wrap{max-width:820px}
     nav{margin-bottom:30px}
     .demo{font-size:11px;padding:5px 11px}
-
-    /* two-column hero: headline left, supply box right */
     .hero-wrap{display:grid;grid-template-columns:1fr 1fr;gap:22px;align-items:stretch;margin-bottom:16px}
     .hero-intro{display:flex;flex-direction:column;justify-content:center}
     .hero-intro h1{font-size:40px;margin-bottom:14px}
     .hero-intro .sub{font-size:15px;max-width:48ch;margin-bottom:0}
     .hero{margin-bottom:0;display:flex;flex-direction:column;justify-content:center;padding:28px 26px}
     .supply{font-size:48px}
-
-    /* stats: four columns */
     .grid{grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
     .stat{padding:16px}
     .stat .v{font-size:20px}
-
-
-    /* tools/data cards in two columns */
     .toolgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .tool{margin-bottom:0}
-
-    /* donation: two boxes side by side */
     .donaterow{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
     .donaterow .addr{margin-bottom:0;height:100%}
     .donate .addr.dd-pending{display:flex;flex-direction:column;justify-content:center}
-
     .sectionhead{margin:32px 0 16px}
     footer{margin-top:34px}
   }
 
-  /* footer nav + contact */
   .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:13px;line-height:1.5}
   .footnav a{color:var(--mint);text-decoration:none}
   .footnav a:hover{text-decoration:underline}
@@ -207,17 +204,7 @@
   .footcontact a{color:var(--mint);text-decoration:none}
   .footcontact a:hover{text-decoration:underline}
   footer{border-top:1px solid var(--line);padding-top:18px}
-  /* share buttons */
-  .sharebtn{position:absolute;top:10px;right:10px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--line);border-radius:8px;color:var(--muted);cursor:pointer;padding:0}
-  .sharebtn:hover{color:var(--mint);border-color:var(--ring)}
-  .sharebtn svg{width:15px;height:15px}
-  .sharebtn.ok{color:var(--mint);border-color:var(--ring)}
-  .hero{position:relative}
-  .stat{position:relative}
-  /* share menu + toast */
-  .sharemenu{position:absolute;top:44px;right:10px;z-index:30;background:var(--card);border:1px solid var(--ring);border-radius:10px;padding:6px;display:flex;flex-direction:column;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
-  .sharemenu button{background:transparent;border:0;color:var(--text);font-family:inherit;font-size:13.5px;text-align:left;padding:9px 10px;border-radius:7px;cursor:pointer}
-  .sharemenu button:hover{background:var(--ring)}
+
   .sharetoast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);background:var(--card);border:1px solid var(--ring);color:var(--text);font-size:13.5px;padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:99;max-width:90vw;text-align:center}
   .sharetoast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
@@ -252,14 +239,15 @@
     <div class="statuspill live" id="liveBadge"><span class="sdot"></span><span id="liveTxt">Live</span></div>
   </nav>
 
-  <!-- ============ SUPPLY DASHBOARD (main page) ============ -->
   <div class="hero-wrap">
     <div class="hero-intro">
       <h1>Every $DD, <em>accounted for.</em></h1>
       <p class="sub">Independent real-time statistics for DigiDollar — the decentralized USD stablecoin native to the DigiByte blockchain. DigiDollar is live on mainnet. All numbers read from the chain. Verify everything.</p>
     </div>
     <div class="hero">
-      <button class="sharebtn" type="button" aria-label="Share this live stat" title="Share" onclick="shareStat('supply',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg></button>
+      <button class="share-btn" type="button" aria-label="Share circulating supply" title="Share" onclick="shareStat('supply')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </button>
       <div class="live"><span class="dot"></span>Circulating supply</div>
       <div class="supply" id="supply">—<small>$DD</small></div>
       <div class="updated" id="updated">connecting to live data…</div>
@@ -267,7 +255,13 @@
   </div>
 
   <div class="grid">
-    <div class="stat"><button class="sharebtn" type="button" aria-label="Share this live stat" title="Share" onclick="shareStat('locked',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg></button><div class="k"><img class="coin" src="/dgb-coin.png" alt="DGB">DGB locked</div><div class="v" id="locked">—</div></div>
+    <div class="stat">
+      <button class="share-btn" type="button" aria-label="Share DGB locked" title="Share" onclick="shareStat('locked')">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg>
+      </button>
+      <div class="k"><img class="coin" src="/dgb-coin.png" alt="DGB">DGB locked</div>
+      <div class="v" id="locked">—</div>
+    </div>
     <div class="stat"><div class="k">Active positions</div><div class="v" id="positions">—</div></div>
     <div class="stat"><div class="k">System health</div><div class="v mint" id="health">—</div></div>
     <div class="stat"><div class="k">Oracle DGB price</div><div class="v" id="oracle">—</div></div>
@@ -292,7 +286,6 @@
     </details>
   </div>
 
-  <!-- ============ MORE DATA & TOOLS ============ -->
   <div class="sectionhead"><h2>Data &amp; tools</h2><div class="rule"></div></div>
 
   <div class="toolgrid">
@@ -301,25 +294,21 @@
     <h3>Live Stats</h3>
     <p>A minimal, fast-loading dashboard of the same on-chain numbers — supply, collateral, positions, health — refreshed every 60 seconds.</p>
   </a>
-
   <a class="tool" href="/oracle">
     <span class="go">→</span>
     <h3>Oracle Watch</h3>
     <p>The price feed in the open: the consensus DGB/USD price, which oracles are reporting, and the 7-of-35 MuSig2 quorum signing each bundle onto the chain.</p>
   </a>
-
   <a class="tool" href="/calculator">
     <span class="go">→</span>
     <h3>Mint Calculator</h3>
     <p>Pick a lock duration, see the collateral ratio, DGB required per $DD, your fixed USD debt, and unlock date. Live DGB price, fully editable.</p>
   </a>
-
   <a class="tool" href="/planner">
     <span class="go">→</span>
     <h3>Position Planner</h3>
     <p>Map out a mint before you commit — and download a calendar reminder for the exact day your timelock expires.</p>
   </a>
-
   <a class="tool" href="/node">
     <span class="go">→</span>
     <h3>Run a Node</h3>
@@ -329,7 +318,7 @@
 
   <div class="sectionhead"><h2>Support this site</h2><div class="rule"></div></div>
 
-    <div class="donate">
+  <div class="donate">
     <h3>Keep the numbers independent</h3>
     <p>This site is free, has no ads, and never will. If it's useful to you, donations are welcome — sent wallet-to-wallet, held in self-custody. <strong>Never expected, always appreciated.</strong></p>
     <div class="donaterow">
@@ -365,7 +354,6 @@
 <script>
   const fmt = n => n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
   const fmtInt = n => Math.round(n).toLocaleString('en-US');
-
   const API = 'https://digibyte.io/api/getdigidollarstats';
   const REFRESH_SECONDS = 60;
   const badge = document.getElementById('liveBadge');
@@ -376,34 +364,26 @@
       const r = await fetch(API, {cache:'no-store'});
       if (!r.ok) throw new Error('http '+r.status);
       const d = await r.json();
-
       const supply = (d.total_dd_supply || 0) / 100;
       $('supply').innerHTML = fmt(supply) + '<small>$DD</small>';
       $('locked').textContent = fmtInt(d.total_collateral_dgb || 0) + ' DGB';
       $('positions').textContent = fmtInt(d.active_positions || 0);
-      $('health').textContent = (d.health_percentage || 0) + '%' +
-        (d.health_status ? ' · ' + d.health_status : '');
-      $('oracle').textContent = d.oracle_price_micro_usd
-        ? '$' + (d.oracle_price_micro_usd/1e6).toFixed(6) : '—';
-
+      $('health').textContent = (d.health_percentage || 0) + '%' + (d.health_status ? ' · ' + d.health_status : '');
+      $('oracle').textContent = d.oracle_price_micro_usd ? '$' + (d.oracle_price_micro_usd/1e6).toFixed(6) : '—';
       const mintOpen = !d.minting_restricted_reason || d.minting_restricted_reason === 'none';
       const stMint = $('stMint');
       stMint.textContent = mintOpen ? 'Open' : d.minting_restricted_reason;
       stMint.className = 'v' + (mintOpen ? '' : ' warn');
-
       $('stOracle').textContent = d.oracle_status || (d.oracle_available ? 'available' : 'unavailable');
       const em = $('stEmerg');
       em.textContent = d.is_emergency ? 'ACTIVE' : 'No';
       em.className = 'v' + (d.is_emergency ? ' warn' : '');
       $('stRatio').textContent = (d.system_collateral_ratio || d.health_percentage || 0) + '%';
       $('stErr').textContent = d.err_tier && d.err_tier.description ? d.err_tier.description : '—';
-
       const now = new Date();
-      $('updated').textContent = 'live on mainnet · updated ' +
-        now.toLocaleTimeString() + ' · refreshes every ' + REFRESH_SECONDS + 's';
+      $('updated').textContent = 'live on mainnet · updated ' + now.toLocaleTimeString() + ' · refreshes every ' + REFRESH_SECONDS + 's';
       document.getElementById('liveTxt').textContent = 'Live';
       badge.className = 'statuspill live';
-
     }catch(e){
       document.getElementById('liveTxt').textContent = 'Source down';
       badge.className = 'statuspill err';
@@ -413,7 +393,6 @@
   refresh();
   setInterval(refresh, REFRESH_SECONDS*1000);
 
-  // ---- donation QR + copy ----
   (function(){
     var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
     try{
@@ -427,7 +406,7 @@
     var hint = document.getElementById("dgbHint");
     function copy(){
       navigator.clipboard.writeText(addr).then(function(){
-        el.classList.add("copied"); hint.textContent = "Copied \u2713";
+        el.classList.add("copied"); hint.textContent = "Copied ✓";
         setTimeout(function(){ el.classList.remove("copied"); hint.textContent = "Copy"; }, 1600);
       }).catch(function(){});
     }
@@ -436,181 +415,42 @@
       el.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); copy(); } });
     }
   })();
-</script>
-<script>
-function statInfo(kind){
-  var el = document.getElementById(kind === 'supply' ? 'supply' : 'locked');
-  var v = '';
-  if (el) el.childNodes.forEach(function(n){ if (n.nodeType === 3) v += n.textContent; });
-  v = v.trim();
-  var has = v && v !== '\u2014';
-  var text;
-  if (kind === 'supply'){
-    text = has ? 'DigiDollar ($DD) circulating supply right now: ' + v + (v.indexOf('$') === 0 ? '' : ' $DD')
-               : 'Live DigiDollar ($DD) circulating supply';
-  } else {
-    text = has ? v + ' locked as DigiDollar collateral right now'
-               : 'Live DGB collateral locked for DigiDollar ($DD)';
-  }
-  text += ' \u2014 real on-chain data';
-  var link = document.querySelector('link[rel="canonical"]');
-  return {
-    has: has, text: text,
-    url: (link && link.href) || location.href,
-    label: kind === 'supply' ? 'CIRCULATING $DD SUPPLY' : 'DGB LOCKED AS COLLATERAL',
-    valTxt: kind === 'supply' ? (v.indexOf('$') === 0 ? v : v + ' $DD') : v
-  };
-}
 
-async function shareStat(kind, btn){
-  var s = statInfo(kind);
-  var touch = matchMedia('(pointer: coarse)').matches;
-  if (touch && s.has && navigator.canShare){
-    try{
-      var blob = await buildStatBlob(s.label, s.valTxt);
-      var file = new File([blob], 'digidollar-live.png', {type:'image/png'});
-      if (navigator.canShare({files:[file]})){
-        await navigator.share({files:[file], text: s.text, url: s.url});
-        return;
-      }
-    }catch(e){ if (e && e.name === 'AbortError') return; }
-  }
-  if (touch && navigator.share){
-    navigator.share({text: s.text, url: s.url}).catch(function(){});
-    return;
-  }
-  toggleShareMenu(btn, s);
-}
-
-var _shareMenu = null;
-function closeShareMenu(){ if (_shareMenu){ _shareMenu.remove(); _shareMenu = null; } }
-document.addEventListener('click', function(e){
-  if (_shareMenu && !_shareMenu.contains(e.target) && !e.target.closest('.sharebtn')) closeShareMenu();
-});
-document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeShareMenu(); });
-
-function toggleShareMenu(btn, s){
-  if (_shareMenu){ closeShareMenu(); return; }
-  var m = document.createElement('div');
-  m.className = 'sharemenu';
-  var items = [];
-  items.push(['Post on X', function(){
-    window.open('https://x.com/intent/post?text=' + encodeURIComponent(s.text) + '&url=' + encodeURIComponent(s.url), '_blank');
-    if (s.has){
-      copyCard(s).then(function(){ shareToast('Card image copied \u2014 paste it into your post'); })
-                 .catch(function(){ shareToast('Compose opened \u2014 text is pre-filled'); });
+  // ======== SIMPLE SHARE ========
+  function shareStat(kind){
+    var el, text, url = 'https://digidollarstats.com/';
+    if(kind === 'supply'){
+      el = document.getElementById('supply');
+      var v = el ? el.textContent.replace('$DD','').trim() : '—';
+      text = v && v !== '—'
+        ? 'DigiDollar ($DD) circulating supply right now: ' + v + ' $DD — real on-chain data'
+        : 'Live DigiDollar ($DD) circulating supply — digidollarstats.com';
     } else {
-      shareToast('Compose opened');
+      el = document.getElementById('locked');
+      var v = el ? el.textContent.trim() : '—';
+      text = v && v !== '—'
+        ? v + ' locked as DigiDollar collateral right now — real on-chain data'
+        : 'Live DGB collateral locked for DigiDollar ($DD) — digidollarstats.com';
     }
-    closeShareMenu();
-  }]);
-  if (s.has) items.push(['Copy card image', function(){
-    copyCard(s).then(function(){ shareToast('Card image copied'); })
-               .catch(function(){ shareToast('Could not copy the image'); });
-    closeShareMenu();
-  }]);
-  items.push(['Copy text & link', function(){
-    navigator.clipboard.writeText(s.text + ' ' + s.url).then(function(){ shareToast('Copied'); }).catch(function(){});
-    closeShareMenu();
-  }]);
-  if (navigator.share) items.push(['More\u2026', function(){
-    navigator.share({text: s.text, url: s.url}).catch(function(){});
-    closeShareMenu();
-  }]);
-  items.forEach(function(it){
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.textContent = it[0];
-    b.addEventListener('click', function(ev){ ev.stopPropagation(); it[1](); });
-    m.appendChild(b);
-  });
-  btn.parentElement.appendChild(m);
-  _shareMenu = m;
-}
-
-function copyCard(s){
-  if (!navigator.clipboard || !window.ClipboardItem) return Promise.reject(new Error('clipboard unavailable'));
-  var blobP = buildStatBlob(s.label, s.valTxt);
-  try{
-    return navigator.clipboard.write([new ClipboardItem({'image/png': blobP})]);
-  }catch(e){
-    return blobP.then(function(b){
-      return navigator.clipboard.write([new ClipboardItem({'image/png': b})]);
-    });
+    if(navigator.share){
+      navigator.share({text: text, url: url}).catch(function(){});
+    } else {
+      navigator.clipboard.writeText(text + ' ' + url).then(function(){ toast('Copied to clipboard'); }).catch(function(){});
+    }
   }
-}
 
-var _toastEl = null, _toastT = null;
-function shareToast(msg){
-  if (!_toastEl){
-    _toastEl = document.createElement('div');
-    _toastEl.className = 'sharetoast';
-    document.body.appendChild(_toastEl);
+  var _toastEl = null, _toastT = null;
+  function toast(msg){
+    if(!_toastEl){
+      _toastEl = document.createElement('div');
+      _toastEl.className = 'sharetoast';
+      document.body.appendChild(_toastEl);
+    }
+    _toastEl.textContent = msg;
+    _toastEl.classList.add('on');
+    clearTimeout(_toastT);
+    _toastT = setTimeout(function(){ _toastEl.classList.remove('on'); }, 2800);
   }
-  _toastEl.textContent = msg;
-  _toastEl.classList.add('on');
-  clearTimeout(_toastT);
-  _toastT = setTimeout(function(){ _toastEl.classList.remove('on'); }, 2800);
-}
-
-function loadImg(src){
-  return new Promise(function(res){
-    var im = new Image();
-    im.onload = function(){ res(im); };
-    im.onerror = function(){ res(null); };
-    im.src = src;
-  });
-}
-function rrect(x,a,b,w,h,r){
-  x.beginPath();
-  x.moveTo(a+r,b);
-  x.arcTo(a+w,b,a+w,b+h,r);
-  x.arcTo(a+w,b+h,a,b+h,r);
-  x.arcTo(a,b+h,a,b,r);
-  x.arcTo(a,b,a+w,b,r);
-  x.closePath();
-}
-async function buildStatBlob(label, value){
-  try{ await document.fonts.ready; }catch(e){}
-  var W = 1200, H = 630;
-  var c = document.createElement('canvas'); c.width = W; c.height = H;
-  var x = c.getContext('2d');
-  x.fillStyle = '#070E0A'; x.fillRect(0,0,W,H);
-  rrect(x,40,40,W-80,H-80,28);
-  x.fillStyle = '#0F1D15'; x.fill();
-  x.lineWidth = 2; x.strokeStyle = '#193322'; x.stroke();
-  var logo = await loadImg('/icon-192.png');
-  if (logo){
-    x.save(); x.beginPath(); x.arc(134,134,38,0,7); x.clip();
-    x.drawImage(logo,96,96,76,76); x.restore();
-  }
-  x.textBaseline = 'middle';
-  x.font = '700 38px "Space Grotesk", sans-serif';
-  x.fillStyle = '#E9F2EC'; x.fillText('DigiDollar', 192, 134);
-  var w1 = x.measureText('DigiDollar').width;
-  x.fillStyle = '#8FD4B0'; x.fillText('Stats', 192 + w1, 134);
-  x.font = '500 27px "Space Grotesk", sans-serif';
-  x.fillStyle = '#9DB3A6'; x.fillText(label, 100, 262);
-  var size = 100;
-  do { x.font = '700 ' + size + 'px "JetBrains Mono", monospace'; size -= 4; }
-  while (x.measureText(value).width > 1000 && size > 40);
-  x.fillStyle = '#8FD4B0'; x.fillText(value, 100, 352);
-  x.font = '500 24px "JetBrains Mono", monospace';
-  x.fillStyle = '#9DB3A6';
-  var ts = new Date().toLocaleString(undefined, {dateStyle:'medium', timeStyle:'short'});
-  x.fillText('live from the DigiByte chain \u00b7 ' + ts, 100, 438);
-  x.strokeStyle = '#193322';
-  x.beginPath(); x.moveTo(100,496); x.lineTo(W-100,496); x.stroke();
-  x.font = '600 27px "Space Grotesk", sans-serif';
-  x.fillStyle = '#8FD4B0'; x.fillText('digidollarstats.com', 100, 544);
-  x.font = '500 22px "Space Grotesk", sans-serif';
-  x.fillStyle = '#9DB3A6';
-  var t2 = 'real data \u00b7 verify independently';
-  x.fillText(t2, W - 100 - x.measureText(t2).width, 544);
-  var blob = await new Promise(function(res){ c.toBlob(res, 'image/png'); });
-  if (!blob) throw new Error('canvas failed');
-  return blob;
-}
 </script>
 </body>
 </html>
