@@ -48,6 +48,12 @@ footer{color:var(--muted);font-size:13px;text-align:center;margin-top:28px;line-
   .footcontact a{color:var(--mint);text-decoration:none}
   .footcontact a:hover{text-decoration:underline}
   footer{border-top:1px solid var(--line);padding-top:18px}
+  /* share buttons */
+  .sharebtn{position:absolute;top:10px;right:10px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--line);border-radius:8px;color:var(--muted);cursor:pointer;padding:0}
+  .sharebtn:hover{color:var(--mint);border-color:var(--ring)}
+  .sharebtn svg{width:15px;height:15px}
+  .sharebtn.ok{color:var(--mint);border-color:var(--ring)}
+  .card{position:relative}
 </style>
 </head>
 <body>
@@ -64,13 +70,14 @@ footer{color:var(--muted);font-size:13px;text-align:center;margin-top:28px;line-
 <div id="badge" class="badge wait">WAITING FOR PUBLIC DATA SOURCE</div>
 
 <div class="card hero">
+  <button class="sharebtn" type="button" aria-label="Share this live stat" title="Share" onclick="shareStat('supply',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg></button>
   <div class="label">Circulating DD Supply</div>
   <div class="big" id="supply">—</div>
   <div class="meta" id="updated"></div>
 </div>
 
 <div class="grid">
-  <div class="card stat"><div class="label">DGB locked as collateral</div><div class="val" id="locked">—</div></div>
+  <div class="card stat"><button class="sharebtn" type="button" aria-label="Share this live stat" title="Share" onclick="shareStat('locked',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg></button><div class="label">DGB locked as collateral</div><div class="val" id="locked">—</div></div>
   <div class="card stat"><div class="label">Open positions</div><div class="val" id="positions">—</div></div>
   <div class="card stat"><div class="label">System health</div><div class="val" id="health">—</div></div>
   <div class="card stat"><div class="label">Oracle DGB price</div><div class="val" id="oracle">—</div></div>
@@ -185,6 +192,37 @@ async function tick(){
 
 tick();
 setInterval(tick, REFRESH_SECONDS*1000);
+</script>
+<script>
+function shareStat(kind, btn){
+  var el = document.getElementById(kind === 'supply' ? 'supply' : 'locked');
+  var v = '';
+  if (el) el.childNodes.forEach(function(n){ if (n.nodeType === 3) v += n.textContent; });
+  v = v.trim();
+  var has = v && v !== '\u2014';
+  var text;
+  if (kind === 'supply'){
+    text = has ? 'DigiDollar ($DD) circulating supply right now: ' + v + (v.indexOf('$') === 0 ? '' : ' $DD')
+               : 'Live DigiDollar ($DD) circulating supply';
+  } else {
+    text = has ? v + ' locked as DigiDollar collateral right now'
+               : 'Live DGB collateral locked for DigiDollar ($DD)';
+  }
+  text += ' \u2014 real on-chain data';
+  var link = document.querySelector('link[rel="canonical"]');
+  var url = (link && link.href) || location.href;
+  if (navigator.share){
+    navigator.share({text: text, url: url}).catch(function(){});
+  } else if (navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text + ' ' + url).then(function(){ shareOk(btn); }).catch(function(){});
+  }
+}
+function shareOk(btn){
+  var old = btn.innerHTML;
+  btn.classList.add('ok');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+  setTimeout(function(){ btn.classList.remove('ok'); btn.innerHTML = old; }, 1400);
+}
 </script>
 </body>
 </html>
