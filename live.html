@@ -29,7 +29,7 @@ h1{font-size:30px;font-weight:700;margin-bottom:6px}
 .badge.wait{background:#4a3c1f;color:var(--amber)}
 .badge.live{background:var(--ring);color:var(--text)}
 .badge.err{background:#4a2323;color:#e0a3a3}
-.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;margin-bottom:14px;position:relative}
 .hero .label{color:var(--muted);font-size:14px;letter-spacing:.04em;text-transform:uppercase}
 .hero .big{font-family:'JetBrains Mono',monospace;font-size:42px;font-weight:700;color:var(--mint);margin-top:6px;word-break:break-all}
 .grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
@@ -40,27 +40,34 @@ h1{font-size:30px;font-weight:700;margin-bottom:6px}
 .note b{color:var(--text)}
 footer{color:var(--muted);font-size:13px;text-align:center;margin-top:28px;line-height:1.6;border-top:1px solid var(--line);padding-top:16px}
 @media(min-width:900px){body{padding:32px 24px 60px}h1{font-size:34px}}
-  /* footer nav + contact */
-  .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:13px;line-height:1.5}
-  .footnav a{color:var(--mint);text-decoration:none}
-  .footnav a:hover{text-decoration:underline}
-  .footcontact{margin-bottom:14px;font-size:13px;color:var(--muted)}
-  .footcontact a{color:var(--mint);text-decoration:none}
-  .footcontact a:hover{text-decoration:underline}
-  footer{border-top:1px solid var(--line);padding-top:18px}
-  /* share buttons */
-  .sharebtn{position:absolute;top:10px;right:10px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--line);border-radius:8px;color:var(--muted);cursor:pointer;padding:0}
-  .sharebtn:hover{color:var(--mint);border-color:var(--ring)}
-  .sharebtn svg{width:15px;height:15px}
-  .sharebtn.ok{color:var(--mint);border-color:var(--ring)}
-  .card{position:relative}
-  /* share menu + toast */
-  .sharemenu{position:absolute;top:44px;right:10px;z-index:30;background:var(--card);border:1px solid var(--ring);border-radius:10px;padding:6px;display:flex;flex-direction:column;min-width:200px;box-shadow:0 8px 24px rgba(0,0,0,.45)}
-  .sharemenu button{background:transparent;border:0;color:var(--text);font-family:inherit;font-size:13.5px;text-align:left;padding:9px 10px;border-radius:7px;cursor:pointer}
-  .sharemenu button:hover{background:var(--ring)}
-  .sharetoast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);background:var(--card);border:1px solid var(--ring);color:var(--text);font-size:13.5px;padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:99;max-width:90vw;text-align:center}
-  .sharetoast.on{opacity:1;transform:translateX(-50%) translateY(0)}
+
+/* ===== SHARE BUTTON ===== */
+.share-btn{
+  display:block !important;
+  visibility:visible !important;
+  opacity:1 !important;
+  position:absolute;top:12px;right:12px;
+  width:44px;height:44px;border-radius:10px;border:1px solid var(--line);
+  background:#1a3d2a;color:#8FD4B0;cursor:pointer;
+  align-items:center;justify-content:center;z-index:999;
+  box-shadow:0 2px 8px rgba(0,0,0,.4);
+}
+.share-btn svg{width:20px;height:20px}
+
+/* footer nav + contact */
+.footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:13px;line-height:1.5}
+.footnav a{color:var(--mint);text-decoration:none}
+.footnav a:hover{text-decoration:underline}
+.footcontact{margin-bottom:14px;font-size:13px;color:var(--muted)}
+.footcontact a{color:var(--mint);text-decoration:none}
+.footcontact a:hover{text-decoration:underline}
+footer{border-top:1px solid var(--line);padding-top:18px}
+
+/* toast */
+.sharetoast{position:fixed;left:50%;bottom:26px;transform:translateX(-50%) translateY(8px);background:var(--card);border:1px solid var(--ring);color:var(--text);font-size:13.5px;padding:10px 14px;border-radius:10px;opacity:0;pointer-events:none;transition:opacity .2s,transform .2s;z-index:99;max-width:90vw;text-align:center}
+.sharetoast.on{opacity:1;transform:translateX(-50%) translateY(0)}
 </style>
+<base target="_blank">
 </head>
 <body>
 <div class="wrap">
@@ -76,14 +83,22 @@ footer{color:var(--muted);font-size:13px;text-align:center;margin-top:28px;line-
 <div id="badge" class="badge wait">WAITING FOR PUBLIC DATA SOURCE</div>
 
 <div class="card hero">
-  <button class="sharebtn" type="button" aria-label="Share this live stat" title="Share" onclick="shareStat('supply',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg></button>
+  <button class="share-btn" type="button" aria-label="Share" title="Share" onclick="shareStat('supply')">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+  </button>
   <div class="label">Circulating DD Supply</div>
   <div class="big" id="supply">—</div>
   <div class="meta" id="updated"></div>
 </div>
 
 <div class="grid">
-  <div class="card stat"><button class="sharebtn" type="button" aria-label="Share this live stat" title="Share" onclick="shareStat('locked',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v7a1.5 1.5 0 0 0 1.5 1.5h13A1.5 1.5 0 0 0 20 19v-7"/><path d="M12 15V3"/><path d="m8 7 4-4 4 4"/></svg></button><div class="label">DGB locked as collateral</div><div class="val" id="locked">—</div></div>
+  <div class="card stat">
+    <button class="share-btn" type="button" aria-label="Share" title="Share" onclick="shareStat('locked')">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M4 12v8a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-8"/><polyline points="16 6 12 2 8 6"/><line x1="12" y1="2" x2="12" y2="15"/></svg>
+    </button>
+    <div class="label">DGB locked as collateral</div>
+    <div class="val" id="locked">—</div>
+  </div>
   <div class="card stat"><div class="label">Open positions</div><div class="val" id="positions">—</div></div>
   <div class="card stat"><div class="label">System health</div><div class="val" id="health">—</div></div>
   <div class="card stat"><div class="label">Oracle DGB price</div><div class="val" id="oracle">—</div></div>
@@ -97,57 +112,40 @@ footer{color:var(--muted);font-size:13px;text-align:center;margin-top:28px;line-
 </div>
 
 <footer>
-    <nav class="footnav" aria-label="Footer">
-      <a href="/">Home</a>
-      <a href="/what-is-digidollar">What is DigiDollar?</a>
-      <a href="/live">Live Stats</a>
-      <a href="/oracle">Oracle Watch</a>
-      <a href="/calculator">Mint Calculator</a>
-      <a href="/planner">Position Planner</a>
-      <a href="/node">Run a Node</a>
-    </nav>
-    <div class="footcontact">Contact <a href="mailto:hello@digidollarstats.com">hello@digidollarstats.com</a></div>
-    <a href="/">digidollarstats.com</a> · an independent community project by <a href="https://x.com/dgb_signal">@dgb_signal</a><br>
-    Not an official DigiByte channel · not affiliated with the DigiByte Core team<br>
-    Data source: digibyte.io public API · verify independently · not financial advice
-  </footer>
+  <nav class="footnav" aria-label="Footer">
+    <a href="/">Home</a>
+    <a href="/what-is-digidollar">What is DigiDollar?</a>
+    <a href="/live">Live Stats</a>
+    <a href="/oracle">Oracle Watch</a>
+    <a href="/calculator">Mint Calculator</a>
+    <a href="/planner">Position Planner</a>
+    <a href="/node">Run a Node</a>
+  </nav>
+  <div class="footcontact">Contact <a href="mailto:hello@digidollarstats.com">hello@digidollarstats.com</a></div>
+  <a href="/">digidollarstats.com</a> · an independent community project by <a href="https://x.com/dgb_signal">@dgb_signal</a><br>
+  Not an official DigiByte channel · not affiliated with the DigiByte Core team<br>
+  Data source: digibyte.io public API · verify independently · not financial advice
+</footer>
 </div>
 
 <script>
-/* ================================================================
-   DATA SOURCE CONFIG — edit this block at activation.
-   Add one or more sources. Each source needs:
-     name : label shown on the page
-     url  : a public JSON endpoint
-     map  : function turning that JSON into the fields below
-   Fields (all optional except supply):
-     supply    — circulating DD in dollars (number)
-     minted    — total DD ever minted (dollars)
-     burned    — total DD burned (dollars)
-     locked    — total DGB locked as collateral (DGB)
-     positions — number of open mint positions
-   Sources are tried in order; first one that works wins.
-   ================================================================ */
 const DATA_SOURCES = [
   {
     name: "digibyte.io",
     url : "https://digibyte.io/api/getdigidollarstats",
     map : r => ({
-      supply:    r.total_dd_supply / 100,        // endpoint returns cents
-      locked:    r.total_collateral_dgb,          // DGB
+      supply:    r.total_dd_supply / 100,
+      locked:    r.total_collateral_dgb,
       positions: r.active_positions,
-      health:    r.health_percentage,             // %
+      health:    r.health_percentage,
       healthTxt: r.health_status,
-      oracleUsd: r.oracle_price_micro_usd / 1e6   // DGB price in USD
+      oracleUsd: r.oracle_price_micro_usd / 1e6
     })
   },
 ];
 const REFRESH_SECONDS = 60;
-/* ============================================================== */
-
 const $ = id => document.getElementById(id);
-const fmtUSD = n => n==null ? "—" :
-  "$" + Number(n).toLocaleString("en-US",{maximumFractionDigits:0});
+const fmtUSD = n => n==null ? "—" : "$" + Number(n).toLocaleString("en-US",{maximumFractionDigits:0});
 const fmtNum = n => n==null ? "—" : Number(n).toLocaleString("en-US");
 
 function render(d, srcName){
@@ -191,120 +189,39 @@ async function tick(){
       if (!res.ok) continue;
       const data = src.map(await res.json());
       if (data && data.supply != null){ render(data, src.name); return; }
-    }catch(e){ /* try next source */ }
+    }catch(e){}
   }
   showWaiting(true);
 }
 
 tick();
 setInterval(tick, REFRESH_SECONDS*1000);
-</script>
-<script>
-function statInfo(kind){
-  var el = document.getElementById(kind === 'supply' ? 'supply' : 'locked');
-  var v = '';
-  if (el) el.childNodes.forEach(function(n){ if (n.nodeType === 3) v += n.textContent; });
-  v = v.trim();
-  var has = v && v !== '\u2014';
-  var text;
-  if (kind === 'supply'){
-    text = has ? 'DigiDollar ($DD) circulating supply right now: ' + v + (v.indexOf('$') === 0 ? '' : ' $DD')
-               : 'Live DigiDollar ($DD) circulating supply';
+
+function shareStat(kind){
+  var el, text, url = 'https://digidollarstats.com/live';
+  if(kind === 'supply'){
+    el = document.getElementById('supply');
+    var v = el ? el.textContent.trim() : '—';
+    text = v && v !== '—'
+      ? 'DigiDollar ($DD) circulating supply right now: ' + v + ' — real on-chain data'
+      : 'Live DigiDollar ($DD) circulating supply — digidollarstats.com';
   } else {
-    text = has ? v + ' locked as DigiDollar collateral right now'
-               : 'Live DGB collateral locked for DigiDollar ($DD)';
+    el = document.getElementById('locked');
+    var v = el ? el.textContent.trim() : '—';
+    text = v && v !== '—'
+      ? v + ' locked as DigiDollar collateral right now — real on-chain data'
+      : 'Live DGB collateral locked for DigiDollar ($DD) — digidollarstats.com';
   }
-  text += ' \u2014 real on-chain data';
-  var link = document.querySelector('link[rel="canonical"]');
-  return {
-    has: has, text: text,
-    url: (link && link.href) || location.href,
-    label: kind === 'supply' ? 'CIRCULATING $DD SUPPLY' : 'DGB LOCKED AS COLLATERAL',
-    valTxt: kind === 'supply' ? (v.indexOf('$') === 0 ? v : v + ' $DD') : v
-  };
-}
-
-async function shareStat(kind, btn){
-  var s = statInfo(kind);
-  var touch = matchMedia('(pointer: coarse)').matches;
-  if (touch && s.has && navigator.canShare){
-    try{
-      var blob = await buildStatBlob(s.label, s.valTxt);
-      var file = new File([blob], 'digidollar-live.png', {type:'image/png'});
-      if (navigator.canShare({files:[file]})){
-        await navigator.share({files:[file], text: s.text, url: s.url});
-        return;
-      }
-    }catch(e){ if (e && e.name === 'AbortError') return; }
-  }
-  if (touch && navigator.share){
-    navigator.share({text: s.text, url: s.url}).catch(function(){});
-    return;
-  }
-  toggleShareMenu(btn, s);
-}
-
-var _shareMenu = null;
-function closeShareMenu(){ if (_shareMenu){ _shareMenu.remove(); _shareMenu = null; } }
-document.addEventListener('click', function(e){
-  if (_shareMenu && !_shareMenu.contains(e.target) && !e.target.closest('.sharebtn')) closeShareMenu();
-});
-document.addEventListener('keydown', function(e){ if (e.key === 'Escape') closeShareMenu(); });
-
-function toggleShareMenu(btn, s){
-  if (_shareMenu){ closeShareMenu(); return; }
-  var m = document.createElement('div');
-  m.className = 'sharemenu';
-  var items = [];
-  items.push(['Post on X', function(){
-    window.open('https://x.com/intent/post?text=' + encodeURIComponent(s.text) + '&url=' + encodeURIComponent(s.url), '_blank');
-    if (s.has){
-      copyCard(s).then(function(){ shareToast('Card image copied \u2014 paste it into your post'); })
-                 .catch(function(){ shareToast('Compose opened \u2014 text is pre-filled'); });
-    } else {
-      shareToast('Compose opened');
-    }
-    closeShareMenu();
-  }]);
-  if (s.has) items.push(['Copy card image', function(){
-    copyCard(s).then(function(){ shareToast('Card image copied'); })
-               .catch(function(){ shareToast('Could not copy the image'); });
-    closeShareMenu();
-  }]);
-  items.push(['Copy text & link', function(){
-    navigator.clipboard.writeText(s.text + ' ' + s.url).then(function(){ shareToast('Copied'); }).catch(function(){});
-    closeShareMenu();
-  }]);
-  if (navigator.share) items.push(['More\u2026', function(){
-    navigator.share({text: s.text, url: s.url}).catch(function(){});
-    closeShareMenu();
-  }]);
-  items.forEach(function(it){
-    var b = document.createElement('button');
-    b.type = 'button';
-    b.textContent = it[0];
-    b.addEventListener('click', function(ev){ ev.stopPropagation(); it[1](); });
-    m.appendChild(b);
-  });
-  btn.parentElement.appendChild(m);
-  _shareMenu = m;
-}
-
-function copyCard(s){
-  if (!navigator.clipboard || !window.ClipboardItem) return Promise.reject(new Error('clipboard unavailable'));
-  var blobP = buildStatBlob(s.label, s.valTxt);
-  try{
-    return navigator.clipboard.write([new ClipboardItem({'image/png': blobP})]);
-  }catch(e){
-    return blobP.then(function(b){
-      return navigator.clipboard.write([new ClipboardItem({'image/png': b})]);
-    });
+  if(navigator.share){
+    navigator.share({text: text, url: url}).catch(function(){});
+  } else {
+    navigator.clipboard.writeText(text + ' ' + url).then(function(){ toast('Copied to clipboard'); }).catch(function(){});
   }
 }
 
 var _toastEl = null, _toastT = null;
-function shareToast(msg){
-  if (!_toastEl){
+function toast(msg){
+  if(!_toastEl){
     _toastEl = document.createElement('div');
     _toastEl.className = 'sharetoast';
     document.body.appendChild(_toastEl);
@@ -313,65 +230,6 @@ function shareToast(msg){
   _toastEl.classList.add('on');
   clearTimeout(_toastT);
   _toastT = setTimeout(function(){ _toastEl.classList.remove('on'); }, 2800);
-}
-
-function loadImg(src){
-  return new Promise(function(res){
-    var im = new Image();
-    im.onload = function(){ res(im); };
-    im.onerror = function(){ res(null); };
-    im.src = src;
-  });
-}
-function rrect(x,a,b,w,h,r){
-  x.beginPath();
-  x.moveTo(a+r,b);
-  x.arcTo(a+w,b,a+w,b+h,r);
-  x.arcTo(a+w,b+h,a,b+h,r);
-  x.arcTo(a,b+h,a,b,r);
-  x.arcTo(a,b,a+w,b,r);
-  x.closePath();
-}
-async function buildStatBlob(label, value){
-  try{ await document.fonts.ready; }catch(e){}
-  var W = 1200, H = 630;
-  var c = document.createElement('canvas'); c.width = W; c.height = H;
-  var x = c.getContext('2d');
-  x.fillStyle = '#070E0A'; x.fillRect(0,0,W,H);
-  rrect(x,40,40,W-80,H-80,28);
-  x.fillStyle = '#0F1D15'; x.fill();
-  x.lineWidth = 2; x.strokeStyle = '#193322'; x.stroke();
-  var logo = await loadImg('/icon-192.png');
-  if (logo){
-    x.save(); x.beginPath(); x.arc(134,134,38,0,7); x.clip();
-    x.drawImage(logo,96,96,76,76); x.restore();
-  }
-  x.textBaseline = 'middle';
-  x.font = '700 38px "Space Grotesk", sans-serif';
-  x.fillStyle = '#E9F2EC'; x.fillText('DigiDollar', 192, 134);
-  var w1 = x.measureText('DigiDollar').width;
-  x.fillStyle = '#8FD4B0'; x.fillText('Stats', 192 + w1, 134);
-  x.font = '500 27px "Space Grotesk", sans-serif';
-  x.fillStyle = '#9DB3A6'; x.fillText(label, 100, 262);
-  var size = 100;
-  do { x.font = '700 ' + size + 'px "JetBrains Mono", monospace'; size -= 4; }
-  while (x.measureText(value).width > 1000 && size > 40);
-  x.fillStyle = '#8FD4B0'; x.fillText(value, 100, 352);
-  x.font = '500 24px "JetBrains Mono", monospace';
-  x.fillStyle = '#9DB3A6';
-  var ts = new Date().toLocaleString(undefined, {dateStyle:'medium', timeStyle:'short'});
-  x.fillText('live from the DigiByte chain \u00b7 ' + ts, 100, 438);
-  x.strokeStyle = '#193322';
-  x.beginPath(); x.moveTo(100,496); x.lineTo(W-100,496); x.stroke();
-  x.font = '600 27px "Space Grotesk", sans-serif';
-  x.fillStyle = '#8FD4B0'; x.fillText('digidollarstats.com', 100, 544);
-  x.font = '500 22px "Space Grotesk", sans-serif';
-  x.fillStyle = '#9DB3A6';
-  var t2 = 'real data \u00b7 verify independently';
-  x.fillText(t2, W - 100 - x.measureText(t2).width, 544);
-  var blob = await new Promise(function(res){ c.toBlob(res, 'image/png'); });
-  if (!blob) throw new Error('canvas failed');
-  return blob;
 }
 </script>
 </body>
