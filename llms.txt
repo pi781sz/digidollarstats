@@ -27,6 +27,10 @@ DigiByte chain via the public digibyte.io API.
 
 - [Home / dashboard](https://digidollarstats.com/): live supply, DGB locked,
   positions, system health, and oracle price.
+- [What is DigiDollar?](https://digidollarstats.com/what-is-digidollar): a
+  plain-English explainer of DigiDollar — what it is, how minting and
+  redemption work, the 10 collateral tiers, and how the oracle keeps the price
+  near a dollar.
 - [Live stats](https://digidollarstats.com/live): minimal live dashboard of the
   same on-chain figures.
 - [Oracle Watch](https://digidollarstats.com/oracle): the DigiDollar price feed
