@@ -211,9 +211,14 @@ function shareStat(kind, btn){
   text += ' \u2014 real on-chain data';
   var link = document.querySelector('link[rel="canonical"]');
   var url = (link && link.href) || location.href;
-  if (navigator.share){
+  // Mobile: native share sheet (unchanged)
+  if (matchMedia('(pointer: coarse)').matches && navigator.share){
     navigator.share({text: text, url: url}).catch(function(){});
-  } else if (navigator.clipboard && navigator.clipboard.writeText){
+    return;
+  }
+  // Desktop: open X compose with the live number + link already filled in
+  var w = window.open('https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url), '_blank', 'noopener');
+  if (!w && navigator.clipboard && navigator.clipboard.writeText){
     navigator.clipboard.writeText(text + ' ' + url).then(function(){ shareOk(btn); }).catch(function(){});
   }
 }
