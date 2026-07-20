@@ -432,7 +432,7 @@
   })();
 </script>
 <script>
-function shareStat(kind, btn){
+async function shareStat(kind, btn){
   var el = document.getElementById(kind === 'supply' ? 'supply' : 'locked');
   var v = '';
   if (el) el.childNodes.forEach(function(n){ if (n.nodeType === 3) v += n.textContent; });
@@ -449,6 +449,20 @@ function shareStat(kind, btn){
   text += ' \u2014 real on-chain data';
   var link = document.querySelector('link[rel="canonical"]');
   var url = (link && link.href) || location.href;
+
+  // Try image + text first (mobile share sheets)
+  if (has && navigator.canShare){
+    try{
+      var label = kind === 'supply' ? 'CIRCULATING $DD SUPPLY' : 'DGB LOCKED AS COLLATERAL';
+      var valTxt = kind === 'supply' ? (v.indexOf('$') === 0 ? v : v + ' $DD') : v;
+      var file = await buildStatImage(label, valTxt);
+      if (file && navigator.canShare({files:[file]})){
+        await navigator.share({files:[file], text: text, url: url});
+        return;
+      }
+    }catch(e){ if (e && e.name === 'AbortError') return; }
+  }
+  // Text-only share, then clipboard
   if (navigator.share){
     navigator.share({text: text, url: url}).catch(function(){});
   } else if (navigator.clipboard && navigator.clipboard.writeText){
@@ -460,6 +474,64 @@ function shareOk(btn){
   btn.classList.add('ok');
   btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
   setTimeout(function(){ btn.classList.remove('ok'); btn.innerHTML = old; }, 1400);
+}
+function loadImg(src){
+  return new Promise(function(res){
+    var im = new Image();
+    im.onload = function(){ res(im); };
+    im.onerror = function(){ res(null); };
+    im.src = src;
+  });
+}
+function rrect(x,a,b,w,h,r){
+  x.beginPath();
+  x.moveTo(a+r,b);
+  x.arcTo(a+w,b,a+w,b+h,r);
+  x.arcTo(a+w,b+h,a,b+h,r);
+  x.arcTo(a,b+h,a,b,r);
+  x.arcTo(a,b,a+w,b,r);
+  x.closePath();
+}
+async function buildStatImage(label, value){
+  try{ await document.fonts.ready; }catch(e){}
+  var W = 1200, H = 630;
+  var c = document.createElement('canvas'); c.width = W; c.height = H;
+  var x = c.getContext('2d');
+  x.fillStyle = '#070E0A'; x.fillRect(0,0,W,H);
+  rrect(x,40,40,W-80,H-80,28);
+  x.fillStyle = '#0F1D15'; x.fill();
+  x.lineWidth = 2; x.strokeStyle = '#193322'; x.stroke();
+  var logo = await loadImg('/icon-192.png');
+  if (logo){
+    x.save(); x.beginPath(); x.arc(134,134,38,0,7); x.clip();
+    x.drawImage(logo,96,96,76,76); x.restore();
+  }
+  x.textBaseline = 'middle';
+  x.font = '700 38px "Space Grotesk", sans-serif';
+  x.fillStyle = '#E9F2EC'; x.fillText('DigiDollar', 192, 134);
+  var w1 = x.measureText('DigiDollar').width;
+  x.fillStyle = '#8FD4B0'; x.fillText('Stats', 192 + w1, 134);
+  x.font = '500 27px "Space Grotesk", sans-serif';
+  x.fillStyle = '#9DB3A6'; x.fillText(label, 100, 262);
+  var size = 100;
+  do { x.font = '700 ' + size + 'px "JetBrains Mono", monospace'; size -= 4; }
+  while (x.measureText(value).width > 1000 && size > 40);
+  x.fillStyle = '#8FD4B0'; x.fillText(value, 100, 352);
+  x.font = '500 24px "JetBrains Mono", monospace';
+  x.fillStyle = '#9DB3A6';
+  var ts = new Date().toLocaleString(undefined, {dateStyle:'medium', timeStyle:'short'});
+  x.fillText('live from the DigiByte chain \u00b7 ' + ts, 100, 438);
+  x.strokeStyle = '#193322';
+  x.beginPath(); x.moveTo(100,496); x.lineTo(W-100,496); x.stroke();
+  x.font = '600 27px "Space Grotesk", sans-serif';
+  x.fillStyle = '#8FD4B0'; x.fillText('digidollarstats.com', 100, 544);
+  x.font = '500 22px "Space Grotesk", sans-serif';
+  x.fillStyle = '#9DB3A6';
+  var t2 = 'real data \u00b7 verify independently';
+  x.fillText(t2, W - 100 - x.measureText(t2).width, 544);
+  var blob = await new Promise(function(res){ c.toBlob(res, 'image/png'); });
+  if (!blob) return null;
+  return new File([blob], 'digidollar-live.png', {type:'image/png'});
 }
 </script>
 </body>
