@@ -224,6 +224,30 @@ function fullDate(ts){
   if (!ts) return 'not yet confirmed';
   return new Date(ts*1000).toLocaleString(undefined,{dateStyle:'medium', timeStyle:'short'});
 }
+
+/* Plain-English confirmation status. The raw block count means nothing to
+   most readers — what they actually want to know is "can I trust this?" */
+function confirmLabel(conf){
+  conf = Number(conf) || 0;
+  if (conf <= 0)   return { text: 'Waiting to confirm', tone: 'amber' };
+  if (conf < 6)    return { text: 'Just confirmed', tone: 'amber' };
+  if (conf < 100)  return { text: 'Confirmed', tone: 'mint' };
+  return { text: 'Permanently confirmed', tone: 'mint' };
+}
+
+/* Context for the fee as a share of what was actually sent — computed
+   directly from on-chain numbers, no external price needed. Keeps this
+   page's "real data only" rule intact and stays clear of DGB/USD entirely. */
+function feePercentOf(feeDgb, ofDgb){
+  feeDgb = Number(feeDgb) || 0;
+  ofDgb = Number(ofDgb) || 0;
+  if (!feeDgb || !ofDgb) return '';
+  var pct = (feeDgb / ofDgb) * 100;
+  if (pct < 0.01) return 'a negligible share of the amount sent';
+  var s = pct < 1 ? pct.toFixed(2) : pct.toFixed(1);
+  return s + '% of the amount sent';
+}
+
 function looksLikeTxid(s){ return /^[0-9a-fA-F]{64}$/.test(s); }
 
 /* The Worker normalises amounts to whole DGB regardless of upstream.
@@ -279,19 +303,47 @@ function copyable(a){
 /* Work out what a transaction did FROM THIS ADDRESS'S POINT OF VIEW */
 function interpret(tx, address){
   var inMine = 0, outMine = 0, senders = {}, receivers = {}, coinbase = false;
+  var myAddrs = {}; myAddrs[address] = true;
 
   (tx.vin || []).forEach(function(v){
     if (v.coinbase) { coinbase = true; return; }
     var val = sat(v.value);
     var a = firstAddr(v);
-    if (a === address) inMine += val;
-    else if (a) senders[a] = (senders[a]||0) + val;
+    if (a === address) { inMine += val; }
+    else if (a) { senders[a] = (senders[a]||0) + val; myAddrs[a] = true; } // other inputs = same wallet, spent together
   });
+
+  /* Same fresh-change heuristic as renderTx: with exactly 2 real outputs and
+     neither matching a known input address, the largest one is the best
+     guess for change back to a new address in the sender's own wallet.
+     This holds regardless of how many total outputs the transaction has —
+     a 5-output payout with 4 small recipients and 1 large change return
+     works the same as a simple 1-recipient send. Only applies when this
+     address was actually a sender (inMine > 0) — for an address that only
+     appears as a recipient, every output can legitimately be "theirs" in
+     isolation and this heuristic doesn't apply. Skipped when there's only
+     1 real output (nothing to distinguish from change) or when an output
+     already matches a known address (then we trust that match instead of
+     guessing). */
+  if (inMine > 0) {
+    var realOuts = (tx.vout || []).filter(function(o){ return !o.isData; });
+    var matchesKnown = realOuts.filter(function(o){ return o.addr && myAddrs[o.addr]; }).length;
+    if (realOuts.length >= 2 && matchesKnown === 0) {
+      var maxVal = Math.max.apply(null, realOuts.map(function(o){ return sat(o.value); }));
+      var flagged = false;
+      realOuts.forEach(function(o){
+        if (!flagged && sat(o.value) === maxVal) { myAddrs[o.addr] = true; flagged = true; }
+      });
+    }
+  }
+
   (tx.vout || []).forEach(function(o){
     var val = sat(o.value);
     /* Normalised format uses o.addr (string|null); isData outputs have addr===null */
     var addrs = o.isData ? [] : (o.addr ? [o.addr] : (o.addresses || []));
-    if (addrs.indexOf(address) !== -1) outMine += val;
+    var a0 = addrs[0];
+    if (a0 === address) outMine += val;
+    else if (a0 && myAddrs[a0]) { outMine += val; } // change to a fresh address in the same wallet — still ours
     else addrs.forEach(function(a){ receivers[a] = (receivers[a]||0) + val; });
   });
 
@@ -330,11 +382,14 @@ function eventCard(tx, address){
     party = 'To ' + to + '. The rest returned to your wallet as change.';
   }
 
-  var conf = r.confirmations > 0
-    ? '<span class="ok">✓ confirmed</span> · ' + r.confirmations.toLocaleString() + ' blocks deep'
-    : '<span class="pending">waiting to confirm</span>';
+  var cl = confirmLabel(r.confirmations);
+  var conf = '<span class="'+(cl.tone==='mint'?'ok':'pending')+'">'+
+    (cl.tone==='mint' ? '✓ ' : '') + cl.text + '</span>';
 
-  var feeTxt = (kind === 'out' && r.fee) ? 'network fee ' + dgb(r.fee) : '';
+  var feePct = feePercentOf(r.fee, Math.abs(r.net));
+  var feeTxt = (kind === 'out' && r.fee)
+    ? 'network fee ' + dgb(r.fee) + (feePct ? ' (' + feePct + ')' : '')
+    : '';
 
   return '' +
   '<div class="ev '+kind+'">' +
@@ -348,6 +403,7 @@ function eventCard(tx, address){
     '<details class="tech"><summary>Technical details</summary><div class="body">' +
       '<span>transaction id</span><br>'+esc(r.txid)+'<br><br>' +
       '<span>exact time</span> '+fullDate(r.time)+'<br>' +
+      '<span>confirmations</span> '+r.confirmations.toLocaleString()+' blocks<br>' +
       '<span>inputs</span> '+((tx.vin||[]).length)+' · <span>outputs</span> '+((tx.vout||[]).length)+'<br>' +
       (r.fee ? '<span>fee</span> '+dgb(r.fee)+'<br>' : '') +
       (tx.blockHeight && tx.blockHeight>0 ? '<span>block</span> '+tx.blockHeight : '<span>block</span> not yet mined') +
@@ -425,18 +481,19 @@ function renderTx(tx, viewingAddress){
   if (viewingAddress) myAddrs[viewingAddress] = true;
   ins.forEach(function(v){ if (v.addr) myAddrs[v.addr] = true; });
 
-  /* Heuristic for fresh change addresses: if there are exactly 2 real outputs
-     and one clearly goes back to a known sender address (myAddrs) but the
-     other doesn't, that's a clean send. But if NEITHER matches myAddrs (wallet
-     used a fresh change address), flag the larger output as likely change —
-     this is almost always correct for single-recipient sends. */
+  /* Heuristic for fresh change addresses: when none of the outputs match a
+     known sender address, the largest one is the best guess for change.
+     Generalizes to any number of outputs — a multi-recipient payout with
+     one large change return works the same as a simple send. Kept in sync
+     with the identical heuristic in interpret() so the address-card view
+     and this detail view always agree on which output is change. */
   var realOuts = outs.filter(function(o){ return !o.isData; });
   var knownChangeCount = realOuts.filter(function(o){ return o.addr && myAddrs[o.addr]; }).length;
-  if (realOuts.length === 2 && knownChangeCount === 0) {
-    // Neither output address matches a known sender — find the larger one
+  if (realOuts.length >= 2 && knownChangeCount === 0) {
     var maxVal = Math.max.apply(null, realOuts.map(function(o){ return sat(o.value); }));
+    var flagged = false;
     realOuts.forEach(function(o){
-      if (sat(o.value) === maxVal) myAddrs[o.addr] = true; // treat as change
+      if (!flagged && sat(o.value) === maxVal) { myAddrs[o.addr] = true; flagged = true; }
     });
   }
   var netOut = 0;
@@ -450,12 +507,14 @@ function renderTx(tx, viewingAddress){
       ? 'This transaction sent <b>'+dgb(netOut)+'</b> to outside wallets.'
       : 'This transaction moved <b>'+dgb(total)+'</b>.';
 
+  var feePct = feePercentOf(fee, netOut > 0 ? netOut : total);
   var sub = coinbase
     ? 'New coins are created when a miner finds a block. They don\'t come from anyone else\'s wallet.'
     : 'It took money from '+ins.length+' input'+(ins.length===1?'':'s')+' and sent to '+
       outs.length+' output'+(outs.length===1?'':'s')+
-      (fee ? ', paying '+dgb(fee)+' as a network fee.' : '.')+
-      (netOut > 0 && netOut < total ? ' The rest came back as change.' : '');
+      (fee ? ', paying '+dgb(fee)+' as a network fee'+(feePct?' ('+feePct+')':'')+'.' : '.');
+
+  var cl = confirmLabel(conf);
 
   var html =
     '<div class="summary">' +
@@ -465,8 +524,10 @@ function renderTx(tx, viewingAddress){
     '</div>' +
     '<div class="statrow">' +
       '<div class="st"><div class="k">When</div><div class="v" style="font-size:15px">'+esc(fullDate(tx.time))+'</div></div>' +
-      '<div class="st"><div class="k">Status</div><div class="v" style="font-size:15px;color:'+(conf>0?'var(--mint)':'var(--amber)')+'">' +
-        (conf>0 ? 'Confirmed · '+conf.toLocaleString()+' deep' : 'Waiting to confirm')+'</div></div>' +
+      '<div class="st"><div class="k">Status</div><div class="v" style="font-size:15px;color:var(--'+cl.tone+')">' +
+        cl.text +
+        (conf>0 ? '<span style="display:block;font-size:11.5px;color:var(--dim);font-weight:400;margin-top:2px">'+conf.toLocaleString()+' blocks deep</span>' : '') +
+      '</div></div>' +
     '</div>';
 
   if (!coinbase && ins.length){
@@ -485,11 +546,13 @@ function renderTx(tx, viewingAddress){
 
   html += '<h2>Money went to</h2><div class="h2sub">Actual amounts sent to recipients</div>';
   var hasRealOutputs = false;
+  var hiddenChange = [];
   outs.forEach(function(o){
     var val = sat(o.value);
     var isData = o.isData || false;
     var isChange = !isData && o.addr && myAddrs[o.addr];
-    if (isData || isChange) return; // hide change and data outputs
+    if (isData) return;
+    if (isChange){ hiddenChange.push({ addr: o.addr, val: val }); return; }
     hasRealOutputs = true;
     html += '<div class="ev in"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
             '<span class="verb">to</span></div>' +
@@ -501,8 +564,36 @@ function renderTx(tx, viewingAddress){
             '<div class="party">Nothing left this wallet permanently.</div></div>';
   }
 
+  if (hiddenChange.length){
+    var changeTotal = hiddenChange.reduce(function(sum,c){ return sum + c.val; }, 0);
+    html += '<div class="note" style="margin-top:10px">' +
+      (hiddenChange.length === 1
+        ? 'An output of '+dgb(changeTotal)+' returned to the sender as change and isn\'t shown above.'
+        : hiddenChange.length+' outputs totalling '+dgb(changeTotal)+' returned to the sender as change and aren\'t shown above.') +
+      ' <a href="#" class="showchange" style="text-decoration:underline">Show it</a>.' +
+      '</div>';
+  }
+
   html += '<div class="note">Read directly from a public DigiByte block explorer. This page is read-only and never asks for a private key or seed phrase.</div>';
   out.innerHTML = html;
+
+  if (hiddenChange.length){
+    var link = out.querySelector('.showchange');
+    if (link){
+      link.addEventListener('click', function(e){
+        e.preventDefault();
+        var block = hiddenChange.map(function(c){
+          return '<div class="ev"><div class="top"><span class="amt">'+dgb(c.val)+'</span>' +
+                 '<span class="verb" style="color:var(--muted)">change back to sender</span></div>' +
+                 '<div class="party">'+copyable(c.addr)+'</div></div>';
+        }).join('');
+        e.target.closest('.note').outerHTML =
+          '<div class="note" style="margin-top:10px">'+
+            (hiddenChange.length===1 ? 'This is the change output:' : 'These are the change outputs:') +
+          '</div>' + block;
+      });
+    }
+  }
 }
 
 /* ---------- lookup ---------- */
