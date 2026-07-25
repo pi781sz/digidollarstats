@@ -417,14 +417,28 @@ function renderTx(tx, viewingAddress){
   var fee = sat(tx.fee || tx.fees || 0);
   var conf = Number(tx.confirmations) || 0;
 
-  /* Work out which output addresses belong to the viewing address,
-     so we can label change outputs clearly. */
+  /* Work out which output addresses are change.
+     Change = an output that goes back to an address that also appears
+     as a sender in the inputs. This works whether we arrived here from
+     an address view (state.address set) or a direct txid lookup. */
   var myAddrs = {};
   if (viewingAddress) myAddrs[viewingAddress] = true;
-  /* Also mark any address that appears in vin (sent from here = likely ours) */
   ins.forEach(function(v){ if (v.addr) myAddrs[v.addr] = true; });
 
-  /* Net amount actually sent to external parties */
+  /* Heuristic for fresh change addresses: if there are exactly 2 real outputs
+     and one clearly goes back to a known sender address (myAddrs) but the
+     other doesn't, that's a clean send. But if NEITHER matches myAddrs (wallet
+     used a fresh change address), flag the larger output as likely change —
+     this is almost always correct for single-recipient sends. */
+  var realOuts = outs.filter(function(o){ return !o.isData; });
+  var knownChangeCount = realOuts.filter(function(o){ return o.addr && myAddrs[o.addr]; }).length;
+  if (realOuts.length === 2 && knownChangeCount === 0) {
+    // Neither output address matches a known sender — find the larger one
+    var maxVal = Math.max.apply(null, realOuts.map(function(o){ return sat(o.value); }));
+    realOuts.forEach(function(o){
+      if (sat(o.value) === maxVal) myAddrs[o.addr] = true; // treat as change
+    });
+  }
   var netOut = 0;
   outs.forEach(function(o){
     if (!o.isData && o.addr && !myAddrs[o.addr]) netOut += sat(o.value);
@@ -456,35 +470,36 @@ function renderTx(tx, viewingAddress){
     '</div>';
 
   if (!coinbase && ins.length){
-    html += '<h2>Money came from</h2><div class="h2sub">These wallets funded the transaction</div>';
+    html += '<h2>Money came from</h2><div class="h2sub">These wallets sent the transaction</div>';
+    /* Deduplicate senders — a wallet can have multiple UTXOs in one tx */
+    var seenSenders = {};
     ins.forEach(function(v){
-      var val = sat(v.value);
       var a = v.addr || firstAddr(v);
-      html += '<div class="ev out"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
+      if (!a || seenSenders[a]) return;
+      seenSenders[a] = true;
+      html += '<div class="ev out"><div class="top">' +
               '<span class="verb">from</span></div>' +
-              '<div class="party">'+(a ? copyable(a) : 'an address the explorer couldn\'t identify')+'</div></div>';
+              '<div class="party">'+ copyable(a) +'</div></div>';
     });
   }
 
-  html += '<h2>Money went to</h2><div class="h2sub">Where it ended up · change returns to sender</div>';
+  html += '<h2>Money went to</h2><div class="h2sub">Actual amounts sent to recipients</div>';
+  var hasRealOutputs = false;
   outs.forEach(function(o){
     var val = sat(o.value);
     var isData = o.isData || false;
     var isChange = !isData && o.addr && myAddrs[o.addr];
-    if (isData){
-      html += '<div class="ev"><div class="top"><span class="amt">—</span>' +
-              '<span class="verb">a note attached to the chain</span></div>' +
-              '<div class="party">This output carries data rather than money. DigiDollar uses these to record mint and redeem details.</div></div>';
-    } else if (isChange){
-      html += '<div class="ev"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
-              '<span class="verb" style="color:var(--muted)">change back to sender</span></div>' +
-              '<div class="party">'+copyable(o.addr)+'</div></div>';
-    } else {
-      html += '<div class="ev in"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
-              '<span class="verb">to</span></div>' +
-              '<div class="party">'+(o.addr ? copyable(o.addr) : 'an address the explorer couldn\'t identify')+'</div></div>';
-    }
+    if (isData || isChange) return; // hide change and data outputs
+    hasRealOutputs = true;
+    html += '<div class="ev in"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
+            '<span class="verb">to</span></div>' +
+            '<div class="party">'+(o.addr ? copyable(o.addr) : 'an address the explorer couldn\'t identify')+'</div></div>';
   });
+  if (!hasRealOutputs){
+    html += '<div class="ev"><div class="top"><span class="amt">—</span>' +
+            '<span class="verb">all outputs returned as change</span></div>' +
+            '<div class="party">Nothing left this wallet permanently.</div></div>';
+  }
 
   html += '<div class="note">Read directly from a public DigiByte block explorer. This page is read-only and never asks for a private key or seed phrase.</div>';
   out.innerHTML = html;
