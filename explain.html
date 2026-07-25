@@ -323,11 +323,11 @@ function eventCard(tx, address){
       : 'an address the explorer couldn\'t identify';
     party = 'Sent from ' + from + '.';
   } else {
-    kind = 'out'; amt = dgb(Math.abs(r.net)); verb = 'went out';
+    kind = 'out'; amt = dgb(Math.abs(r.net)); verb = 'actually sent';
     var to = r.receivers.length
       ? r.receivers.slice(0,3).map(copyable).join(', ') + (r.receivers.length>3 ? ' and '+(r.receivers.length-3)+' more' : '')
       : 'an address the explorer couldn\'t identify';
-    party = 'Sent to ' + to + '.';
+    party = 'To ' + to + '. The rest returned to your wallet as change.';
   }
 
   var conf = r.confirmations > 0
@@ -409,7 +409,7 @@ function showMore(){
   if (btn && state.shown >= state.txs.length) btn.style.display = 'none';
 }
 
-function renderTx(tx){
+function renderTx(tx, viewingAddress){
   var ins = (tx.vin||[]).filter(function(v){ return !v.coinbase; });
   var coinbase = (tx.vin||[]).some(function(v){ return !!v.coinbase; });
   var outs = tx.vout || [];
@@ -417,15 +417,31 @@ function renderTx(tx){
   var fee = sat(tx.fee || tx.fees || 0);
   var conf = Number(tx.confirmations) || 0;
 
+  /* Work out which output addresses belong to the viewing address,
+     so we can label change outputs clearly. */
+  var myAddrs = {};
+  if (viewingAddress) myAddrs[viewingAddress] = true;
+  /* Also mark any address that appears in vin (sent from here = likely ours) */
+  ins.forEach(function(v){ if (v.addr) myAddrs[v.addr] = true; });
+
+  /* Net amount actually sent to external parties */
+  var netOut = 0;
+  outs.forEach(function(o){
+    if (!o.isData && o.addr && !myAddrs[o.addr]) netOut += sat(o.value);
+  });
+
   var lead = coinbase
     ? 'This transaction created <b>'+dgb(total)+'</b> as a mining reward.'
-    : 'This transaction moved <b>'+dgb(total)+'</b>.';
+    : netOut > 0
+      ? 'This transaction sent <b>'+dgb(netOut)+'</b> to outside wallets.'
+      : 'This transaction moved <b>'+dgb(total)+'</b>.';
 
   var sub = coinbase
     ? 'New coins are created when a miner finds a block. They don\'t come from anyone else\'s wallet.'
-    : 'It took money from '+ins.length+' place'+(ins.length===1?'':'s')+' and delivered it to '+
-      outs.length+' place'+(outs.length===1?'':'s')+
-      (fee ? ', paying '+dgb(fee)+' to the network for processing it.' : '.');
+    : 'It took money from '+ins.length+' input'+(ins.length===1?'':'s')+' and sent to '+
+      outs.length+' output'+(outs.length===1?'':'s')+
+      (fee ? ', paying '+dgb(fee)+' as a network fee.' : '.')+
+      (netOut > 0 && netOut < total ? ' The rest came back as change.' : '');
 
   var html =
     '<div class="summary">' +
@@ -435,7 +451,7 @@ function renderTx(tx){
     '</div>' +
     '<div class="statrow">' +
       '<div class="st"><div class="k">When</div><div class="v" style="font-size:15px">'+esc(fullDate(tx.time))+'</div></div>' +
-      '<div class="st"><div class="k">Status</div><div class="v" style="font-size:15px;color:'+(conf>0?'var(--mint)':'var(--amber)')+'">'+
+      '<div class="st"><div class="k">Status</div><div class="v" style="font-size:15px;color:'+(conf>0?'var(--mint)':'var(--amber)')+'">' +
         (conf>0 ? 'Confirmed · '+conf.toLocaleString()+' deep' : 'Waiting to confirm')+'</div></div>' +
     '</div>';
 
@@ -450,14 +466,19 @@ function renderTx(tx){
     });
   }
 
-  html += '<h2>Money went to</h2><div class="h2sub">Where it ended up</div>';
+  html += '<h2>Money went to</h2><div class="h2sub">Where it ended up · change returns to sender</div>';
   outs.forEach(function(o){
     var val = sat(o.value);
     var isData = o.isData || false;
+    var isChange = !isData && o.addr && myAddrs[o.addr];
     if (isData){
       html += '<div class="ev"><div class="top"><span class="amt">—</span>' +
               '<span class="verb">a note attached to the chain</span></div>' +
               '<div class="party">This output carries data rather than money. DigiDollar uses these to record mint and redeem details.</div></div>';
+    } else if (isChange){
+      html += '<div class="ev"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
+              '<span class="verb" style="color:var(--muted)">change back to sender</span></div>' +
+              '<div class="party">'+copyable(o.addr)+'</div></div>';
     } else {
       html += '<div class="ev in"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
               '<span class="verb">to</span></div>' +
@@ -492,7 +513,7 @@ function lookup(pushUrl){
 
   if (looksLikeTxid(q)){
     apiGet('/tx/'+encodeURIComponent(q))
-      .then(function(tx){ renderTx(tx); done(); })
+      .then(function(tx){ renderTx(tx, state.address); done(); })
       .catch(function(){
         msg('Couldn\'t find a transaction with that ID. Double-check it, or it may not have reached the network yet.', true);
         done();
