@@ -85,6 +85,25 @@ h2{font-size:17px;font-weight:700;margin:26px 0 4px}
 .ev .party{font-size:14px;color:var(--muted);margin-top:9px;line-height:1.55}
 .ev .party code{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text);
   background:#0a1710;border:1px solid var(--line);border-radius:5px;padding:2px 6px;cursor:pointer}
+
+/* clickable address chip + copy button */
+.addrchip{display:inline-flex;align-items:center;gap:3px;vertical-align:baseline;max-width:100%}
+.addrlink{
+  font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--text);
+  background:#0a1710;border:1px solid var(--line);border-radius:5px;
+  padding:2px 6px;cursor:pointer;text-decoration:none;display:inline-block;
+}
+.addrlink:hover,.addrlink:focus{border-color:var(--ring);color:var(--mint);text-decoration:none;outline:none}
+.addrcopy{
+  background:transparent;border:0;color:var(--dim);cursor:pointer;padding:3px;
+  line-height:0;border-radius:4px;flex-shrink:0;
+}
+.addrcopy:hover,.addrcopy:focus{color:var(--mint);outline:none}
+.addrcopy.done{color:var(--mint)}
+.addrcopy .tick{display:none}
+.addrcopy.done .tick{display:inline}
+.addrcopy.done .sheets{display:none}
+.summary .addr .addrcopy{vertical-align:middle;margin-left:6px}
 .ev .meta{font-size:12.5px;color:var(--dim);margin-top:10px;display:flex;gap:14px;flex-wrap:wrap}
 .ev .meta .ok{color:var(--mint)}
 .ev .meta .pending{color:var(--amber)}
@@ -236,8 +255,29 @@ function msg(html, isErr){
   out.innerHTML = '<div class="msg'+(isErr?' err':'')+'">'+html+'</div>';
 }
 
+/* Small reusable copy button. Shows a tick for ~1.4s after copying. */
+function copyBtn(value, label){
+  return '<button type="button" class="addrcopy" data-copy="'+esc(value)+'" ' +
+    'title="Copy '+(label||'address')+'" aria-label="Copy full '+(label||'address')+'">' +
+    '<svg class="sheets" width="12" height="12" viewBox="0 0 24 24" fill="none" ' +
+      'stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">' +
+      '<rect x="9" y="9" width="13" height="13" rx="2"/>' +
+      '<path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>' +
+    '<svg class="tick" width="12" height="12" viewBox="0 0 24 24" fill="none" ' +
+      'stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">' +
+      '<path d="M20 6L9 17l-5-5"/></svg>' +
+  '</button>';
+}
+
+/* An address renders as a chip: tap the address to explain it, or use the
+   copy button to grab the full string. */
 function copyable(a){
-  return '<code onclick="navigator.clipboard&&navigator.clipboard.writeText(\''+esc(a)+'\')" title="Tap to copy">'+esc(shortAddr(a))+'</code>';
+  if (!a) return 'an address the explorer couldn\'t identify';
+  return '<span class="addrchip">' +
+    '<a class="addrlink" href="?q='+encodeURIComponent(a)+'" data-addr="'+esc(a)+'" ' +
+      'title="Explain this address">'+esc(shortAddr(a))+'</a>' +
+    copyBtn(a, 'address') +
+  '</span>';
 }
 
 /* Work out what a transaction did FROM THIS ADDRESS'S POINT OF VIEW */
@@ -340,7 +380,7 @@ function renderAddress(info){
     '<div class="summary">' +
       '<div class="lead">'+lead+'</div>' +
       '<div class="sub">'+sub+'</div>' +
-      '<div class="addr">'+esc(address)+'</div>' +
+      '<div class="addr">'+esc(address)+copyBtn(address,'address')+'</div>' +
     '</div>' +
     '<div class="statrow">' +
       '<div class="st"><div class="k">Balance now</div><div class="v" style="color:var(--mint)">'+dgb(bal)+'</div></div>' +
@@ -394,7 +434,7 @@ function renderTx(tx){
     '<div class="summary">' +
       '<div class="lead">'+lead+'</div>' +
       '<div class="sub">'+sub+'</div>' +
-      '<div class="addr">'+esc(tx.txid)+'</div>' +
+      '<div class="addr">'+esc(tx.hash||tx.txid)+copyBtn(tx.txid||'','transaction id')+'</div>' +
     '</div>' +
     '<div class="statrow">' +
       '<div class="st"><div class="k">When</div><div class="v" style="font-size:15px">'+esc(fullDate(tx.blockTime))+'</div></div>' +
@@ -434,9 +474,20 @@ function renderTx(tx){
 }
 
 /* ---------- lookup ---------- */
-function lookup(){
+/* pushUrl: add a history entry so back/forward and sharing work.
+   Skipped when we're responding to a popstate, to avoid loops. */
+function lookup(pushUrl){
   var q = $('q').value.trim();
   if (!q){ msg('Paste a DigiByte address or transaction ID above and press Explain.'); return; }
+
+  if (pushUrl){
+    try {
+      var target = location.pathname + '?q=' + encodeURIComponent(q);
+      if (location.pathname + location.search !== target){
+        history.pushState({ q: q }, '', target);
+      }
+    } catch (err){ /* history unavailable — not fatal */ }
+  }
 
   $('go').disabled = true;
   msg('Reading the chain…');
@@ -461,14 +512,57 @@ function lookup(){
     });
 }
 
-$('go').addEventListener('click', lookup);
-$('q').addEventListener('keydown', function(e){ if (e.key === 'Enter') lookup(); });
-$('demo').addEventListener('click', function(){ $('q').value = DEMO; lookup(); });
+$('go').addEventListener('click', function(){ lookup(true); });
+$('q').addEventListener('keydown', function(e){ if (e.key === 'Enter') lookup(true); });
+$('demo').addEventListener('click', function(){ $('q').value = DEMO; lookup(true); });
+
+/* Delegated: works for cards rendered after this runs.
+   - copy button  -> copy full value to clipboard
+   - address chip -> look that address up in place */
+out.addEventListener('click', function(e){
+  var btn = e.target.closest && e.target.closest('.addrcopy');
+  if (btn){
+    e.preventDefault();
+    var val = btn.getAttribute('data-copy') || '';
+    var done = function(){
+      btn.classList.add('done');
+      setTimeout(function(){ btn.classList.remove('done'); }, 1400);
+    };
+    if (navigator.clipboard && navigator.clipboard.writeText){
+      navigator.clipboard.writeText(val).then(done).catch(function(){});
+    } else {
+      // Fallback for browsers without the async clipboard API
+      var ta = document.createElement('textarea');
+      ta.value = val; ta.setAttribute('readonly','');
+      ta.style.position = 'absolute'; ta.style.left = '-9999px';
+      document.body.appendChild(ta); ta.select();
+      try { document.execCommand('copy'); done(); } catch(err){}
+      document.body.removeChild(ta);
+    }
+    return;
+  }
+
+  var link = e.target.closest && e.target.closest('.addrlink');
+  if (link){
+    e.preventDefault();
+    var addr = link.getAttribute('data-addr');
+    if (!addr) return;
+    $('q').value = addr;
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+    lookup(true);
+  }
+});
+
+/* Browser back/forward moves between looked-up addresses */
+window.addEventListener('popstate', function(){
+  var m = location.search.match(/[?&]q=([^&]+)/);
+  if (m){ $('q').value = decodeURIComponent(m[1]); lookup(false); }
+});
 
 /* deep link: /explain?q=... */
 (function(){
   var m = location.search.match(/[?&]q=([^&]+)/);
-  if (m){ $('q').value = decodeURIComponent(m[1]); lookup(); }
+  if (m){ $('q').value = decodeURIComponent(m[1]); lookup(false); }
 })();
 </script>
 </body>
