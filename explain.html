@@ -226,16 +226,12 @@ function fullDate(ts){
 }
 function looksLikeTxid(s){ return /^[0-9a-fA-F]{64}$/.test(s); }
 
-/* Blockbook returns every amount as an integer string of the smallest
-   unit (satoshis). This page speaks whole DGB. */
-function sat(v){ return (Number(v) || 0) / 1e8; }
+/* The Worker normalises amounts to whole DGB regardless of upstream.
+   sat() is kept as a no-op identity so existing call sites don't break. */
+function sat(v){ return Number(v) || 0; }
 
-/* Blockbook gives a vin/vout its addresses as an array, which may be
-   null for non-address outputs like OP_RETURN data. */
-function firstAddr(o){
-  var a = o && o.addresses;
-  return (a && a.length) ? a[0] : null;
-}
+/* Normalised vin/vout use {addr, value} — addr is a plain string or null. */
+function firstAddr(o){ return (o && o.addr) || null; }
 
 /* ---------- API with fallback ---------- */
 function apiGet(path){
@@ -293,7 +289,8 @@ function interpret(tx, address){
   });
   (tx.vout || []).forEach(function(o){
     var val = sat(o.value);
-    var addrs = o.addresses || [];
+    /* Normalised format uses o.addr (string|null); isData outputs have addr===null */
+    var addrs = o.isData ? [] : (o.addr ? [o.addr] : (o.addresses || []));
     if (addrs.indexOf(address) !== -1) outMine += val;
     else addrs.forEach(function(a){ receivers[a] = (receivers[a]||0) + val; });
   });
@@ -302,11 +299,11 @@ function interpret(tx, address){
   return {
     coinbase: coinbase,
     net: net,
-    fee: sat(tx.fees),
+    fee: sat(tx.fees || tx.fee || 0),
     senders: Object.keys(senders),
     receivers: Object.keys(receivers),
     confirmations: Number(tx.confirmations) || 0,
-    time: tx.blockTime,
+    time: tx.blockTime || tx.time || 0,
     txid: tx.txid
   };
 }
@@ -417,7 +414,7 @@ function renderTx(tx){
   var coinbase = (tx.vin||[]).some(function(v){ return !!v.coinbase; });
   var outs = tx.vout || [];
   var total = sat(tx.value);
-  var fee = sat(tx.fees);
+  var fee = sat(tx.fee || tx.fees || 0);
   var conf = Number(tx.confirmations) || 0;
 
   var lead = coinbase
@@ -434,10 +431,10 @@ function renderTx(tx){
     '<div class="summary">' +
       '<div class="lead">'+lead+'</div>' +
       '<div class="sub">'+sub+'</div>' +
-      '<div class="addr">'+esc(tx.hash||tx.txid)+copyBtn(tx.txid||'','transaction id')+'</div>' +
+      '<div class="addr">'+esc(tx.txid)+copyBtn(tx.txid||'','transaction id')+'</div>' +
     '</div>' +
     '<div class="statrow">' +
-      '<div class="st"><div class="k">When</div><div class="v" style="font-size:15px">'+esc(fullDate(tx.blockTime))+'</div></div>' +
+      '<div class="st"><div class="k">When</div><div class="v" style="font-size:15px">'+esc(fullDate(tx.time))+'</div></div>' +
       '<div class="st"><div class="k">Status</div><div class="v" style="font-size:15px;color:'+(conf>0?'var(--mint)':'var(--amber)')+'">'+
         (conf>0 ? 'Confirmed · '+conf.toLocaleString()+' deep' : 'Waiting to confirm')+'</div></div>' +
     '</div>';
@@ -446,7 +443,7 @@ function renderTx(tx){
     html += '<h2>Money came from</h2><div class="h2sub">These wallets funded the transaction</div>';
     ins.forEach(function(v){
       var val = sat(v.value);
-      var a = firstAddr(v);
+      var a = v.addr || firstAddr(v);
       html += '<div class="ev out"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
               '<span class="verb">from</span></div>' +
               '<div class="party">'+(a ? copyable(a) : 'an address the explorer couldn\'t identify')+'</div></div>';
@@ -456,8 +453,7 @@ function renderTx(tx){
   html += '<h2>Money went to</h2><div class="h2sub">Where it ended up</div>';
   outs.forEach(function(o){
     var val = sat(o.value);
-    var addrs = o.addresses || [];
-    var isData = (o.type === 'nulldata') || (!addrs.length && o.isAddress === false);
+    var isData = o.isData || false;
     if (isData){
       html += '<div class="ev"><div class="top"><span class="amt">—</span>' +
               '<span class="verb">a note attached to the chain</span></div>' +
@@ -465,7 +461,7 @@ function renderTx(tx){
     } else {
       html += '<div class="ev in"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
               '<span class="verb">to</span></div>' +
-              '<div class="party">'+(addrs.length?addrs.map(copyable).join(', '):'an address the explorer couldn\'t identify')+'</div></div>';
+              '<div class="party">'+(o.addr ? copyable(o.addr) : 'an address the explorer couldn\'t identify')+'</div></div>';
     }
   });
 
