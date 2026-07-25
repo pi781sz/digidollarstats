@@ -206,21 +206,26 @@ function fullDate(ts){
   return new Date(ts*1000).toLocaleString(undefined,{dateStyle:'medium', timeStyle:'short'});
 }
 function looksLikeTxid(s){ return /^[0-9a-fA-F]{64}$/.test(s); }
-function looksLikeAddress(s){
-  return /^(D|S|dgb1|D)[a-zA-Z0-9]{20,}$/.test(s) || /^dgb1[a-z0-9]{20,}$/i.test(s);
+
+/* Blockchair returns satoshis; this page speaks DGB */
+function sat2dgb(s){ return (Number(s)||0) / 1e8; }
+
+/* Blockchair timestamps look like "2026-07-18 12:34:56" (UTC, no zone marker) */
+function toUnix(s){
+  if (!s) return 0;
+  var t = Date.parse(String(s).replace(' ','T') + 'Z');
+  return isFinite(t) ? Math.floor(t/1000) : 0;
+}
+function fullDateFromStr(s){
+  var ts = toUnix(s);
+  return ts ? fullDate(ts) : 'not yet confirmed';
 }
 
-/* ---------- API with fallback ---------- */
+/* ---------- API ---------- */
 function apiGet(path){
-  var i = 0;
-  function attempt(){
-    if (i >= API_BASES.length) return Promise.reject(new Error('unreachable'));
-    var url = API_BASES[i++] + path;
-    return fetch(url, {cache:'no-store'})
-      .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); })
-      .catch(function(){ return attempt(); });
-  }
-  return attempt();
+  var url = API_BASES[0] + path;
+  return fetch(url, {cache:'no-store'})
+    .then(function(r){ if(!r.ok) throw new Error('http '+r.status); return r.json(); });
 }
 
 /* ---------- rendering ---------- */
@@ -229,94 +234,25 @@ function msg(html, isErr){
 }
 
 function copyable(a){
+  if (!a) return 'an address the explorer couldn\'t identify';
   return '<code onclick="navigator.clipboard&&navigator.clipboard.writeText(\''+esc(a)+'\')" title="Tap to copy">'+esc(shortAddr(a))+'</code>';
 }
 
-/* Work out what a transaction did FROM THIS ADDRESS'S POINT OF VIEW */
-function interpret(tx, address){
-  var inMine = 0, outMine = 0, senders = {}, receivers = {}, coinbase = false;
+/* ---------- address view ---------- */
+function renderAddress(json, addressQueried){
+  var entry = json && json.data && json.data[addressQueried];
+  if (!entry){ msg('Couldn\'t find that address on the chain yet — it may never have been used.', true); return; }
 
-  (tx.vin || []).forEach(function(v){
-    if (v.coinbase) { coinbase = true; return; }
-    var val = Number(v.value != null ? v.value : (v.valueSat||0)/1e8) || 0;
-    if (v.addr === address) inMine += val;
-    else if (v.addr) senders[v.addr] = (senders[v.addr]||0) + val;
-  });
-  (tx.vout || []).forEach(function(o){
-    var val = Number(o.value) || 0;
-    var addrs = (o.scriptPubKey && o.scriptPubKey.addresses) || [];
-    if (addrs.indexOf(address) !== -1) outMine += val;
-    else addrs.forEach(function(a){ receivers[a] = (receivers[a]||0) + val; });
-  });
+  var a = entry.address || {};
+  var txs = entry.transactions || [];
+  var chainHeight = (json.context && json.context.state) || 0;
 
-  var net = outMine - inMine;
-  var fee = Number(tx.fees) || 0;
-  return {
-    coinbase: coinbase,
-    net: net,
-    fee: fee,
-    senders: Object.keys(senders),
-    receivers: Object.keys(receivers),
-    confirmations: Number(tx.confirmations) || 0,
-    time: tx.time || tx.blocktime,
-    txid: tx.txid
-  };
-}
+  state.txs = txs; state.shown = 0; state.address = addressQueried; state.chainHeight = chainHeight;
 
-function eventCard(tx, address){
-  var r = interpret(tx, address);
-  var kind, amt, verb, party;
-
-  if (r.coinbase){
-    kind = 'mined'; amt = dgb(r.net);
-    verb = 'arrived as a mining reward';
-    party = 'This was newly created by mining a block — it didn\'t come from anyone.';
-  } else if (r.net >= 0){
-    kind = 'in'; amt = dgb(r.net); verb = 'came in';
-    var from = r.senders.length
-      ? r.senders.slice(0,3).map(copyable).join(', ') + (r.senders.length>3 ? ' and '+(r.senders.length-3)+' more' : '')
-      : 'an address the explorer couldn\'t identify';
-    party = 'Sent from ' + from + '.';
-  } else {
-    kind = 'out'; amt = dgb(Math.abs(r.net)); verb = 'went out';
-    var to = r.receivers.length
-      ? r.receivers.slice(0,3).map(copyable).join(', ') + (r.receivers.length>3 ? ' and '+(r.receivers.length-3)+' more' : '')
-      : 'an address the explorer couldn\'t identify';
-    party = 'Sent to ' + to + '.';
-  }
-
-  var conf = r.confirmations > 0
-    ? '<span class="ok">✓ confirmed</span> · ' + r.confirmations.toLocaleString() + ' blocks deep'
-    : '<span class="pending">waiting to confirm</span>';
-
-  var feeTxt = (kind === 'out' && r.fee) ? 'network fee ' + dgb(r.fee) : '';
-
-  return '' +
-  '<div class="ev '+kind+'">' +
-    '<div class="top">' +
-      '<span class="amt">'+amt+'</span>' +
-      '<span class="verb">'+verb+'</span>' +
-      '<span class="when">'+whenText(r.time)+'</span>' +
-    '</div>' +
-    '<div class="party">'+party+'</div>' +
-    '<div class="meta">'+conf+(feeTxt?' · '+feeTxt:'')+'</div>' +
-    '<details class="tech"><summary>Technical details</summary><div class="body">' +
-      '<span>transaction id</span><br>'+esc(r.txid)+'<br><br>' +
-      '<span>exact time</span> '+fullDate(r.time)+'<br>' +
-      '<span>inputs</span> '+((tx.vin||[]).length)+' · <span>outputs</span> '+((tx.vout||[]).length)+'<br>' +
-      (r.fee ? '<span>fee</span> '+dgb(r.fee)+'<br>' : '') +
-      (tx.blockheight && tx.blockheight>0 ? '<span>block</span> '+tx.blockheight : '<span>block</span> not yet mined') +
-    '</div></details>' +
-  '</div>';
-}
-
-function renderAddress(info, txs){
-  state.txs = txs; state.shown = 0; state.address = info.addrStr;
-
-  var bal = Number(info.balance) || 0;
-  var recv = Number(info.totalReceived) || 0;
-  var sent = Number(info.totalSent) || 0;
-  var n = Number(info.txApperances || info.txAppearances || (info.transactions||[]).length) || 0;
+  var bal = sat2dgb(a.balance);
+  var recv = sat2dgb(a.received);
+  var sent = sat2dgb(a.spent);
+  var n = Number(a.transaction_count) || txs.length;
 
   var lead = n === 0
     ? 'This wallet has never been used.'
@@ -330,7 +266,7 @@ function renderAddress(info, txs){
     '<div class="summary">' +
       '<div class="lead">'+lead+'</div>' +
       '<div class="sub">'+sub+'</div>' +
-      '<div class="addr">'+esc(info.addrStr)+'</div>' +
+      '<div class="addr">'+esc(addressQueried)+'</div>' +
     '</div>' +
     '<div class="statrow">' +
       '<div class="st"><div class="k">Balance now</div><div class="v" style="color:var(--mint)">'+dgb(bal)+'</div></div>' +
@@ -339,32 +275,89 @@ function renderAddress(info, txs){
 
   if (txs.length){
     html += '<h2>What happened, most recent first</h2>' +
-            '<div class="h2sub">Green came in · amber went out</div>' +
+            '<div class="h2sub">Green came in · amber went out · tap any line for the full story</div>' +
             '<div id="evs"></div>' +
             '<button class="more" id="more" type="button">Show more</button>';
   }
-  html += '<div class="note">Balances and history come from public block explorers. This page is read-only and never asks for a private key or seed phrase — nobody legitimate ever will.</div>';
+  html += '<div class="note">Balances and history come from Blockchair, a public multi-chain explorer. This page is read-only and never asks for a private key or seed phrase — nobody legitimate ever will.</div>';
 
   out.innerHTML = html;
-  if (txs.length){ showMore(); $('more').addEventListener('click', showMore); }
+  if (txs.length){
+    showMore();
+    $('more').addEventListener('click', showMore);
+    $('evs').addEventListener('click', function(e){
+      var el = e.target.closest('.ev');
+      if (!el) return;
+      var txid = el.getAttribute('data-txid');
+      if (txid){ $('q').value = txid; lookup(); }
+    });
+    $('evs').addEventListener('keydown', function(e){
+      if (e.key !== 'Enter' && e.key !== ' ') return;
+      var el = e.target.closest('.ev');
+      if (!el) return;
+      e.preventDefault();
+      var txid = el.getAttribute('data-txid');
+      if (txid){ $('q').value = txid; lookup(); }
+    });
+  }
+}
+
+/* One line per transaction in the address view — net movement only.
+   Tapping a line loads the full breakdown via renderTx(). */
+function eventCardLite(t){
+  if (typeof t === 'string'){
+    // Upstream returned a bare hash with no detail attached
+    return '<div class="ev" data-txid="'+esc(t)+'" role="button" tabindex="0">' +
+      '<div class="top"><span class="verb">Transaction '+esc(shortAddr(t))+'</span></div>' +
+      '<div class="party">Tap for the full breakdown.</div>' +
+    '</div>';
+  }
+
+  var net = sat2dgb(t.balance_change);
+  var kind = net >= 0 ? 'in' : 'out';
+  var amt = dgb(Math.abs(net));
+  var verb = net >= 0 ? 'came in (net)' : 'went out (net)';
+  var confirmed = Number(t.block_id) > 0;
+  var conf = confirmed
+    ? '<span class="ok">✓ confirmed</span>'
+    : '<span class="pending">waiting to confirm</span>';
+
+  return '' +
+  '<div class="ev '+kind+'" data-txid="'+esc(t.hash)+'" role="button" tabindex="0">' +
+    '<div class="top">' +
+      '<span class="amt">'+amt+'</span>' +
+      '<span class="verb">'+verb+'</span>' +
+      '<span class="when">'+whenText(toUnix(t.time))+'</span>' +
+    '</div>' +
+    '<div class="party">Tap for who sent what.</div>' +
+    '<div class="meta">'+conf+'</div>' +
+  '</div>';
 }
 
 function showMore(){
   var box = $('evs'); if (!box) return;
   var next = state.txs.slice(state.shown, state.shown + PAGE_SIZE);
-  box.insertAdjacentHTML('beforeend', next.map(function(t){ return eventCard(t, state.address); }).join(''));
+  box.insertAdjacentHTML('beforeend', next.map(eventCardLite).join(''));
   state.shown += next.length;
   var btn = $('more');
   if (btn && state.shown >= state.txs.length) btn.style.display = 'none';
 }
 
-function renderTx(tx){
-  var ins = (tx.vin||[]).filter(function(v){ return !v.coinbase; });
-  var coinbase = (tx.vin||[]).some(function(v){ return v.coinbase; });
-  var outs = tx.vout || [];
-  var total = Number(tx.valueOut) || 0;
-  var fee = Number(tx.fees) || 0;
-  var conf = Number(tx.confirmations) || 0;
+/* ---------- transaction view ---------- */
+function renderTx(json, txidQueried){
+  var entry = json && json.data && json.data[txidQueried];
+  if (!entry){ msg('Couldn\'t find a transaction with that ID.', true); return; }
+
+  var t = entry.transaction || {};
+  var ins = entry.inputs || [];
+  var outs = entry.outputs || [];
+  var chainHeight = (json.context && json.context.state) || 0;
+
+  var total = sat2dgb(t.output_total);
+  var fee = sat2dgb(t.fee);
+  var coinbase = !!t.is_coinbase;
+  var blockId = Number(t.block_id) || 0;
+  var conf = blockId > 0 ? Math.max(0, chainHeight - blockId + 1) : 0;
 
   var lead = coinbase
     ? 'This transaction created <b>'+dgb(total)+'</b> as a mining reward.'
@@ -380,10 +373,10 @@ function renderTx(tx){
     '<div class="summary">' +
       '<div class="lead">'+lead+'</div>' +
       '<div class="sub">'+sub+'</div>' +
-      '<div class="addr">'+esc(tx.txid)+'</div>' +
+      '<div class="addr">'+esc(t.hash||txidQueried)+'</div>' +
     '</div>' +
     '<div class="statrow">' +
-      '<div class="st"><div class="k">When</div><div class="v" style="font-size:15px">'+esc(fullDate(tx.time||tx.blocktime))+'</div></div>' +
+      '<div class="st"><div class="k">When</div><div class="v" style="font-size:15px">'+esc(fullDateFromStr(t.time))+'</div></div>' +
       '<div class="st"><div class="k">Status</div><div class="v" style="font-size:15px;color:'+(conf>0?'var(--mint)':'var(--amber)')+'">'+
         (conf>0 ? 'Confirmed · '+conf.toLocaleString()+' deep' : 'Waiting to confirm')+'</div></div>' +
     '</div>';
@@ -391,18 +384,17 @@ function renderTx(tx){
   if (!coinbase && ins.length){
     html += '<h2>Money came from</h2><div class="h2sub">These wallets funded the transaction</div>';
     ins.forEach(function(v){
-      var val = Number(v.value != null ? v.value : (v.valueSat||0)/1e8) || 0;
+      var val = sat2dgb(v.value);
       html += '<div class="ev out"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
               '<span class="verb">from</span></div>' +
-              '<div class="party">'+copyable(v.addr)+'</div></div>';
+              '<div class="party">'+copyable(v.recipient)+'</div></div>';
     });
   }
 
   html += '<h2>Money went to</h2><div class="h2sub">Where it ended up</div>';
   outs.forEach(function(o){
-    var val = Number(o.value)||0;
-    var addrs = (o.scriptPubKey && o.scriptPubKey.addresses) || [];
-    var isData = o.scriptPubKey && o.scriptPubKey.type === 'nulldata';
+    var val = sat2dgb(o.value);
+    var isData = o.type === 'nulldata';
     if (isData){
       html += '<div class="ev"><div class="top"><span class="amt">—</span>' +
               '<span class="verb">a note attached to the chain</span></div>' +
@@ -410,11 +402,11 @@ function renderTx(tx){
     } else {
       html += '<div class="ev in"><div class="top"><span class="amt">'+dgb(val)+'</span>' +
               '<span class="verb">to</span></div>' +
-              '<div class="party">'+(addrs.length?addrs.map(copyable).join(', '):'an address the explorer couldn\'t identify')+'</div></div>';
+              '<div class="party">'+copyable(o.recipient)+'</div></div>';
     }
   });
 
-  html += '<div class="note">Read directly from public block explorers. This page is read-only and never asks for a private key or seed phrase.</div>';
+  html += '<div class="note">Read directly from Blockchair, a public multi-chain explorer. This page is read-only and never asks for a private key or seed phrase.</div>';
   out.innerHTML = html;
 }
 
@@ -430,7 +422,7 @@ function lookup(){
 
   if (looksLikeTxid(q)){
     apiGet('/tx/'+encodeURIComponent(q))
-      .then(function(tx){ renderTx(tx); done(); })
+      .then(function(json){ renderTx(json, q); done(); })
       .catch(function(){
         msg('Couldn\'t find a transaction with that ID. Double-check it, or it may not have reached the network yet.', true);
         done();
@@ -439,12 +431,7 @@ function lookup(){
   }
 
   apiGet('/addr/'+encodeURIComponent(q))
-    .then(function(info){
-      return apiGet('/txs?address='+encodeURIComponent(q)+'&pageNum=0')
-        .then(function(t){ return {info:info, txs:(t && t.txs) || []}; })
-        .catch(function(){ return {info:info, txs:[]}; });
-    })
-    .then(function(res){ renderAddress(res.info, res.txs); done(); })
+    .then(function(json){ renderAddress(json, q); done(); })
     .catch(function(){
       msg('Couldn\'t look that up. Check the address or transaction ID is correct — or the lookup service may be temporarily unavailable.', true);
       done();
