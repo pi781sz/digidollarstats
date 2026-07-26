@@ -131,6 +131,12 @@
   .footcontact{margin-bottom:14px;font-size:13px;color:var(--muted)}
   .footcontact a{color:var(--mint);text-decoration:none}
   .footcontact a:hover{text-decoration:underline}
+  .footdonate{margin-bottom:14px;font-size:13px;color:var(--muted);line-height:1.8;font-weight:700}
+  .footdonate .fdlabel{color:var(--text);font-weight:700}
+  .footdonate .fdaddr{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11.5px;color:var(--mint);cursor:pointer;word-break:break-all;border-bottom:1px dotted var(--ring)}
+  .footdonate .fdaddr:hover{color:var(--text)}
+  .footdonate .fdhint{font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim,#5f7a6b);margin-left:6px;white-space:nowrap}
+  .footdonate .fdhint.ok{color:var(--mint)}
   footer{border-top:1px solid var(--line);padding-top:18px}
 </style>
 <script type="application/ld+json">
@@ -219,6 +225,10 @@
       <a href="/node">Run a Node</a>
     </nav>
     <div class="footcontact">Contact <a href="mailto:hello@digidollarstats.com">hello@digidollarstats.com</a></div>
+    <div class="footdonate">
+      <span class="fdlabel">Chip in</span> · Never expected, always appreciated.<br>
+      <span class="fdaddr" id="fdDgb" role="button" tabindex="0" title="Click to copy">dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz</span><span class="fdhint" id="fdDgbHint">copy</span>
+    </div>
     <a href="/">digidollarstats.com</a> · an independent community project by <a href="https://x.com/dgb_signal">@dgb_signal</a><br>
     Not an official DigiByte channel · not affiliated with the DigiByte Core team<br>
     Data source: digibyte.io public API · verify independently · not financial advice
@@ -323,6 +333,22 @@
   }
   priceRefresh.addEventListener('click', ()=>fetchPrice(true));
   fetchPrice(false);
+</script>
+<script>
+(function(){
+  var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
+  var fel = document.getElementById("fdDgb");
+  var fhint = document.getElementById("fdDgbHint");
+  if(!fel || !fhint) return;
+  function fcopy(){
+    navigator.clipboard.writeText(addr).then(function(){
+      fhint.classList.add("ok"); fhint.textContent = "copied \u2713";
+      setTimeout(function(){ fhint.classList.remove("ok"); fhint.textContent = "copy"; }, 1600);
+    }).catch(function(){});
+  }
+  fel.addEventListener("click", fcopy);
+  fel.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fcopy(); } });
+})();
 </script>
 </body>
 </html>

@@ -33,7 +33,6 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;600;700&display=swap" rel="stylesheet">
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <style>
   :root{
     --bg:#070E0A; --bg2:#0C1810; --card:#0F1D15; --line:#193322;
@@ -134,29 +133,6 @@
   .badge.soon{color:#1A1206;background:var(--amber)}
   .badge.plan{color:var(--muted);background:var(--line)}
 
-  .donate{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:12px}
-  .donate h3{font-size:16.5px;font-weight:700;margin-bottom:6px}
-  .donate p{color:var(--muted);font-size:13.5px;line-height:1.6;margin-bottom:12px}
-  .donate p strong{color:var(--mint);font-weight:700}
-  .addr{
-    font-family:'JetBrains Mono',monospace;font-size:12px;word-break:break-all;
-    background:var(--bg);border:1px solid var(--line);border-radius:10px;
-    padding:11px;color:var(--mint);margin-bottom:8px;
-  }
-  .addr .tag{display:block;color:var(--muted);font-size:10.5px;letter-spacing:.06em;text-transform:uppercase;margin-bottom:4px}
-  .addr.dd-pending{color:var(--muted);font-style:italic}
-
-  .donate .addr{position:relative;cursor:pointer}
-  .donate .addr:hover{border-color:var(--ring)}
-  .copyhint{position:absolute;top:11px;right:11px;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-  .addr.copied .copyhint{color:var(--mint)}
-  .donate .addr.withqr{display:flex;align-items:center;gap:12px}
-  .qrmini{background:#fff;border-radius:6px;padding:4px;line-height:0;flex-shrink:0}
-  .addrcol{flex:1;min-width:0}
-  .addrcol .val{display:block;word-break:break-all;font-size:12px;color:var(--mint)}
-  .addrcol .copyhint{position:static;display:block;margin-top:8px;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted)}
-  .donate .addr.withqr .tag{position:static;display:block;margin-bottom:4px}
-
   .principles{
     border:1px dashed var(--line);border-radius:14px;padding:15px 17px;
     margin-top:22px;color:var(--muted);font-size:13px;line-height:1.7;
@@ -191,11 +167,6 @@
     .toolgrid{display:grid;grid-template-columns:1fr 1fr;gap:14px}
     .tool{margin-bottom:0}
 
-    /* donation: two boxes side by side */
-    .donaterow{display:grid;grid-template-columns:1fr 1fr;gap:12px;align-items:stretch}
-    .donaterow .addr{margin-bottom:0;height:100%}
-    .donate .addr.dd-pending{display:flex;flex-direction:column;justify-content:center}
-
     .sectionhead{margin:32px 0 16px}
     footer{margin-top:34px}
   }
@@ -207,6 +178,12 @@
   .footcontact{margin-bottom:14px;font-size:13px;color:var(--muted)}
   .footcontact a{color:var(--mint);text-decoration:none}
   .footcontact a:hover{text-decoration:underline}
+  .footdonate{margin-bottom:14px;font-size:13px;color:var(--muted);line-height:1.8;font-weight:700}
+  .footdonate .fdlabel{color:var(--text);font-weight:700}
+  .footdonate .fdaddr{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11.5px;color:var(--mint);cursor:pointer;word-break:break-all;border-bottom:1px dotted var(--ring)}
+  .footdonate .fdaddr:hover{color:var(--text)}
+  .footdonate .fdhint{font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim,#5f7a6b);margin-left:6px;white-space:nowrap}
+  .footdonate .fdhint.ok{color:var(--mint)}
   footer{border-top:1px solid var(--line);padding-top:18px}
   /* share buttons */
   .sharebtn{position:absolute;top:10px;right:10px;width:30px;height:30px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--line);border-radius:8px;color:var(--muted);cursor:pointer;padding:0}
@@ -328,20 +305,6 @@
   </a>
   </div>
 
-  <div class="sectionhead"><h2>Support this site</h2><div class="rule"></div></div>
-
-    <div class="donate">
-    <h3>Keep the numbers independent</h3>
-    <p>This site is free, has no ads, and never will. If it's useful to you, donations are welcome — sent wallet-to-wallet, held in self-custody. <strong>Never expected, always appreciated.</strong></p>
-    <div class="donaterow">
-    <div class="addr withqr" id="dgbAddr" role="button" tabindex="0" title="Tap to copy">
-      <div class="qrmini"><div id="dgbqr"></div></div>
-      <div class="addrcol"><span class="tag">Donate DGB</span><span class="val">dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz</span><span class="copyhint" id="dgbHint">Tap to copy</span></div>
-    </div>
-    <div class="addr dd-pending"><span class="tag">Donate $DD</span>DigiDollar is live on mainnet — a $DD donation address is coming soon.</div>
-    </div>
-  </div>
-
   <div class="principles">
     <b>House rules:</b> no price predictions, no yield pitches, no financial advice. DigiDollar is liquidity against your own locked DGB — not free money. Debt is fixed in USD, timelocks have no early exit. This site shows the numbers; decisions are yours.
   </div>
@@ -358,6 +321,10 @@
       <a href="/node">Run a Node</a>
     </nav>
     <div class="footcontact">Contact <a href="mailto:hello@digidollarstats.com">hello@digidollarstats.com</a></div>
+    <div class="footdonate">
+      <span class="fdlabel">Chip in</span> · Never expected, always appreciated.<br>
+      <span class="fdaddr" id="fdDgb" role="button" tabindex="0" title="Click to copy">dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz</span><span class="fdhint" id="fdDgbHint">copy</span>
+    </div>
     <a href="/">digidollarstats.com</a> · an independent community project by <a href="https://x.com/dgb_signal">@dgb_signal</a><br>
     Not an official DigiByte channel · not affiliated with the DigiByte Core team<br>
     Data source: digibyte.io public API · verify independently · not financial advice
@@ -415,27 +382,20 @@
   refresh();
   setInterval(refresh, REFRESH_SECONDS*1000);
 
-  // ---- donation QR + copy ----
+  // ---- donation address copy ----
   (function(){
     var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
-    try{
-      new QRCode(document.getElementById("dgbqr"), {
-        text: "digibyte:" + addr, width: 56, height: 56,
-        colorDark: "#0F1D15", colorLight: "#ffffff",
-        correctLevel: QRCode.CorrectLevel.M
-      });
-    }catch(e){}
-    var el = document.getElementById("dgbAddr");
-    var hint = document.getElementById("dgbHint");
-    function copy(){
+    var fel = document.getElementById("fdDgb");
+    var fhint = document.getElementById("fdDgbHint");
+    function fcopy(){
       navigator.clipboard.writeText(addr).then(function(){
-        el.classList.add("copied"); hint.textContent = "Copied \u2713";
-        setTimeout(function(){ el.classList.remove("copied"); hint.textContent = "Copy"; }, 1600);
+        fhint.classList.add("ok"); fhint.textContent = "copied \u2713";
+        setTimeout(function(){ fhint.classList.remove("ok"); fhint.textContent = "copy"; }, 1600);
       }).catch(function(){});
     }
-    if(el){
-      el.addEventListener("click", copy);
-      el.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); copy(); } });
+    if(fel){
+      fel.addEventListener("click", fcopy);
+      fel.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fcopy(); } });
     }
   })();
 </script>
