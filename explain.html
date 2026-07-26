@@ -332,6 +332,43 @@ function copyable(a){
 }
 
 /* Work out what a transaction did FROM THIS ADDRESS'S POINT OF VIEW */
+/* ---------- change detection ----------
+   A payment is a number a person chose: 10000, 17, 0.5 — few significant
+   digits. Change is the leftover after subtracting the payment and the fee,
+   so it is nearly always a long arbitrary number. Comparing precision
+   separates the two far more reliably than comparing size: a wallet may
+   just as easily send 10,000 and keep 2,260.066 as send 17 and keep
+   105,200.65, and a size-based rule gets the first case backwards. */
+function sigDigits(v){
+  var satoshis = Math.round((Number(v)||0) * 1e8);
+  if (!satoshis) return 0;
+  return String(satoshis).replace(/0+$/,'').length;
+}
+
+/* Returns the index of the output that is change, or -1 when we cannot tell.
+   Returning -1 means "show everything" — never hide a real payment on a guess. */
+function findChangeIndex(ins, outs){
+  var real = [];
+  (outs||[]).forEach(function(o,i){ if(!o.isData) real.push({o:o,i:i}); });
+  if (real.length < 2) return -1;
+
+  var inAddrs = {};
+  (ins||[]).forEach(function(v){ var a = v.addr || firstAddr(v); if(a) inAddrs[a] = true; });
+
+  /* An output paying back an address that funded the transaction is
+     definitively change — no guessing needed. */
+  var reused = real.filter(function(r){ return r.o.addr && inAddrs[r.o.addr]; });
+  if (reused.length === 1) return reused[0].i;
+  if (reused.length > 1)  return -1;
+
+  /* Otherwise fall back to precision, and only when the gap is unambiguous. */
+  var scored = real.map(function(r){ return { i:r.i, sig:sigDigits(r.o.value) }; })
+                   .sort(function(a,b){ return b.sig - a.sig; });
+  if (scored[0].sig - scored[1].sig >= 2) return scored[0].i;
+  return -1;
+}
+
+
 function interpret(tx, address){
   var inMine = 0, outMine = 0, senders = {}, receivers = {}, coinbase = false;
   var myAddrs = {}; myAddrs[address] = true;
@@ -344,27 +381,14 @@ function interpret(tx, address){
     else if (a) { senders[a] = (senders[a]||0) + val; myAddrs[a] = true; } // other inputs = same wallet, spent together
   });
 
-  /* Same fresh-change heuristic as renderTx: with exactly 2 real outputs and
-     neither matching a known input address, the largest one is the best
-     guess for change back to a new address in the sender's own wallet.
-     This holds regardless of how many total outputs the transaction has —
-     a 5-output payout with 4 small recipients and 1 large change return
-     works the same as a simple 1-recipient send. Only applies when this
-     address was actually a sender (inMine > 0) — for an address that only
-     appears as a recipient, every output can legitimately be "theirs" in
-     isolation and this heuristic doesn't apply. Skipped when there's only
-     1 real output (nothing to distinguish from change) or when an output
-     already matches a known address (then we trust that match instead of
-     guessing). */
+  /* Mark the change output (if any) as ours, so it is excluded from
+     "sent" and from the receivers list. Only meaningful when this address
+     actually funded the transaction. */
   if (inMine > 0) {
-    var realOuts = (tx.vout || []).filter(function(o){ return !o.isData; });
-    var matchesKnown = realOuts.filter(function(o){ return o.addr && myAddrs[o.addr]; }).length;
-    if (realOuts.length >= 2 && matchesKnown === 0) {
-      var maxVal = Math.max.apply(null, realOuts.map(function(o){ return sat(o.value); }));
-      var flagged = false;
-      realOuts.forEach(function(o){
-        if (!flagged && sat(o.value) === maxVal) { myAddrs[o.addr] = true; flagged = true; }
-      });
+    var ci = findChangeIndex(tx.vin || [], tx.vout || []);
+    if (ci >= 0) {
+      var co = (tx.vout || [])[ci];
+      if (co && co.addr) myAddrs[co.addr] = true;
     }
   }
 
@@ -512,20 +536,11 @@ function renderTx(tx, viewingAddress){
   if (viewingAddress) myAddrs[viewingAddress] = true;
   ins.forEach(function(v){ if (v.addr) myAddrs[v.addr] = true; });
 
-  /* Heuristic for fresh change addresses: when none of the outputs match a
-     known sender address, the largest one is the best guess for change.
-     Generalizes to any number of outputs — a multi-recipient payout with
-     one large change return works the same as a simple send. Kept in sync
-     with the identical heuristic in interpret() so the address-card view
-     and this detail view always agree on which output is change. */
-  var realOuts = outs.filter(function(o){ return !o.isData; });
-  var knownChangeCount = realOuts.filter(function(o){ return o.addr && myAddrs[o.addr]; }).length;
-  if (realOuts.length >= 2 && knownChangeCount === 0) {
-    var maxVal = Math.max.apply(null, realOuts.map(function(o){ return sat(o.value); }));
-    var flagged = false;
-    realOuts.forEach(function(o){
-      if (!flagged && sat(o.value) === maxVal) { myAddrs[o.addr] = true; flagged = true; }
-    });
+  /* Same detection as the address cards, so the two views can never disagree. */
+  var _ci = findChangeIndex(ins, outs);
+  if (_ci >= 0) {
+    var _co = outs[_ci];
+    if (_co && _co.addr) myAddrs[_co.addr] = true;
   }
   var netOut = 0;
   outs.forEach(function(o){
