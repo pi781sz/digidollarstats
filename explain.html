@@ -291,6 +291,13 @@ function feePercentOf(feeDgb, ofDgb){
 
 function looksLikeTxid(s){ return /^[0-9a-fA-F]{64}$/.test(s); }
 
+/* DigiDollar addresses are Base58Check with a 2-byte version prefix wrapping a
+   32-byte Taproot key: 38 bytes, which always encodes to exactly 52 characters
+   beginning DD (mainnet), TD (testnet) or RD (regtest).
+   Source: DIGIDOLLAR_ARCHITECTURE.md, DigiByte Core.
+   Legacy DGB addresses are 34 characters, so the two cannot collide. */
+function looksLikeDdAddress(s){ return /^(DD|TD|RD)[1-9A-HJ-NP-Za-km-z]{50}$/.test(s); }
+
 /* The Worker normalises amounts to whole DGB regardless of upstream.
    sat() is kept as a no-op identity so existing call sites don't break. */
 function sat(v){ return Number(v) || 0; }
@@ -666,6 +673,21 @@ function lookup(pushUrl){
         history.pushState({ q: q }, '', target);
       }
     } catch (err){ /* history unavailable — not fatal */ }
+  }
+
+  /* A DigiDollar address is not a DigiByte address. Block explorers index the
+     DGB UTXO set only, so looking one up returns an empty result that would
+     render as a real "0 DGB, never used" balance. Say so instead. */
+  if (looksLikeDdAddress(q)){
+    msg('<strong>That\'s a DigiDollar address, not a DigiByte one.</strong><br>' +
+        'This page reads the DigiByte chain through a public block explorer, and no ' +
+        'explorer indexes DigiDollar yet \u2014 so DD balances and history can\'t be shown here.<br>' +
+        'A DigiDollar output holds 0 DGB by design: the amount is carried in the ' +
+        'transaction\'s data, not in the DGB balance. A DD balance is currently only ' +
+        'visible in the DigiByte Core wallet that holds the address.<br>' +
+        'To use this page, paste a DigiByte address \u2014 they start with D or dgb1 \u2014 ' +
+        'or a transaction ID. <a href="/what-is-digidollar">What is DigiDollar?</a>');
+    return;
   }
 
   $('go').disabled = true;
