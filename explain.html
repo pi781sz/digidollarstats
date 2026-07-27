@@ -60,6 +60,8 @@ h1{font-size:30px;font-weight:700;margin-bottom:8px}
 
 .msg{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px;color:var(--muted);font-size:14.5px;line-height:1.6}
 .msg.err{border-color:#5c2a2a;color:#e6b3b3}
+.msg p{margin:0 0 11px}
+.msg p:last-child{margin-bottom:0}
 
 /* summary */
 .summary{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:14px}
@@ -679,14 +681,14 @@ function lookup(pushUrl){
      DGB UTXO set only, so looking one up returns an empty result that would
      render as a real "0 DGB, never used" balance. Say so instead. */
   if (looksLikeDdAddress(q)){
-    msg('<strong>That\'s a DigiDollar address, not a DigiByte one.</strong><br>' +
-        'This page reads the DigiByte chain through a public block explorer, and no ' +
-        'explorer indexes DigiDollar yet \u2014 so DD balances and history can\'t be shown here.<br>' +
-        'A DigiDollar output holds 0 DGB by design: the amount is carried in the ' +
-        'transaction\'s data, not in the DGB balance. A DD balance is currently only ' +
-        'visible in the DigiByte Core wallet that holds the address.<br>' +
-        'To use this page, paste a DigiByte address \u2014 they start with D or dgb1 \u2014 ' +
-        'or a transaction ID. <a href="/what-is-digidollar">What is DigiDollar?</a>');
+    msg('<p><strong>That\'s a DigiDollar address, not a DigiByte one.</strong></p>' +
+        '<p>This page reads the DigiByte chain through a public block explorer, and no ' +
+        'explorer indexes DigiDollar yet \u2014 so it can\'t show DD balances or history.</p>' +
+        '<p>A DigiDollar output holds 0 DGB by design; the amount is carried in the ' +
+        'transaction\'s data. For now a DD balance is only visible in the DigiByte Core ' +
+        'wallet that holds the address.</p>' +
+        '<p>Paste a DigiByte address \u2014 they start with D or dgb1 \u2014 or a ' +
+        'transaction ID. <a href="/what-is-digidollar">What is DigiDollar?</a></p>');
     return;
   }
 
