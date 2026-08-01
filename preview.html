@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>DigiDollarStats — Live DigiDollar ($DD) Supply &amp; Stats</title>
+  <meta name="description" content="Independent real-time stats for DigiDollar ($DD), the decentralized USD stablecoin on DigiByte: live supply, DGB locked, and system health from the chain.">
+  <!-- PREVIEW ONLY — keeps this page out of the index while we look at it. -->
+  <meta name="robots" content="noindex, nofollow">
+  <meta name="theme-color" content="#070E0A">
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+
+<style>
+  :root{
+    --field:#070E0A;
+    --panel:#0D1712;
+    --rule:#1B2E23;
+    --rule2:#2A4636;
+    --text:#E7EFE9;
+    --muted:#7E9689;
+    --signal:#8FD4B0;
+    --amber:#D9B36C;
+
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --sans:'IBM Plex Sans',system-ui,sans-serif;
+
+    --t-hero:clamp(40px,13vw,68px);
+    --t-h1:clamp(23px,5.6vw,30px);
+    --t-h2:17px;
+    --t-body:15px;
+    --t-small:13px;
+    --t-micro:11px;
+
+    --gap:26px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--field)}
+  body{
+    background:var(--field);
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:var(--t-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:20px 18px 54px;
+  }
+  .wrap{width:100%;max-width:600px}
+  a{color:var(--signal)}
+  :focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+
+  /* one label treatment for the whole page */
+  .eyebrow{
+    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:30px;
+  }
+  .homelink{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+  .logo{width:34px;height:34px;object-fit:cover;display:block}
+  .brand{font-family:var(--mono);font-weight:600;font-size:16px;letter-spacing:-.01em}
+  .brand em{font-style:normal;color:var(--muted)}
+  .status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+  .status .sdot{width:6px;height:6px;background:var(--signal);flex-shrink:0}
+  .status.err{color:var(--amber)}
+  .status.err .sdot{background:var(--amber)}
+
+  /* ---------- hero ---------- */
+  h1{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-h1);
+    line-height:1.25;letter-spacing:-.02em;margin-bottom:10px;
+  }
+  .lede{color:var(--muted);font-size:var(--t-body);max-width:54ch;margin-bottom:28px}
+
+  .readout{
+    background:var(--panel);border:1px solid var(--rule);
+    padding:22px 20px 20px;position:relative;margin-bottom:var(--gap);
+  }
+  .readout .eyebrow{display:block;margin-bottom:12px}
+  .supply{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-hero);
+    line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums;
+    word-break:break-word;
+  }
+  .supply .unit{font-size:.26em;letter-spacing:0;color:var(--muted);margin-left:.4em;font-weight:400}
+  .updated{color:var(--muted);font-size:var(--t-small);margin-top:14px;font-family:var(--mono)}
+
+  /* ---------- signature: collateral bar ---------- */
+  .backing{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+  .backingtop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px}
+  .backingval{font-family:var(--mono);font-weight:600;font-size:var(--t-h2);font-variant-numeric:tabular-nums}
+  .track{position:relative;height:12px;background:#08120C;border:1px solid var(--rule)}
+  .fill{position:absolute;inset:1px auto 1px 1px;width:0;background:var(--signal)}
+  @media (prefers-reduced-motion:no-preference){.fill{transition:width .5s ease-out}}
+  .fill.warn{background:var(--amber)}
+  .tick{position:absolute;top:-4px;bottom:-4px;left:25%;width:1px;background:var(--rule2)}
+  .scale{
+    display:flex;justify-content:space-between;margin-top:7px;
+    font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;
+  }
+  .scale .mid{position:absolute;left:25%;transform:translateX(-50%)}
+  .scalewrap{position:relative}
+  .backingnote{color:var(--muted);font-size:var(--t-small);margin-top:12px}
+
+  /* ---------- ledger ---------- */
+  .ledger{border-top:1px solid var(--rule);margin-bottom:var(--gap)}
+  .ledger .eyebrow{display:block;padding:16px 0 4px}
+  .row{
+    display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+    padding:11px 0;border-bottom:1px solid var(--rule);
+  }
+  .row .k{color:var(--muted);font-size:var(--t-small)}
+  .row .v{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-small);
+    font-variant-numeric:tabular-nums;text-align:right;
+  }
+  .row .v.warn{color:var(--amber)}
+  .row .k .coin{width:14px;height:14px;vertical-align:-2px;margin-right:6px}
+
+  details.notes{border-bottom:1px solid var(--rule)}
+  details.notes summary{
+    cursor:pointer;list-style:none;padding:12px 0;color:var(--muted);
+    font-size:var(--t-small);font-family:var(--mono);
+  }
+  details.notes summary::-webkit-details-marker{display:none}
+  details.notes summary::after{content:" [+]";color:var(--rule2)}
+  details.notes[open] summary::after{content:" [–]"}
+  details.notes ul{list-style:none;padding-bottom:8px}
+  details.notes li{color:var(--muted);font-size:var(--t-small);padding:7px 0;border-top:1px solid var(--rule)}
+  details.notes li b{color:var(--text);font-weight:600;font-family:var(--mono)}
+
+  /* ---------- tools ---------- */
+  .tools{border-top:1px solid var(--rule);margin-bottom:var(--gap)}
+  .tools .eyebrow{display:block;padding:16px 0 4px}
+  .tool{
+    display:block;text-decoration:none;color:inherit;
+    padding:15px 30px 15px 0;border-bottom:1px solid var(--rule);position:relative;
+  }
+  .tool h3{font-family:var(--mono);font-weight:600;font-size:var(--t-h2);letter-spacing:-.01em;margin-bottom:4px}
+  .tool p{color:var(--muted);font-size:var(--t-small);max-width:56ch}
+  .tool .go{position:absolute;right:2px;top:16px;color:var(--rule2);font-family:var(--mono)}
+  .tool:hover{background:#0A130E}
+  .tool:hover .go{color:var(--signal)}
+  .tool:hover h3{color:var(--signal)}
+
+  /* ---------- house rules ---------- */
+  .house{
+    border-left:2px solid var(--rule2);padding:2px 0 2px 16px;
+    color:var(--muted);font-size:var(--t-small);margin-bottom:34px;
+  }
+  .house b{color:var(--text);font-weight:600;font-family:var(--mono)}
+
+  /* ---------- share ---------- */
+  .sharebtn{
+    position:absolute;top:16px;right:16px;width:28px;height:28px;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;border:1px solid var(--rule);color:var(--muted);
+    cursor:pointer;padding:0;
+  }
+  .sharebtn:hover{color:var(--signal);border-color:var(--rule2)}
+  .sharebtn svg{width:14px;height:14px}
+  .sharebtn.ok{color:var(--signal);border-color:var(--rule2)}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--rule);padding-top:20px;color:var(--muted);font-size:12px;line-height:1.75}
+  .footnav{display:flex;flex-wrap:wrap;gap:6px 18px;margin-bottom:16px;font-size:var(--t-small)}
+  .footnav a{text-decoration:none}
+  .footnav a:hover{text-decoration:underline}
+  .footcontact{margin-bottom:14px;font-size:var(--t-small)}
+  .footcontact a{text-decoration:none}
+  .footdonate{margin-bottom:16px;font-size:var(--t-small);line-height:1.9}
+  .footdonate .fdlabel{color:var(--text);font-weight:600;font-family:var(--mono)}
+  .fdaddr{
+    font-family:var(--mono);font-size:11.5px;color:var(--signal);cursor:pointer;
+    word-break:break-all;border-bottom:1px dotted var(--rule2);
+  }
+  .fdaddr:hover{color:var(--text)}
+  .fdhint{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#4E6558;margin-left:8px;white-space:nowrap}
+  .fdhint.ok{color:var(--signal)}
+  footer a{text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
+  /* ---------- desktop ---------- */
+  @media (min-width:900px){
+    body{padding:40px 24px 76px}
+    .wrap{max-width:860px}
+    .masthead{margin-bottom:40px}
+    .hero{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end;margin-bottom:var(--gap)}
+    .lede{margin-bottom:0}
+    .readout{margin-bottom:0}
+    .ledgergrid{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-items:start}
+    .tools{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-items:start}
+    .tools .eyebrow{grid-column:1 / -1}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="masthead">
+    <a class="homelink" href="/" aria-label="DigiDollarStats home">
+      <img class="logo" src="/icon-192.png" alt="">
+      <span class="brand">DigiDollar<em>Stats</em></span>
+    </a>
+    <span class="status eyebrow" id="liveBadge"><span class="sdot"></span><span id="liveTxt">Live</span></span>
+  </div>
+
+  <div class="hero">
+    <div>
+      <h1>Every $DD, accounted for.</h1>
+      <p class="lede">Independent statistics for DigiDollar — the USD stablecoin native to DigiByte, live on mainnet. Every number here is read from the chain. Verify all of it yourself.</p>
+    </div>
+
+    <div class="readout">
+      <button class="sharebtn" type="button" aria-label="Share the live supply figure" title="Share" onclick="shareStat('supply',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
+      <span class="eyebrow">Circulating supply</span>
+      <div class="supply" id="supply">—</div>
+      <div class="updated" id="updated">connecting to live data…</div>
+
+      <div class="backing">
+        <div class="backingtop">
+          <span class="eyebrow">Collateral backing</span>
+          <span class="backingval" id="backingVal">—</span>
+        </div>
+        <div class="track"><span class="fill" id="backingFill"></span><span class="tick"></span></div>
+        <div class="scalewrap">
+          <div class="scale"><span>0</span><span class="mid">100%</span><span>400%</span></div>
+        </div>
+        <p class="backingnote">The marker is 100% — the point where every $DD is exactly covered by locked DGB. Scale ends at 400%.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="ledgergrid">
+    <div class="ledger">
+      <span class="eyebrow">Chain figures</span>
+      <div class="row"><span class="k"><img class="coin" src="/dgb-coin.png" alt="">DGB locked</span><span class="v" id="locked">—</span></div>
+      <div class="row"><span class="k">Active positions</span><span class="v" id="positions">—</span></div>
+      <div class="row"><span class="k">System health</span><span class="v" id="health">—</span></div>
+      <div class="row"><span class="k">Oracle DGB price</span><span class="v" id="oracle">—</span></div>
+    </div>
+
+    <div class="ledger">
+      <span class="eyebrow">System status</span>
+      <div class="row"><span class="k">Minting</span><span class="v" id="stMint">—</span></div>
+      <div class="row"><span class="k">Oracle feed</span><span class="v" id="stOracle">—</span></div>
+      <div class="row"><span class="k">Emergency mode</span><span class="v" id="stEmerg">—</span></div>
+      <div class="row"><span class="k">System collateral ratio</span><span class="v" id="stRatio">—</span></div>
+      <div class="row"><span class="k">ERR tier</span><span class="v" id="stErr">—</span></div>
+      <details class="notes">
+        <summary>How to read this</summary>
+        <ul>
+          <li><b>Minting</b> — whether new $DD can be minted right now. "Open" is normal; it freezes automatically if DGB moves too fast.</li>
+          <li><b>Oracle feed</b> — whether the price oracle is publishing. Minting needs a live price to stay safe.</li>
+          <li><b>Emergency mode</b> — the system-wide safety state. "No" is healthy; if ACTIVE, minting halts and redemption rules tighten.</li>
+          <li><b>System collateral ratio</b> — total DGB locked against total $DD owed. Higher is safer.</li>
+          <li><b>ERR tier</b> — the current burn multiplier. "Normal (1.0x)" means you burn exactly the $DD you minted to unlock your DGB.</li>
+        </ul>
+      </details>
+    </div>
+  </div>
+
+  <div class="tools">
+    <span class="eyebrow">Data &amp; tools</span>
+
+    <a class="tool" href="/live"><span class="go">→</span>
+      <h3>Live Stats</h3>
+      <p>A minimal, fast-loading dashboard of the same on-chain numbers — supply, collateral, positions, health — refreshed every 60 seconds.</p></a>
+
+    <a class="tool" href="/oracle"><span class="go">→</span>
+      <h3>Oracle Watch</h3>
+      <p>The price feed in the open: the consensus DGB/USD price, which oracles are reporting, and the 7-of-35 MuSig2 quorum signing each bundle onto the chain.</p></a>
+
+    <a class="tool" href="/calculator"><span class="go">→</span>
+      <h3>Mint Calculator</h3>
+      <p>Pick a lock duration, see the collateral ratio, DGB required per $DD, your fixed USD debt, and unlock date. Live DGB price, fully editable.</p></a>
+
+    <a class="tool" href="/planner"><span class="go">→</span>
+      <h3>Position Planner</h3>
+      <p>Map out a mint before you commit — and download a calendar reminder for the exact day your timelock expires.</p></a>
+
+    <a class="tool" href="/node"><span class="go">→</span>
+      <h3>Run a Node</h3>
+      <p>Pick your OS — Windows, macOS, Linux, or Raspberry Pi — for the minimum specs and exact steps to run DigiByte Core. Needed to mint and redeem DigiDollar.</p></a>
+
+    <a class="tool" href="/explain"><span class="go">→</span>
+      <h3>Transaction Explainer</h3>
+      <p>Paste any DigiByte address or transaction ID and read what actually happened in plain English — amounts sent and received, who paid whom, confirmations, and the fee.</p></a>
+  </div>
+
+  <p class="house"><b>House rules:</b> no price predictions, no yield pitches, no financial advice. DigiDollar is liquidity against your own locked DGB — not free money. Debt is fixed in USD, timelocks have no early exit. This site shows the numbers; decisions are yours.</p>
+
+  <footer>
+    <nav class="footnav" aria-label="Footer">
+      <a href="/">Home</a>
+      <a href="/what-is-digidollar">What is DigiDollar?</a>
+      <a href="/explain">Explainer</a>
+      <a href="/live">Live Stats</a>
+      <a href="/oracle">Oracle Watch</a>
+      <a href="/calculator">Mint Calculator</a>
+      <a href="/planner">Position Planner</a>
+      <a href="/node">Run a Node</a>
+    </nav>
+    <div class="footcontact">Contact <a href="mailto:hello@digidollarstats.com">hello@digidollarstats.com</a></div>
+    <div class="footdonate">
+      <span class="fdlabel">Chip in</span> · Never expected, always appreciated.<br>
+      <span class="fdaddr" id="fdDgb" role="button" tabindex="0" title="Click to copy">dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz</span><span class="fdhint" id="fdDgbHint">copy</span>
+    </div>
+    <a href="/">digidollarstats.com</a> · an independent community project by <a href="https://x.com/dgb_signal">@dgb_signal</a><br>
+    Not an official DigiByte channel · not affiliated with the DigiByte Core team<br>
+    Data source: digibyte.io public API · verify independently · not financial advice
+  </footer>
+</div>
+
+<script>
+  const fmt = n => n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
+  const fmtInt = n => Math.round(n).toLocaleString('en-US');
+
+  const API = 'https://digibyte.io/api/getdigidollarstats';
+  const REFRESH_SECONDS = 60;
+  const BAR_MAX = 400;
+  const badge = document.getElementById('liveBadge');
+  const $ = id => document.getElementById(id);
+
+  async function refresh(){
+    try{
+      const r = await fetch(API, {cache:'no-store'});
+      if (!r.ok) throw new Error('http '+r.status);
+      const d = await r.json();
+
+      const supply = (d.total_dd_supply || 0) / 100;
+      $('supply').innerHTML = fmt(supply) + '<span class="unit">$DD</span>';
+      $('locked').textContent = fmtInt(d.total_collateral_dgb || 0) + ' DGB';
+      $('positions').textContent = fmtInt(d.active_positions || 0);
+      $('health').textContent = (d.health_percentage || 0) + '%' +
+        (d.health_status ? ' · ' + d.health_status : '');
+      $('oracle').textContent = d.oracle_price_micro_usd
+        ? '$' + (d.oracle_price_micro_usd/1e6).toFixed(6) : '—';
+
+      // collateral bar — drawn only from a real ratio, never a placeholder
+      const ratio = Number(d.system_collateral_ratio || d.health_percentage);
+      const fill = $('backingFill');
+      if (ratio > 0){
+        $('backingVal').textContent = ratio + '%';
+        fill.style.width = 'calc(' + Math.min(ratio / BAR_MAX * 100, 100) + '% - 2px)';
+        fill.className = ratio < 100 ? 'fill warn' : 'fill';
+      } else {
+        $('backingVal').textContent = '—';
+        fill.style.width = '0';
+      }
+
+      const mintOpen = !d.minting_restricted_reason || d.minting_restricted_reason === 'none';
+      const stMint = $('stMint');
+      stMint.textContent = mintOpen ? 'Open' : d.minting_restricted_reason;
+      stMint.className = 'v' + (mintOpen ? '' : ' warn');
+
+      $('stOracle').textContent = d.oracle_status || (d.oracle_available ? 'available' : 'unavailable');
+      const em = $('stEmerg');
+      em.textContent = d.is_emergency ? 'ACTIVE' : 'No';
+      em.className = 'v' + (d.is_emergency ? ' warn' : '');
+      $('stRatio').textContent = (d.system_collateral_ratio || d.health_percentage || 0) + '%';
+      $('stErr').textContent = d.err_tier && d.err_tier.description ? d.err_tier.description : '—';
+
+      const now = new Date();
+      $('updated').textContent = 'updated ' + now.toLocaleTimeString() +
+        ' · refreshes every ' + REFRESH_SECONDS + 's';
+      $('liveTxt').textContent = 'Live';
+      badge.className = 'status eyebrow';
+
+    }catch(e){
+      $('liveTxt').textContent = 'Source down';
+      badge.className = 'status eyebrow err';
+      $('updated').textContent = 'data source unreachable — retrying every ' + REFRESH_SECONDS + 's';
+    }
+  }
+  refresh();
+  setInterval(refresh, REFRESH_SECONDS*1000);
+
+  (function(){
+    var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
+    var fel = document.getElementById("fdDgb");
+    var fhint = document.getElementById("fdDgbHint");
+    function fcopy(){
+      navigator.clipboard.writeText(addr).then(function(){
+        fhint.classList.add("ok"); fhint.textContent = "copied \u2713";
+        setTimeout(function(){ fhint.classList.remove("ok"); fhint.textContent = "copy"; }, 1600);
+      }).catch(function(){});
+    }
+    if(fel){
+      fel.addEventListener("click", fcopy);
+      fel.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fcopy(); } });
+    }
+  })();
+</script>
+<script>
+function shareStat(kind, btn){
+  var el = document.getElementById('supply');
+  var v = '';
+  if (el) el.childNodes.forEach(function(n){ if (n.nodeType === 3) v += n.textContent; });
+  v = v.trim();
+  var has = v && v !== '\u2014';
+  var text = has
+    ? 'There are ' + v + ' $DD in circulation right now, each one backed by locked DGB. Real, verifiable, updated live:'
+    : 'Live DigiDollar ($DD) circulating supply, each unit backed by locked DGB. Real, verifiable, updated live:';
+  var url = 'https://digidollarstats.com/';
+  if (matchMedia('(pointer: coarse)').matches && navigator.share){
+    navigator.share({text: text, url: url}).catch(function(){});
+    return;
+  }
+  var w = window.open('https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url), '_blank', 'noopener');
+  if (!w && navigator.clipboard && navigator.clipboard.writeText){
+    navigator.clipboard.writeText(text + ' ' + url).then(function(){ shareOk(btn); }).catch(function(){});
+  }
+}
+function shareOk(btn){
+  var old = btn.innerHTML;
+  btn.classList.add('ok');
+  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
+  setTimeout(function(){ btn.classList.remove('ok'); btn.innerHTML = old; }, 1400);
+}
+</script>
+</body>
+</html>
