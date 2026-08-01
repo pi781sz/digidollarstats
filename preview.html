@@ -7,7 +7,17 @@
   <meta name="description" content="Independent real-time stats for DigiDollar ($DD), the decentralized USD stablecoin on DigiByte: live supply, DGB locked, and system health from the chain.">
   <!-- PREVIEW ONLY — keeps this page out of the index while we look at it. -->
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#070E0A">
+  <meta name="theme-color" content="#070E0A" id="themeColor">
+<script>
+(function(){
+  var t=null;
+  try{ t=localStorage.getItem('dds-theme'); }catch(e){}
+  if(t!=='light'&&t!=='dark'){
+    t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';
+  }
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
   <link rel="icon" href="/favicon.ico" sizes="any">
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
@@ -27,6 +37,9 @@
     --muted:#7E9689;
     --signal:#8FD4B0;
     --amber:#D9B36C;
+    --well:#08120C;
+    --hover:#0A130E;
+    --dim:#4E6558;
 
     --mono:'IBM Plex Mono',ui-monospace,monospace;
     --sans:'IBM Plex Sans',system-ui,sans-serif;
@@ -39,6 +52,19 @@
     --t-micro:11px;
 
     --gap:26px;
+  }
+  html[data-theme="light"]{
+    --field:#F2F5F2;
+    --panel:#FFFFFF;
+    --well:#E7ECE8;
+    --hover:#EAF0EC;
+    --rule:#D5DED8;
+    --rule2:#A6BAAF;
+    --text:#0D1712;
+    --muted:#556B60;
+    --dim:#8AA096;
+    --signal:#177346;
+    --amber:#8A5E0F;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   html{background:var(--field)}
@@ -74,6 +100,17 @@
   .brand em{font-style:normal;color:var(--muted)}
   .status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
   .status .sdot{width:6px;height:6px;background:var(--signal);flex-shrink:0}
+  .controls{display:flex;align-items:center;gap:12px}
+  .themetoggle{
+    width:28px;height:28px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;border:1px solid var(--rule);color:var(--muted);
+    cursor:pointer;padding:0;
+  }
+  .themetoggle:hover{color:var(--signal);border-color:var(--rule2)}
+  .themetoggle svg{width:14px;height:14px}
+  html[data-theme="light"] .themetoggle .i-sun{display:none}
+  html[data-theme="dark"]  .themetoggle .i-moon{display:none}
   .status.err{color:var(--amber)}
   .status.err .sdot{background:var(--amber)}
 
@@ -101,7 +138,7 @@
   .backing{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
   .backingtop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px}
   .backingval{font-family:var(--mono);font-weight:600;font-size:var(--t-h2);font-variant-numeric:tabular-nums}
-  .track{position:relative;height:12px;background:#08120C;border:1px solid var(--rule)}
+  .track{position:relative;height:12px;background:var(--well);border:1px solid var(--rule)}
   .fill{position:absolute;inset:1px auto 1px 1px;width:0;background:var(--signal)}
   @media (prefers-reduced-motion:no-preference){.fill{transition:width .5s ease-out}}
   .fill.warn{background:var(--amber)}
@@ -151,7 +188,7 @@
   .tool h3{font-family:var(--mono);font-weight:600;font-size:var(--t-h2);letter-spacing:-.01em;margin-bottom:4px}
   .tool p{color:var(--muted);font-size:var(--t-small);max-width:56ch}
   .tool .go{position:absolute;right:2px;top:16px;color:var(--rule2);font-family:var(--mono)}
-  .tool:hover{background:#0A130E}
+  .tool:hover{background:var(--hover)}
   .tool:hover .go{color:var(--signal)}
   .tool:hover h3{color:var(--signal)}
 
@@ -187,7 +224,7 @@
     word-break:break-all;border-bottom:1px dotted var(--rule2);
   }
   .fdaddr:hover{color:var(--text)}
-  .fdhint{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:#4E6558;margin-left:8px;white-space:nowrap}
+  .fdhint{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-left:8px;white-space:nowrap}
   .fdhint.ok{color:var(--signal)}
   footer a{text-decoration:none}
   footer a:hover{text-decoration:underline}
@@ -214,7 +251,13 @@
       <img class="logo" src="/icon-192.png" alt="">
       <span class="brand">DigiDollar<em>Stats</em></span>
     </a>
-    <span class="status eyebrow" id="liveBadge"><span class="sdot"></span><span id="liveTxt">Live</span></span>
+    <span class="controls">
+      <span class="status eyebrow" id="liveBadge"><span class="sdot"></span><span id="liveTxt">Live</span></span>
+      <button class="themetoggle" id="themeToggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.2M19.4 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+      </button>
+    </span>
   </div>
 
   <div class="hero">
@@ -387,6 +430,24 @@
   }
   refresh();
   setInterval(refresh, REFRESH_SECONDS*1000);
+
+  // ---- theme toggle ----
+  (function(){
+    var root = document.documentElement;
+    var meta = document.getElementById('themeColor');
+    var btn  = document.getElementById('themeToggle');
+    var FIELD = {dark:'#070E0A', light:'#F2F5F2'};
+    function apply(t){
+      root.setAttribute('data-theme', t);
+      if (meta) meta.setAttribute('content', FIELD[t]);
+      if (btn) btn.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      try{ localStorage.setItem('dds-theme', t); }catch(e){}
+    }
+    apply(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+    if (btn) btn.addEventListener('click', function(){
+      apply(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    });
+  })();
 
   (function(){
     var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
