@@ -161,6 +161,10 @@
   .fig{background:var(--panel);border:1px solid var(--rule);padding:15px;position:relative}
   .fig .sharebtn{top:10px;right:10px}
   .fig.sharing .eyebrow{padding-right:26px}
+  a.fig{display:block;text-decoration:none;color:inherit}
+  a.fig .go{position:absolute;right:12px;bottom:11px;color:var(--rule2);font-family:var(--mono);font-size:var(--t-small);line-height:1}
+  a.fig:hover{border-color:var(--rule2)}
+  a.fig:hover .go{color:var(--accent, var(--signal))}
   .fig .eyebrow{display:block;margin-bottom:8px}
   .fig .eyebrow .coin{width:13px;height:13px;vertical-align:-2px;margin-right:6px}
   .figv{
@@ -309,7 +313,7 @@
     <div class="fig sharing"><button class="sharebtn" type="button" aria-label="Share the DGB locked figure" title="Share" onclick="shareStat('locked',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><span class="eyebrow"><img class="coin" src="/dgb-coin.png" alt="">DGB locked</span><span class="figv" id="locked">—</span></div>
     <div class="fig"><span class="eyebrow">Active positions</span><span class="figv" id="positions">—</span></div>
     <div class="fig"><span class="eyebrow">System health</span><span class="figv" id="health">—</span></div>
-    <div class="fig"><span class="eyebrow">Oracle DGB price</span><span class="figv" id="oracle">—</span></div>
+    <a class="fig" href="/oracle" aria-label="Oracle DGB price — open Oracle Watch"><span class="go">→</span><span class="eyebrow">Oracle DGB price</span><span class="figv" id="oracle">—</span></a>
   </div>
 
   <div class="ledger">
