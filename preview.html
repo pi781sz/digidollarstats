@@ -16,10 +16,6 @@
     t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';
   }
   document.documentElement.setAttribute('data-theme',t);
-  var pl=null, pd=null;
-  try{ pl=localStorage.getItem('dds-pal-light'); pd=localStorage.getItem('dds-pal-dark'); }catch(e){}
-  document.documentElement.setAttribute('data-palette-light', pl||'ledger');
-  document.documentElement.setAttribute('data-palette-dark',  pd||'pine');
 })();
 </script>
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -33,17 +29,18 @@
 
 <style>
   :root{
-    --field:#070E0A;
-    --panel:#0D1712;
-    --rule:#1B2E23;
-    --rule2:#2A4636;
-    --text:#E7EFE9;
-    --muted:#7E9689;
-    --signal:#8FD4B0;
-    --amber:#D9B36C;
-    --well:#08120C;
-    --hover:#0A130E;
-    --dim:#4E6558;
+    /* ---- Ash · dark (default) ---- */
+    --field:#1A1D1C;
+    --panel:#232726;
+    --well:#151817;
+    --hover:#1F2322;
+    --rule:#333837;
+    --rule2:#4B5250;
+    --text:#E8ECEA;
+    --muted:#98A29F;
+    --dim:#6B7573;
+    --signal:#7FC9A4;
+    --amber:#D4A96A;
 
     --mono:'IBM Plex Mono',ui-monospace,monospace;
     --sans:'IBM Plex Sans',system-ui,sans-serif;
@@ -57,64 +54,20 @@
 
     --gap:26px;
   }
+  /* ---- Ash · light ---- */
   html[data-theme="light"]{
-    --field:#F2F5F2;
-    --panel:#FFFFFF;
-    --well:#E7ECE8;
-    --hover:#EAF0EC;
-    --rule:#D5DED8;
-    --rule2:#A6BAAF;
-    --text:#0D1712;
-    --muted:#556B60;
-    --dim:#8AA096;
-    --signal:#177346;
-    --amber:#8A5E0F;
+    --field:#ECEEED;
+    --panel:#F8F9F9;
+    --well:#E0E4E2;
+    --hover:#E7EAE9;
+    --rule:#D6DAD9;
+    --rule2:#C1C6C4;
+    --text:#1D2823;
+    --muted:#5E6D69;
+    --dim:#909C99;
+    --signal:#2E694B;
+    --amber:#8B6328;
   }
-  /* ============ BRAND · built from 4 seeds: logo green #244E3C, orange #C87A5C, ink, paper ============ */
-  html[data-theme="light"][data-palette-light="brand"]{--field:#F2F4F2; --panel:#FFFFFF; --well:#DDE3E0; --hover:#E8ECE9; --rule:#C5CFCA; --rule2:#879E93; --text:#0C1D16; --muted:#547467; --dim:#7B9488; --signal:#1B573D; --amber:#AA5636; --accent:#AA5636;}
-  html[data-theme="dark"][data-palette-dark="brand"]{--field:#1A211D; --panel:#272D29; --well:#121714; --hover:#212824; --rule:#203A2E; --rule2:#244E3C; --text:#E6EAE8; --muted:#758E83; --dim:#60766D; --signal:#3BA97A; --amber:#C87A5C; --accent:#C87A5C;}
-  /* orange only appears where --accent is defined; every other palette falls back untouched */
-  html[data-palette-light="brand"] .tick,
-  html[data-palette-dark="brand"]  .tick{width:2px}
-  /* ================= 8 LIGHT PALETTES ================= */
-  html[data-theme="light"][data-palette-light="ledger"]{--field:#F2F5F2; --panel:#FFFFFF; --well:#E7ECE8; --hover:#EAF0EC; --rule:#D5DED8; --rule2:#A6BAAF; --text:#0D1712; --muted:#556B60; --dim:#8AA096; --signal:#177346; --amber:#8A5E0F;}
-  html[data-theme="light"][data-palette-light="blueprint"]{--field:#EDF1F6; --panel:#FFFFFF; --well:#E0E8F0; --hover:#E5EDF5; --rule:#CFDAE6; --rule2:#9DB0C4; --text:#0C1826; --muted:#4E6377; --dim:#8397AB; --signal:#10538C; --amber:#96500A;}
-  html[data-theme="light"][data-palette-light="news"]{--field:#FAFAF7; --panel:#FFFFFF; --well:#EDEDE8; --hover:#F1F1EC; --rule:#DCDCD5; --rule2:#A8A8A0; --text:#101010; --muted:#565650; --dim:#8C8C85; --signal:#101010; --amber:#A03410;}
-  html[data-theme="light"][data-palette-light="slate"]{--field:#E7EAE9; --panel:#FFFFFF; --well:#DADFDE; --hover:#DFE4E3; --rule:#C6CECD; --rule2:#96A3A2; --text:#0E1A1A; --muted:#4E6060; --dim:#849393; --signal:#0D5F5C; --amber:#8A5410;}
-  html[data-theme="light"][data-palette-light="carbon"]{--field:#F1F0EE; --panel:#FFFFFF; --well:#E6E4E1; --hover:#EAE8E5; --rule:#D8D5D0; --rule2:#A9A59E; --text:#14131A; --muted:#58555F; --dim:#8C8894; --signal:#453B8F; --amber:#8A5410;}
-  html[data-theme="light"][data-palette-light="bone"]{--field:#F4F2EF; --panel:#FFFFFF; --well:#EAE6E1; --hover:#EDEAE6; --rule:#DBD5CE; --rule2:#ACA298; --text:#1C1512; --muted:#63574E; --dim:#97887C; --signal:#8C3A1E; --amber:#9B1B1B;}
-  html[data-theme="light"][data-palette-light="paper"]{--field:#FFFFFF; --panel:#FFFFFF; --well:#F0F0F0; --hover:#F6F6F6; --rule:#E2E2E2; --rule2:#B4B4B4; --text:#000000; --muted:#5A5A5A; --dim:#909090; --signal:#006644; --amber:#8A5000;}
-  html[data-theme="light"][data-palette-light="mist"]{--field:#EEF1F3; --panel:#F8FAFB; --well:#E2E7EA; --hover:#E7ECEF; --rule:#D2D9DE; --rule2:#A0AAB2; --text:#16202A; --muted:#55636E; --dim:#8B98A2; --signal:#0E6E7A; --amber:#8A5410;}
-  /* Ash, translated to paper — same hues, mirrored lightness */
-  html[data-theme="light"][data-palette-light="ashlt"]{--field:#ECEEED; --panel:#F8F9F9; --well:#E0E4E2; --hover:#E7EAE9; --rule:#D6DAD9; --rule2:#C1C6C4; --text:#1D2823; --muted:#5E6D69; --dim:#909C99; --signal:#2E694B; --amber:#8B6328;}
-  /* ================= 8 DARK PALETTES ================== */
-  html[data-theme="dark"][data-palette-dark="pine"]{--field:#070E0A; --panel:#0D1712; --well:#08120C; --hover:#0A130E; --rule:#1B2E23; --rule2:#2A4636; --text:#E7EFE9; --muted:#7E9689; --dim:#4E6558; --signal:#8FD4B0; --amber:#D9B36C;}
-  html[data-theme="dark"][data-palette-dark="graphite"]{--field:#0D0D0E; --panel:#161618; --well:#0A0A0B; --hover:#131315; --rule:#262629; --rule2:#3D3D42; --text:#EDEDEF; --muted:#8E8E96; --dim:#5A5A61; --signal:#C9C9CE; --amber:#D9A85C;}
-  html[data-theme="dark"][data-palette-dark="midnight"]{--field:#070C16; --panel:#0E1524; --well:#060A12; --hover:#0C121E; --rule:#1C2739; --rule2:#2E3D54; --text:#E4EAF2; --muted:#7C8CA3; --dim:#4E5C70; --signal:#7FB6E8; --amber:#D9B36C;}
-  html[data-theme="dark"][data-palette-dark="oxide"]{--field:#100C0A; --panel:#191311; --well:#0C0908; --hover:#150F0D; --rule:#2C2320; --rule2:#453833; --text:#F0E9E5; --muted:#9B8B84; --dim:#635853; --signal:#D98E63; --amber:#E85C4A;}
-  html[data-theme="dark"][data-palette-dark="abyss"]{--field:#04090A; --panel:#0B1416; --well:#030708; --hover:#091114; --rule:#17282B; --rule2:#26403F; --text:#E2EEEC; --muted:#7A938F; --dim:#4A5F5C; --signal:#6FD6D0; --amber:#D9B36C;}
-  html[data-theme="dark"][data-palette-dark="plum"]{--field:#0B0810; --panel:#14101C; --well:#080610; --hover:#110D18; --rule:#251E33; --rule2:#3B3050; --text:#EDE8F5; --muted:#8F84A3; --dim:#5C5470; --signal:#B9A2F0; --amber:#D9B36C;}
-  html[data-theme="dark"][data-palette-dark="ash"]{--field:#1A1D1C; --panel:#232726; --well:#151817; --hover:#1F2322; --rule:#333837; --rule2:#4B5250; --text:#E8ECEA; --muted:#98A29F; --dim:#6B7573; --signal:#7FC9A4; --amber:#D4A96A;}
-  html[data-theme="dark"][data-palette-dark="crt"]{--field:#000000; --panel:#0A0A0A; --well:#050505; --hover:#0F0F0F; --rule:#1F1F1F; --rule2:#383838; --text:#E8E4DC; --muted:#8C8579; --dim:#57524A; --signal:#E8A33D; --amber:#E05A44;}
-  /* signal sits too close to text in these two — links get underlines */
-  html[data-palette-light="news"] footer a,
-  html[data-palette-light="news"] .footnav a,
-  html[data-palette-light="news"] .footcontact a,
-  html[data-palette-dark="graphite"] footer a,
-  html[data-palette-dark="graphite"] .footnav a,
-  html[data-palette-dark="graphite"] .footcontact a{text-decoration:underline}
-
-  /* ---- TEMPORARY palette switcher — deleted before this ships ---- */
-  .palettebar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
-    border-top:1px solid var(--rule);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px))}
-  .pgroup{display:flex;flex-wrap:wrap;gap:5px;max-width:620px;margin:0 auto}
-  .palettebar button{flex:1 1 calc(33.333% - 5px);min-width:66px;padding:9px 2px;cursor:pointer;
-    background:transparent;border:1px solid var(--rule);color:var(--muted);font-family:var(--mono);
-    font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
-  .palettebar button[aria-pressed="true"]{background:var(--signal);color:var(--panel);border-color:var(--signal)}
-  html[data-theme="dark"] #palLight{display:none}
-  html[data-theme="light"] #palDark{display:none}
-  body{padding-bottom:190px}
 
   *{box-sizing:border-box;margin:0;padding:0}
   html{background:var(--field)}
@@ -415,31 +368,6 @@
   </footer>
 </div>
 
-<div class="palettebar" id="paletteBar" role="group" aria-label="Preview colour palettes">
-  <div class="pgroup" id="palLight">
-    <button type="button" data-p="brand">Brand</button>
-    <button type="button" data-p="ledger">Ledger</button>
-    <button type="button" data-p="blueprint">Blueprint</button>
-    <button type="button" data-p="news">Newsprint</button>
-    <button type="button" data-p="slate">Slate</button>
-    <button type="button" data-p="carbon">Carbon</button>
-    <button type="button" data-p="bone">Bone</button>
-    <button type="button" data-p="paper">Paper</button>
-    <button type="button" data-p="mist">Mist</button>
-    <button type="button" data-p="ashlt">Ash</button>
-  </div>
-  <div class="pgroup" id="palDark">
-    <button type="button" data-p="brand">Brand</button>
-    <button type="button" data-p="pine">Pine</button>
-    <button type="button" data-p="graphite">Graphite</button>
-    <button type="button" data-p="midnight">Midnight</button>
-    <button type="button" data-p="oxide">Oxide</button>
-    <button type="button" data-p="abyss">Abyss</button>
-    <button type="button" data-p="plum">Plum</button>
-    <button type="button" data-p="ash">Ash</button>
-    <button type="button" data-p="crt">CRT</button>
-  </div>
-</div>
 
 <script>
   const fmt = n => n.toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
@@ -505,35 +433,6 @@
   refresh();
   setInterval(refresh, REFRESH_SECONDS*1000);
 
-  // ---- TEMPORARY palette switcher ----
-  (function(){
-    var root = document.documentElement;
-    var bar  = document.getElementById('paletteBar');
-    if (!bar) return;
-    function isLight(){ return root.getAttribute('data-theme') === 'light'; }
-    function attr(){ return isLight() ? 'data-palette-light' : 'data-palette-dark'; }
-    function key(){  return isLight() ? 'dds-pal-light' : 'dds-pal-dark'; }
-    function mark(){
-      var cur = root.getAttribute(attr());
-      var live = isLight() ? 'palLight' : 'palDark';
-      var btns = bar.querySelectorAll('button[data-p]');
-      for (var i=0;i<btns.length;i++){
-        var on = btns[i].parentNode.id === live && btns[i].getAttribute('data-p') === cur;
-        btns[i].setAttribute('aria-pressed', on ? 'true' : 'false');
-      }
-    }
-    window.ddsMarkPalette = mark;
-    bar.addEventListener('click', function(e){
-      var b = e.target.closest('button[data-p]');
-      if (!b) return;
-      root.setAttribute(attr(), b.getAttribute('data-p'));
-      try{ localStorage.setItem(key(), b.getAttribute('data-p')); }catch(err){}
-      mark();
-      if (window.ddsSyncThemeColor) window.ddsSyncThemeColor();
-    });
-    mark();
-  })();
-
   // ---- theme toggle ----
   (function(){
     var root = document.documentElement;
@@ -550,7 +449,6 @@
       if (btn) btn.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
       try{ localStorage.setItem('dds-theme', t); }catch(e){}
       sync();
-      if (window.ddsMarkPalette) window.ddsMarkPalette();
     }
     apply(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
     if (btn) btn.addEventListener('click', function(){
