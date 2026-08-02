@@ -136,7 +136,7 @@
     line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums;
     word-break:break-word;
   }
-  .supply .unit{font-size:.26em;letter-spacing:0;color:var(--accent, var(--muted));margin-left:.4em;font-weight:400}
+  .supply .unit{font-size:.26em;letter-spacing:0;color:var(--accent, var(--muted));margin-left:.4em;font-weight:400;white-space:nowrap}
   .updated{color:var(--muted);font-size:var(--t-small);margin-top:14px;font-family:var(--mono)}
 
   /* ---------- signature: collateral bar ---------- */
@@ -254,9 +254,6 @@
     body{padding:40px 24px 76px}
     .wrap{max-width:860px}
     .masthead{margin-bottom:40px}
-    .hero{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end;margin-bottom:var(--gap)}
-    .lede{margin-bottom:0}
-    .readout{margin-bottom:0}
     .figs{grid-template-columns:repeat(4,1fr)}
     .fig{padding:16px}
     .tools{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-items:start}
@@ -342,9 +339,6 @@
     <a class="tool" href="/oracle"><span class="go">→</span>
       <h3>Oracle Watch</h3>
       <p>The price feed in the open: the consensus DGB/USD price, which oracles are reporting, and the 7-of-35 MuSig2 quorum signing each bundle onto the chain.</p></a>
-
-
-
   </div>
 
   <p class="house"><b>House rules:</b> no price predictions, no yield pitches, no financial advice. DigiDollar is liquidity against your own locked DGB — not free money. Debt is fixed in USD, timelocks have no early exit. This site shows the numbers; decisions are yours.</p>
