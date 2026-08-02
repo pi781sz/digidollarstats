@@ -70,6 +70,12 @@
     --signal:#177346;
     --amber:#8A5E0F;
   }
+  /* ============ BRAND · built from 4 seeds: logo green #244E3C, orange #C87A5C, ink, paper ============ */
+  html[data-theme="light"][data-palette-light="brand"]{--field:#F2F4F2; --panel:#FFFFFF; --well:#DDE3E0; --hover:#E8ECE9; --rule:#C5CFCA; --rule2:#879E93; --text:#0C1D16; --muted:#547467; --dim:#7B9488; --signal:#1B573D; --amber:#AA5636; --accent:#AA5636;}
+  html[data-theme="dark"][data-palette-dark="brand"]{--field:#1A211D; --panel:#272D29; --well:#121714; --hover:#212824; --rule:#203A2E; --rule2:#244E3C; --text:#E6EAE8; --muted:#758E83; --dim:#60766D; --signal:#3BA97A; --amber:#C87A5C; --accent:#C87A5C;}
+  /* orange only appears where --accent is defined; every other palette falls back untouched */
+  html[data-palette-light="brand"] .tick,
+  html[data-palette-dark="brand"]  .tick{width:2px}
   /* ================= 8 LIGHT PALETTES ================= */
   html[data-theme="light"][data-palette-light="ledger"]{--field:#F2F5F2; --panel:#FFFFFF; --well:#E7ECE8; --hover:#EAF0EC; --rule:#D5DED8; --rule2:#A6BAAF; --text:#0D1712; --muted:#556B60; --dim:#8AA096; --signal:#177346; --amber:#8A5E0F;}
   html[data-theme="light"][data-palette-light="blueprint"]{--field:#EDF1F6; --panel:#FFFFFF; --well:#E0E8F0; --hover:#E5EDF5; --rule:#CFDAE6; --rule2:#9DB0C4; --text:#0C1826; --muted:#4E6377; --dim:#8397AB; --signal:#10538C; --amber:#96500A;}
@@ -100,13 +106,13 @@
   .palettebar{position:fixed;left:0;right:0;bottom:0;z-index:50;background:var(--panel);
     border-top:1px solid var(--rule);padding:8px 8px calc(8px + env(safe-area-inset-bottom,0px))}
   .pgroup{display:flex;flex-wrap:wrap;gap:5px;max-width:620px;margin:0 auto}
-  .palettebar button{flex:1 1 calc(25% - 5px);min-width:66px;padding:9px 2px;cursor:pointer;
+  .palettebar button{flex:1 1 calc(33.333% - 5px);min-width:66px;padding:9px 2px;cursor:pointer;
     background:transparent;border:1px solid var(--rule);color:var(--muted);font-family:var(--mono);
     font-size:9.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase}
   .palettebar button[aria-pressed="true"]{background:var(--signal);color:var(--panel);border-color:var(--signal)}
   html[data-theme="dark"] #palLight{display:none}
   html[data-theme="light"] #palDark{display:none}
-  body{padding-bottom:132px}
+  body{padding-bottom:152px}
 
   *{box-sizing:border-box;margin:0;padding:0}
   html{background:var(--field)}
@@ -173,7 +179,7 @@
     line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums;
     word-break:break-word;
   }
-  .supply .unit{font-size:.26em;letter-spacing:0;color:var(--muted);margin-left:.4em;font-weight:400}
+  .supply .unit{font-size:.26em;letter-spacing:0;color:var(--accent, var(--muted));margin-left:.4em;font-weight:400}
   .updated{color:var(--muted);font-size:var(--t-small);margin-top:14px;font-family:var(--mono)}
 
   /* ---------- signature: collateral bar ---------- */
@@ -184,7 +190,7 @@
   .fill{position:absolute;inset:1px auto 1px 1px;width:0;background:var(--signal)}
   @media (prefers-reduced-motion:no-preference){.fill{transition:width .5s ease-out}}
   .fill.warn{background:var(--amber)}
-  .tick{position:absolute;top:-4px;bottom:-4px;left:25%;width:1px;background:var(--rule2)}
+  .tick{position:absolute;top:-4px;bottom:-4px;left:25%;width:1px;background:var(--accent, var(--rule2))}
   .scale{
     display:flex;justify-content:space-between;margin-top:7px;
     font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;
@@ -231,7 +237,7 @@
   .tool p{color:var(--muted);font-size:var(--t-small);max-width:56ch}
   .tool .go{position:absolute;right:2px;top:16px;color:var(--rule2);font-family:var(--mono)}
   .tool:hover{background:var(--hover)}
-  .tool:hover .go{color:var(--signal)}
+  .tool:hover .go{color:var(--accent, var(--signal))}
   .tool:hover h3{color:var(--signal)}
 
   /* ---------- house rules ---------- */
@@ -406,6 +412,7 @@
 
 <div class="palettebar" id="paletteBar" role="group" aria-label="Preview colour palettes">
   <div class="pgroup" id="palLight">
+    <button type="button" data-p="brand">Brand</button>
     <button type="button" data-p="ledger">Ledger</button>
     <button type="button" data-p="blueprint">Blueprint</button>
     <button type="button" data-p="news">Newsprint</button>
@@ -416,6 +423,7 @@
     <button type="button" data-p="mist">Mist</button>
   </div>
   <div class="pgroup" id="palDark">
+    <button type="button" data-p="brand">Brand</button>
     <button type="button" data-p="pine">Pine</button>
     <button type="button" data-p="graphite">Graphite</button>
     <button type="button" data-p="midnight">Midnight</button>
