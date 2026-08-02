@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DigiDollar Live Stats — DigiDollarStats</title>
-  <meta name="description" content="Live DigiDollar ($DD) numbers read from a public DigiByte data source: circulating supply, DGB locked as collateral, open positions, system health and oracle price. Refreshed every 60 seconds.">
-  <link rel="canonical" href="https://digidollarstats.com/live">
+<title>DigiDollar Oracle Watch — Live DGB/USD Price — DigiDollarStats</title>
+  <meta name="description" content="Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.">
+  <link rel="canonical" href="https://digidollarstats.com/oracle">
 
   <meta property="og:type" content="website">
-  <meta property="og:url" content="https://digidollarstats.com/live">
+  <meta property="og:url" content="https://digidollarstats.com/oracle">
   <meta property="og:site_name" content="DigiDollarStats">
-  <meta property="og:title" content="DigiDollar — Live Stats">
-  <meta property="og:description" content="Real on-chain numbers only. Circulating $DD supply, DGB locked as collateral, open positions, system health and oracle price — refreshed every 60 seconds.">
-  <meta property="og:image" content="https://digidollarstats.com/og-live.png">
+  <meta property="og:title" content="DigiDollar Oracle Watch">
+  <meta property="og:description" content="Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.">
+  <meta property="og:image" content="https://digidollarstats.com/og-oracle.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="DigiDollar — Live Stats">
-  <meta name="twitter:description" content="Real on-chain numbers only. Supply, DGB locked, open positions, system health and oracle price, refreshed every 60 seconds.">
-  <meta name="twitter:image" content="https://digidollarstats.com/og-live.png">
+  <meta name="twitter:title" content="DigiDollar Oracle Watch">
+  <meta name="twitter:description" content="The DigiDollar price feed in the open: consensus DGB/USD, which oracles are reporting, and the 7-of-35 MuSig2 quorum signing each bundle onto the chain.">
+  <meta name="twitter:image" content="https://digidollarstats.com/og-oracle.png">
 
   <!-- PREVIEW ONLY — keeps this draft out of the index while we look at it. -->
   <meta name="robots" content="noindex, nofollow">
@@ -248,12 +248,37 @@
   .sharebtn svg{width:14px;height:14px}
   .sharebtn.ok{color:var(--signal);border-color:var(--rule2)}
 
-  /* ---------- live page only ---------- */
+  /* ---------- oracle page only ---------- */
   .crumb{font-family:var(--mono);font-size:var(--t-small);color:var(--dim);margin-bottom:14px}
   .crumb a{color:var(--muted);text-decoration:none}
   .crumb a:hover{color:var(--signal)}
-  .statusnote{color:var(--muted);font-size:var(--t-small);line-height:1.6}
-  .statusnote b{color:var(--text);font-weight:600;font-family:var(--mono)}
+  .pnote{color:var(--muted);font-size:var(--t-small);line-height:1.6;margin-bottom:14px}
+  .pnote b{color:var(--text);font-weight:600;font-family:var(--mono)}
+
+  .rostersum{font-family:var(--mono);font-size:var(--t-small);color:var(--signal);
+    margin-bottom:10px;font-variant-numeric:tabular-nums}
+  .rostersum span{color:var(--dim)}
+
+  .orow{display:flex;align-items:center;gap:10px;padding:9px 0;
+    border-bottom:1px solid var(--rule);font-size:var(--t-small)}
+  .orow:last-child{border-bottom:none}
+  .oid{font-family:var(--mono);font-size:var(--t-micro);color:var(--dim);width:26px;flex-shrink:0}
+  .oname{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .opill{font-family:var(--mono);font-size:var(--t-micro);font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;padding:2px 7px;border:1px solid;flex-shrink:0;line-height:1.5}
+  .p-onchain{color:var(--signal);border-color:var(--signal)}
+  .p-reporting{color:var(--muted);border-color:var(--rule2)}
+  .p-nodata{color:var(--amber);border-color:var(--amber)}
+  .oprice{font-family:var(--mono);font-size:var(--t-small);width:84px;text-align:right;
+    flex-shrink:0;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  .bundlehdr{font-family:var(--mono);font-size:var(--t-small);color:var(--muted);
+    margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--rule)}
+  .bundlehdr:first-of-type{border-top:none;padding-top:0;margin-top:0}
+  .bundlehdr b{color:var(--signal);font-weight:600}
+  .sig{display:inline-block;background:var(--well);border:1px solid var(--rule);color:var(--text);
+    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;padding:4px 8px;margin:3px 4px 3px 0}
+  .bundlecap{color:var(--dim);font-size:var(--t-micro);margin-top:12px;font-family:var(--mono)}
 
   /* ---------- footer ---------- */
   footer{border-top:1px solid var(--rule);padding-top:20px;color:var(--muted);font-size:12px;line-height:1.75;text-align:center}
@@ -294,17 +319,17 @@
   "@type": "WebSite",
   "name": "DigiDollarStats",
   "alternateName": ["DigiDollar Stats", "digidollarstats.com"],
-  "url": "https://digidollarstats.com/live"
+  "url": "https://digidollarstats.com/"
 }
 </script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Dataset",
-  "name": "DigiDollar ($DD) Live Chain Statistics",
-  "description": "Independent real-time statistics for DigiDollar, the decentralized USD stablecoin native to the DigiByte blockchain: circulating supply, DGB locked as collateral, active positions, system health, and oracle price. Read live from the chain.",
-  "url": "https://digidollarstats.com/live",
-  "keywords": ["DigiDollar", "DD", "DigiByte", "DGB", "stablecoin", "supply", "collateral", "oracle"],
+  "name": "DigiDollar Oracle Network Status",
+  "description": "Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.",
+  "url": "https://digidollarstats.com/oracle",
+  "keywords": ["DigiDollar", "DigiByte", "DGB", "oracle", "price feed", "MuSig2", "quorum", "DGB/USD"],
   "isAccessibleForFree": true,
   "creator": {
     "@type": "Organization",
@@ -334,30 +359,37 @@
     </span>
   </div>
 
-  <p class="crumb"><a href="/">home</a> · live stats</p>
+  <p class="crumb"><a href="/">home</a> · oracle watch</p>
 
-  <h1>DigiDollar — Live Stats</h1>
-  <p class="lede">Real on-chain numbers only. This page never shows simulated data.</p>
+  <h1>Oracle Watch</h1>
+  <p class="lede">The DigiDollar price feed is out in the open. A distributed network of up to 35 community oracles reports DGB/USD; a 7-of-35 MuSig2 quorum signs each price bundle onto the chain. All data live from mainnet.</p>
 
   <div class="topgrid">
     <div class="readout">
-      <button class="sharebtn" type="button" aria-label="Share this live stat" title="Share" onclick="shareStat('supply',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
-      <span class="eyebrow">Circulating DD Supply</span>
-      <div class="supply" id="supply">—</div>
-      <div class="updated" id="updated">connecting to live data…</div>
+      <span class="eyebrow">Consensus DGB / USD price</span>
+      <div class="supply" id="price">—</div>
+      <div class="updated" id="priceMeta">connecting to live data…</div>
     </div>
 
     <div class="figs">
-      <div class="fig sharing"><button class="sharebtn" type="button" aria-label="Share the DGB locked figure" title="Share" onclick="shareStat('locked',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><span class="eyebrow"><img class="coin" src="/dgb-coin.png" alt="" width="64" height="64">DGB locked as collateral</span><span class="figv" id="locked">—</span></div>
-      <div class="fig"><span class="eyebrow">Open positions</span><span class="figv" id="positions">—</span></div>
-      <div class="fig"><span class="eyebrow">System health</span><span class="figv" id="health">—</span></div>
-      <a class="fig" href="/oracle" aria-label="Oracle DGB price — open Oracle Watch"><span class="go">→</span><span class="eyebrow">Oracle DGB price</span><span class="figv" id="oracle">—</span></a>
+      <div class="fig"><span class="eyebrow">Reporting oracles</span><span class="figv" id="reporting">—</span></div>
+      <div class="fig"><span class="eyebrow">On-chain this bundle</span><span class="figv" id="onchain">—</span></div>
+      <div class="fig"><span class="eyebrow">Quorum required</span><span class="figv" id="required">—</span></div>
+      <div class="fig"><span class="eyebrow">Roster slots</span><span class="figv" id="slots">—</span></div>
     </div>
   </div>
 
   <div class="panel">
-    <h2 class="eyebrow">Status</h2>
-    <p class="statusnote" id="statusNote">Connecting to the configured data source…</p>
+    <h2 class="eyebrow">Oracle roster</h2>
+    <p class="pnote">Every configured oracle slot and its current state. <b>On-chain</b> = its price is in the latest signed bundle · <b>Reporting</b> = live but not in the last bundle · <b>No data</b> = silent.</p>
+    <div class="rostersum" id="rosterSum"></div>
+    <div id="roster"></div>
+  </div>
+
+  <div class="panel">
+    <h2 class="eyebrow">Recent signed bundles</h2>
+    <p class="pnote">Each price bundle committed to the chain, with the quorum of oracles whose MuSig2 signatures signed it.</p>
+    <div id="bundles"></div>
   </div>
 
   <footer>
@@ -383,86 +415,86 @@
 
 
 <script>
-/* ================================================================
-   DATA SOURCE CONFIG — edit this block to add or change sources.
-   Add one or more sources. Each source needs:
-     name : label shown on the page
-     url  : a public JSON endpoint
-     map  : function turning that JSON into the fields below
-   Sources are tried in order; first one that works wins.
-   ================================================================ */
-const DATA_SOURCES = [
-  {
-    name: "digibyte.io",
-    url : "https://digibyte.io/api/getdigidollarstats",
-    map : r => ({
-      supply:    r.total_dd_supply / 100,        // endpoint returns cents
-      locked:    r.total_collateral_dgb,         // DGB
-      positions: r.active_positions,
-      health:    r.health_percentage,            // %
-      healthTxt: r.health_status,
-      oracleUsd: r.oracle_price_micro_usd / 1e6  // DGB price in USD
-    })
-  },
-];
+const PRICES_API  = 'https://digibyte.io/api/getalloracleprices';
+const SIGNERS_API = 'https://digibyte.io/api/getoraclesigners?blocks=300';
+const MAX_BUNDLES = 5;
 const REFRESH_SECONDS = 60;
-/* ============================================================== */
-
 const $ = id => document.getElementById(id);
-const fmtNum = n => n == null ? "\u2014" : Number(n).toLocaleString("en-US");
 
+const usd6 = n => '$' + Number(n).toFixed(6);
+function ago(ts){
+  if (!ts) return '';
+  const s = Math.max(0, Math.floor(Date.now()/1000 - ts));
+  if (s < 60) return s + 's ago';
+  if (s < 3600) return Math.floor(s/60) + 'm ago';
+  return Math.floor(s/3600) + 'h ago';
+}
+function pill(status, source){
+  if (source === 'on-chain') return '<span class="opill p-onchain">on-chain</span>';
+  if (status === 'no_data')  return '<span class="opill p-nodata">no data</span>';
+  return '<span class="opill p-reporting">reporting</span>';
+}
 function setBadge(cls, txt){
-  const b = $("liveBadge");
-  b.className = "status eyebrow" + (cls ? " " + cls : "");
-  $("liveTxt").textContent = txt;
+  $('liveBadge').className = 'status eyebrow' + (cls ? ' ' + cls : '');
+  $('liveTxt').textContent = txt;
 }
 
-function render(d, srcName){
-  $("supply").textContent = d.supply == null ? "\u2014" :
-    "$" + Number(d.supply).toLocaleString("en-US",{minimumFractionDigits:2,maximumFractionDigits:2});
-  $("locked").textContent    = d.locked == null ? "\u2014" : fmtNum(Math.round(d.locked)) + " DGB";
-  $("positions").textContent = fmtNum(d.positions);
-  $("health").textContent    = d.health == null ? "\u2014" :
-    d.health + "%" + (d.healthTxt ? " \u00b7 " + d.healthTxt : "");
-  $("oracle").textContent    = d.oracleUsd == null ? "\u2014" : "$" + d.oracleUsd.toFixed(6);
-  setBadge("", "Live \u00b7 " + srcName);
-  $("updated").textContent = "updated " + new Date().toLocaleTimeString() +
-    " \u00b7 refreshes every " + REFRESH_SECONDS + "s";
-  $("statusNote").innerHTML =
-    "<b>Live data</b> from " + srcName + ", refreshed every " + REFRESH_SECONDS + "s. " +
-    "Numbers are read directly from a public DigiByte data source.";
-}
+async function refresh(){
+  try{
+    const [pr, sg] = await Promise.all([
+      fetch(PRICES_API, {cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();}),
+      fetch(SIGNERS_API,{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();}).catch(()=>null)
+    ]);
 
-function showWaiting(){
-  if (DATA_SOURCES.length === 0){
-    setBadge("err", "No source");
-    $("statusNote").innerHTML =
-      "<b>Status:</b> no public data source is configured for this page yet. " +
-      "No cached or simulated numbers are shown.";
-  } else {
-    setBadge("err", "Unreachable");
-    $("statusNote").innerHTML =
-      "<b>Status:</b> configured data source" + (DATA_SOURCES.length > 1 ? "s are" : " is") +
-      " currently unreachable. Retrying every " + REFRESH_SECONDS + "s. " +
-      "No cached or simulated numbers are shown.";
+    $('price').textContent = usd6(pr.consensus_price_usd || (pr.consensus_price_micro_usd||0)/1e6);
+    $('priceMeta').textContent = 'bundle #' + (pr.last_bundle_height||'\u2014') +
+      ' \u00b7 ' + ago(pr.last_bundle_time) + ' \u00b7 updated ' + new Date().toLocaleTimeString();
+
+    const oracles = pr.oracles || [];
+    const reporting = oracles.filter(o=>o.status==='reporting').length;
+    const onchain   = oracles.filter(o=>o.price_source==='on-chain').length;
+    $('reporting').textContent = reporting + ' / ' + (pr.total_oracles||oracles.length);
+    $('onchain').textContent   = onchain;
+    $('required').textContent  = (pr.required||'\u2014') + ' of ' + (pr.total_oracles||'\u2014');
+    $('slots').textContent     = (pr.total_oracles||oracles.length);
+    const nodata = oracles.filter(o=>o.status==='no_data').length;
+    const slots  = pr.total_oracles || oracles.length;
+    $('rosterSum').innerHTML = reporting + ' reporting <span>\u00b7</span> ' +
+      nodata + ' no data <span>\u00b7</span> ' + slots + ' slots';
+
+    $('roster').innerHTML = oracles.map(o =>
+      '<div class="orow">' +
+        '<span class="oid">'+o.oracle_id+'</span>' +
+        '<span class="oname">'+(o.name||('Oracle '+o.oracle_id))+'</span>' +
+        pill(o.status, o.price_source) +
+        '<span class="oprice">'+(o.price_usd?usd6(o.price_usd):'\u2014')+'</span>' +
+      '</div>').join('');
+
+    if (sg && sg.bundles && sg.bundles.length){
+      const shown = sg.bundles.slice(0, MAX_BUNDLES);
+      const total = sg.bundles.length;
+      const rows = shown.map(b => {
+        const signers = (b.signers||[]).map(x=>'<span class="sig">'+(x.name||('#'+x.oracle_id))+'</span>').join('');
+        return '<div class="bundlehdr">block <b>#'+b.height+'</b> \u00b7 '+usd6(b.price_usd)+
+               ' \u00b7 '+(b.signer_count||0)+' signers \u00b7 '+ago(b.timestamp)+'</div>'+
+               '<div>'+signers+'</div>';
+      }).join('');
+      const cap = total > MAX_BUNDLES
+        ? 'Showing the latest ' + MAX_BUNDLES + ' of ' + total + ' bundles from the last 300 blocks.'
+        : total + ' bundle' + (total===1?'':'s') + ' published in the last 300 blocks.';
+      $('bundles').innerHTML = rows + '<div class="bundlecap">' + cap + '</div>';
+    } else {
+      $('bundles').innerHTML = '<div class="bundlecap">No price bundles in the last 300 blocks \u2014 the on-chain price simply hasn\'t changed enough to trigger a new one.</div>';
+    }
+
+    setBadge('', 'Live');
+  }catch(e){
+    setBadge('err', 'Source down');
+    $('priceMeta').textContent = 'no live data';
   }
-  $("updated").textContent = "no live data";
 }
-
-async function tick(){
-  for (const src of DATA_SOURCES){
-    try{
-      const res = await fetch(src.url, {cache:"no-store"});
-      if (!res.ok) continue;
-      const data = src.map(await res.json());
-      if (data && data.supply != null){ render(data, src.name); return; }
-    }catch(e){ /* try next source */ }
-  }
-  showWaiting();
-}
-
-tick();
-setInterval(tick, REFRESH_SECONDS*1000);
+refresh();
+setInterval(refresh, REFRESH_SECONDS*1000);
 
 (function(){
     var root = document.documentElement;
@@ -501,41 +533,6 @@ setInterval(tick, REFRESH_SECONDS*1000);
       fel.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fcopy(); } });
     }
   })();
-</script>
-<script>
-function shareStat(kind, btn){
-  var el = document.getElementById(kind === 'locked' ? 'locked' : 'supply');
-  var v = '';
-  if (el) el.childNodes.forEach(function(n){ if (n.nodeType === 3) v += n.textContent; });
-  v = v.trim();
-  var has = v && v !== '\u2014';
-  var text;
-  if (kind === 'locked'){
-    text = has
-      ? 'Right now, ' + v + " is locked as DigiDollar collateral \u2014 and every coin stays in its owner's wallet. Live from the chain:"
-      : "DGB locked as DigiDollar collateral \u2014 every coin stays in its owner's wallet. Live from the chain:";
-  } else {
-    var num = (v.charAt(0) === '$') ? v.slice(1) : v;
-    text = has
-      ? 'There are ' + num + ' $DD in circulation right now, each one backed by locked DGB. Real, verifiable, updated live:'
-      : 'Live DigiDollar ($DD) circulating supply, each unit backed by locked DGB. Real, verifiable, updated live:';
-  }
-  var url = 'https://digidollarstats.com/';
-  if (matchMedia('(pointer: coarse)').matches && navigator.share){
-    navigator.share({text: text, url: url}).catch(function(){});
-    return;
-  }
-  var w = window.open('https://x.com/intent/post?text=' + encodeURIComponent(text) + '&url=' + encodeURIComponent(url), '_blank', 'noopener');
-  if (!w && navigator.clipboard && navigator.clipboard.writeText){
-    navigator.clipboard.writeText(text + ' ' + url).then(function(){ shareOk(btn); }).catch(function(){});
-  }
-}
-function shareOk(btn){
-  var old = btn.innerHTML;
-  btn.classList.add('ok');
-  btn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg>';
-  setTimeout(function(){ btn.classList.remove('ok'); btn.innerHTML = old; }, 1400);
-}
 </script>
 </body>
 </html>
