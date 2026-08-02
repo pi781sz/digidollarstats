@@ -45,9 +45,6 @@ DigiByte chain via the public digibyte.io API.
 - [Position planner](https://digidollarstats.com/planner): plan a position
   before committing — collateral required, DD mintable, the exact unlock date,
   and a downloadable calendar reminder for when the timelock ends.
-- [Transaction explainer](https://digidollarstats.com/explain): paste any
-  DigiByte address or transaction ID and read what happened in plain English —
-  amounts actually sent and received, counterparties, confirmations, and fees.
 
 ## Key facts
 

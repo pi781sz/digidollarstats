@@ -16,6 +16,9 @@
     t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';
   }
   document.documentElement.setAttribute('data-theme',t);
+  var p=null;
+  try{ p=localStorage.getItem('dds-palette'); }catch(e){}
+  document.documentElement.setAttribute('data-palette', p||'ledger');
 })();
 </script>
   <link rel="icon" href="/favicon.ico" sizes="any">
@@ -66,6 +69,45 @@
     --signal:#177346;
     --amber:#8A5E0F;
   }
+  /* ---- PALETTE 2 · Blueprint ---- */
+  html[data-theme="light"][data-palette="blueprint"]{
+    --field:#EDF1F6; --panel:#FFFFFF; --well:#E0E8F0; --hover:#E5EDF5;
+    --rule:#CFDAE6; --rule2:#9DB0C4; --text:#0C1826; --muted:#4E6377;
+    --dim:#8397AB; --signal:#10538C; --amber:#96500A;
+  }
+  /* ---- PALETTE 3 · Newsprint ---- */
+  html[data-theme="light"][data-palette="news"]{
+    --field:#FAFAF7; --panel:#FFFFFF; --well:#EDEDE8; --hover:#F1F1EC;
+    --rule:#DCDCD5; --rule2:#A8A8A0; --text:#101010; --muted:#565650;
+    --dim:#8C8C85; --signal:#101010; --amber:#A03410;
+  }
+  html[data-palette="news"] footer a,
+  html[data-palette="news"] .footnav a,
+  html[data-palette="news"] .footcontact a{text-decoration:underline}
+  /* ---- PALETTE 4 · Slate ---- */
+  html[data-theme="light"][data-palette="slate"]{
+    --field:#E7EAE9; --panel:#FFFFFF; --well:#DADFDE; --hover:#DFE4E3;
+    --rule:#C6CECD; --rule2:#96A3A2; --text:#0E1A1A; --muted:#4E6060;
+    --dim:#849393; --signal:#0D5F5C; --amber:#8A5410;
+  }
+
+  /* ---- TEMPORARY palette switcher — deleted before this ships ---- */
+  .palettebar{
+    position:fixed;left:0;right:0;bottom:0;z-index:50;
+    display:flex;justify-content:center;gap:0;
+    background:var(--panel);border-top:1px solid var(--rule);padding:8px 10px;
+  }
+  html[data-theme="dark"] .palettebar{display:none}
+  .palettebar button{
+    flex:1;max-width:130px;padding:9px 4px;cursor:pointer;
+    background:transparent;border:1px solid var(--rule);border-right:none;
+    color:var(--muted);font-family:var(--mono);font-size:10px;
+    font-weight:600;letter-spacing:.1em;text-transform:uppercase;
+  }
+  .palettebar button:last-child{border-right:1px solid var(--rule)}
+  .palettebar button[aria-pressed="true"]{background:var(--signal);color:var(--panel);border-color:var(--signal)}
+  body{padding-bottom:96px}
+
   *{box-sizing:border-box;margin:0;padding:0}
   html{background:var(--field)}
   body{
@@ -337,10 +379,6 @@
     <a class="tool" href="/node"><span class="go">→</span>
       <h3>Run a Node</h3>
       <p>Pick your OS — Windows, macOS, Linux, or Raspberry Pi — for the minimum specs and exact steps to run DigiByte Core. Needed to mint and redeem DigiDollar.</p></a>
-
-    <a class="tool" href="/explain"><span class="go">→</span>
-      <h3>Transaction Explainer</h3>
-      <p>Paste any DigiByte address or transaction ID and read what actually happened in plain English — amounts sent and received, who paid whom, confirmations, and the fee.</p></a>
   </div>
 
   <p class="house"><b>House rules:</b> no price predictions, no yield pitches, no financial advice. DigiDollar is liquidity against your own locked DGB — not free money. Debt is fixed in USD, timelocks have no early exit. This site shows the numbers; decisions are yours.</p>
@@ -349,7 +387,6 @@
     <nav class="footnav" aria-label="Footer">
       <a href="/">Home</a>
       <a href="/what-is-digidollar">What is DigiDollar?</a>
-      <a href="/explain">Explainer</a>
       <a href="/live">Live Stats</a>
       <a href="/oracle">Oracle Watch</a>
       <a href="/calculator">Mint Calculator</a>
@@ -365,6 +402,13 @@
     Not an official DigiByte channel · not affiliated with the DigiByte Core team<br>
     Data source: digibyte.io public API · verify independently · not financial advice
   </footer>
+</div>
+
+<div class="palettebar" id="paletteBar" role="group" aria-label="Preview colour palettes">
+  <button type="button" data-p="ledger">Ledger</button>
+  <button type="button" data-p="blueprint">Blueprint</button>
+  <button type="button" data-p="news">Newsprint</button>
+  <button type="button" data-p="slate">Slate</button>
 </div>
 
 <script>
@@ -430,6 +474,29 @@
   }
   refresh();
   setInterval(refresh, REFRESH_SECONDS*1000);
+
+  // ---- TEMPORARY palette switcher ----
+  (function(){
+    var root = document.documentElement;
+    var bar = document.getElementById('paletteBar');
+    if (!bar) return;
+    var btns = bar.querySelectorAll('button');
+    function mark(p){
+      for (var i=0;i<btns.length;i++){
+        btns[i].setAttribute('aria-pressed', btns[i].getAttribute('data-p') === p ? 'true' : 'false');
+      }
+    }
+    function pick(p){
+      root.setAttribute('data-palette', p);
+      try{ localStorage.setItem('dds-palette', p); }catch(e){}
+      mark(p);
+    }
+    mark(root.getAttribute('data-palette') || 'ledger');
+    bar.addEventListener('click', function(e){
+      var b = e.target.closest('button[data-p]');
+      if (b) pick(b.getAttribute('data-p'));
+    });
+  })();
 
   // ---- theme toggle ----
   (function(){
