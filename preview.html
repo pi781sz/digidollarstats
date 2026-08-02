@@ -156,6 +156,20 @@
   .scalewrap{position:relative}
   .backingnote{color:var(--muted);font-size:var(--t-small);margin-top:12px}
 
+  /* ---------- figures ---------- */
+  .figs{
+    display:grid;grid-template-columns:1fr 1fr;gap:1px;
+    background:var(--rule);border:1px solid var(--rule);margin-bottom:var(--gap);
+  }
+  .fig{background:var(--panel);padding:15px 14px 17px}
+  .fig .eyebrow{display:block;margin-bottom:9px}
+  .fig .eyebrow .coin{width:13px;height:13px;vertical-align:-2px;margin-right:6px}
+  .figv{
+    display:block;font-family:var(--mono);font-weight:600;
+    font-size:clamp(20px,5.2vw,24px);line-height:1.15;letter-spacing:-.02em;
+    font-variant-numeric:tabular-nums;word-break:break-word;
+  }
+
   /* ---------- ledger ---------- */
   .ledger{border-top:1px solid var(--rule);margin-bottom:var(--gap)}
   .ledger .eyebrow{display:block;padding:16px 0 4px}
@@ -242,7 +256,7 @@
     .hero{display:grid;grid-template-columns:1fr 1fr;gap:32px;align-items:end;margin-bottom:var(--gap)}
     .lede{margin-bottom:0}
     .readout{margin-bottom:0}
-    .ledgergrid{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-items:start}
+    .figs{grid-template-columns:repeat(4,1fr)}
     .tools{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-items:start}
     .tools .eyebrow{grid-column:1 / -1}
   }
@@ -280,45 +294,40 @@
 
       <div class="backing">
         <div class="backingtop">
-          <span class="eyebrow">Collateral backing</span>
+          <span class="eyebrow">Collateral ratio</span>
           <span class="backingval" id="backingVal">—</span>
         </div>
         <div class="track"><span class="fill" id="backingFill"></span><span class="tick"></span></div>
         <div class="scalewrap">
           <div class="scale"><span>0</span><span class="mid">100%</span><span>400%</span></div>
         </div>
-        <p class="backingnote">The marker is 100% — the point where every $DD is exactly covered by locked DGB. Scale ends at 400%.</p>
+        <p class="backingnote">Total DGB locked vs total $DD owed. 100% = every $DD exactly covered; higher is safer.</p>
       </div>
     </div>
   </div>
 
-  <div class="ledgergrid">
-    <div class="ledger">
-      <span class="eyebrow">Chain figures</span>
-      <div class="row"><span class="k"><img class="coin" src="/dgb-coin.png" alt="">DGB locked</span><span class="v" id="locked">—</span></div>
-      <div class="row"><span class="k">Active positions</span><span class="v" id="positions">—</span></div>
-      <div class="row"><span class="k">System health</span><span class="v" id="health">—</span></div>
-      <div class="row"><span class="k">Oracle DGB price</span><span class="v" id="oracle">—</span></div>
-    </div>
+  <div class="figs">
+    <div class="fig"><span class="eyebrow"><img class="coin" src="/dgb-coin.png" alt="">DGB locked</span><span class="figv" id="locked">—</span></div>
+    <div class="fig"><span class="eyebrow">Active positions</span><span class="figv" id="positions">—</span></div>
+    <div class="fig"><span class="eyebrow">System health</span><span class="figv" id="health">—</span></div>
+    <div class="fig"><span class="eyebrow">Oracle DGB price</span><span class="figv" id="oracle">—</span></div>
+  </div>
 
-    <div class="ledger">
-      <span class="eyebrow">System status</span>
-      <div class="row"><span class="k">Minting</span><span class="v" id="stMint">—</span></div>
-      <div class="row"><span class="k">Oracle feed</span><span class="v" id="stOracle">—</span></div>
-      <div class="row"><span class="k">Emergency mode</span><span class="v" id="stEmerg">—</span></div>
-      <div class="row"><span class="k">System collateral ratio</span><span class="v" id="stRatio">—</span></div>
-      <div class="row"><span class="k">ERR tier</span><span class="v" id="stErr">—</span></div>
-      <details class="notes">
-        <summary>How to read this</summary>
-        <ul>
-          <li><b>Minting</b> — whether new $DD can be minted right now. "Open" is normal; it freezes automatically if DGB moves too fast.</li>
-          <li><b>Oracle feed</b> — whether the price oracle is publishing. Minting needs a live price to stay safe.</li>
-          <li><b>Emergency mode</b> — the system-wide safety state. "No" is healthy; if ACTIVE, minting halts and redemption rules tighten.</li>
-          <li><b>System collateral ratio</b> — total DGB locked against total $DD owed. Higher is safer.</li>
-          <li><b>ERR tier</b> — the current burn multiplier. "Normal (1.0x)" means you burn exactly the $DD you minted to unlock your DGB.</li>
-        </ul>
-      </details>
-    </div>
+  <div class="ledger">
+    <span class="eyebrow">System status</span>
+    <div class="row"><span class="k">Minting</span><span class="v" id="stMint">—</span></div>
+    <div class="row"><span class="k">Oracle feed</span><span class="v" id="stOracle">—</span></div>
+    <div class="row"><span class="k">Emergency mode</span><span class="v" id="stEmerg">—</span></div>
+    <div class="row"><span class="k">ERR tier</span><span class="v" id="stErr">—</span></div>
+    <details class="notes">
+      <summary>How to read this</summary>
+      <ul>
+        <li><b>Minting</b> — whether new $DD can be minted right now. "Open" is normal; it freezes automatically if DGB moves too fast.</li>
+        <li><b>Oracle feed</b> — whether the price oracle is publishing. Minting needs a live price to stay safe.</li>
+        <li><b>Emergency mode</b> — the system-wide safety state. "No" is healthy; if ACTIVE, minting halts and redemption rules tighten.</li>
+        <li><b>ERR tier</b> — the current burn multiplier. "Normal (1.0x)" means you burn exactly the $DD you minted to unlock your DGB.</li>
+      </ul>
+    </details>
   </div>
 
   <div class="tools">
@@ -415,8 +424,7 @@
       const em = $('stEmerg');
       em.textContent = d.is_emergency ? 'ACTIVE' : 'No';
       em.className = 'v' + (d.is_emergency ? ' warn' : '');
-      $('stRatio').textContent = (d.system_collateral_ratio || d.health_percentage || 0) + '%';
-      $('stErr').textContent = d.err_tier && d.err_tier.description ? d.err_tier.description : '—';
+        $('stErr').textContent = d.err_tier && d.err_tier.description ? d.err_tier.description : '—';
 
       const now = new Date();
       $('updated').textContent = 'updated ' + now.toLocaleTimeString() +
