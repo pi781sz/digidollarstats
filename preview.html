@@ -167,27 +167,14 @@
   a.fig:hover .go{color:var(--accent, var(--signal))}
   .fig .eyebrow{display:block;margin-bottom:8px}
   .fig .eyebrow .coin{width:13px;height:13px;vertical-align:-2px;margin-right:6px}
+  .figv.warn{color:var(--amber)}
+  .sect{display:block;padding:0 0 10px}
   .figv{
     display:block;font-family:var(--mono);font-weight:600;font-size:var(--t-h2);
     line-height:1.2;font-variant-numeric:tabular-nums;word-break:break-word;
   }
 
-  /* ---------- ledger ---------- */
-  .ledger{border-top:1px solid var(--rule);margin-bottom:var(--gap)}
-  .ledger .eyebrow{display:block;padding:16px 0 4px}
-  .row{
-    display:flex;justify-content:space-between;align-items:baseline;gap:16px;
-    padding:11px 0;border-bottom:1px solid var(--rule);
-  }
-  .row .k{color:var(--muted);font-size:var(--t-small)}
-  .row .v{
-    font-family:var(--mono);font-weight:600;font-size:var(--t-small);
-    font-variant-numeric:tabular-nums;text-align:right;
-  }
-  .row .v.warn{color:var(--amber)}
-  .row .k .coin{width:14px;height:14px;vertical-align:-2px;margin-right:6px}
-
-  details.notes{border-bottom:1px solid var(--rule)}
+  details.notes{border-top:1px solid var(--rule);border-bottom:1px solid var(--rule)}
   details.notes summary{
     cursor:pointer;list-style:none;padding:12px 0;color:var(--muted);
     font-size:var(--t-small);font-family:var(--mono);
@@ -316,22 +303,23 @@
     <a class="fig" href="/oracle" aria-label="Oracle DGB price — open Oracle Watch"><span class="go">→</span><span class="eyebrow">Oracle DGB price</span><span class="figv" id="oracle">—</span></a>
   </div>
 
-  <div class="ledger">
-    <span class="eyebrow">System status</span>
-    <div class="row"><span class="k">Minting</span><span class="v" id="stMint">—</span></div>
-    <div class="row"><span class="k">Oracle feed</span><span class="v" id="stOracle">—</span></div>
-    <div class="row"><span class="k">Emergency mode</span><span class="v" id="stEmerg">—</span></div>
-    <div class="row"><span class="k">ERR tier</span><span class="v" id="stErr">—</span></div>
-    <details class="notes">
-      <summary>How to read this</summary>
-      <ul>
-        <li><b>Minting</b> — whether new $DD can be minted right now. "Open" is normal; it freezes automatically if DGB moves too fast.</li>
-        <li><b>Oracle feed</b> — whether the price oracle is publishing. Minting needs a live price to stay safe.</li>
-        <li><b>Emergency mode</b> — the system-wide safety state. "No" is healthy; if ACTIVE, minting halts and redemption rules tighten.</li>
-        <li><b>ERR tier</b> — the current burn multiplier. "Normal (1.0x)" means you burn exactly the $DD you minted to unlock your DGB.</li>
-      </ul>
-    </details>
+  <span class="eyebrow sect">System status</span>
+  <div class="figs">
+    <div class="fig"><span class="eyebrow">Minting</span><span class="figv" id="stMint">—</span></div>
+    <div class="fig"><span class="eyebrow">Oracle feed</span><span class="figv" id="stOracle">—</span></div>
+    <div class="fig"><span class="eyebrow">Emergency mode</span><span class="figv" id="stEmerg">—</span></div>
+    <div class="fig"><span class="eyebrow">ERR tier</span><span class="figv" id="stErr">—</span></div>
   </div>
+
+  <details class="notes">
+    <summary>How to read this</summary>
+    <ul>
+      <li><b>Minting</b> — whether new $DD can be minted right now. "Open" is normal; it freezes automatically if DGB moves too fast.</li>
+      <li><b>Oracle feed</b> — whether the price oracle is publishing. Minting needs a live price to stay safe.</li>
+      <li><b>Emergency mode</b> — the system-wide safety state. "No" is healthy; if ACTIVE, minting halts and redemption rules tighten.</li>
+      <li><b>ERR tier</b> — the current burn multiplier. "Normal (1.0x)" means you burn exactly the $DD you minted to unlock your DGB.</li>
+    </ul>
+  </details>
 
   <div class="tools">
     <span class="eyebrow">Data &amp; tools</span>
@@ -421,12 +409,12 @@
       const mintOpen = !d.minting_restricted_reason || d.minting_restricted_reason === 'none';
       const stMint = $('stMint');
       stMint.textContent = mintOpen ? 'Open' : d.minting_restricted_reason;
-      stMint.className = 'v' + (mintOpen ? '' : ' warn');
+      stMint.className = 'figv' + (mintOpen ? '' : ' warn');
 
       $('stOracle').textContent = d.oracle_status || (d.oracle_available ? 'available' : 'unavailable');
       const em = $('stEmerg');
       em.textContent = d.is_emergency ? 'ACTIVE' : 'No';
-      em.className = 'v' + (d.is_emergency ? ' warn' : '');
+      em.className = 'figv' + (d.is_emergency ? ' warn' : '');
         $('stErr').textContent = d.err_tier && d.err_tier.description ? d.err_tier.description : '—';
 
       const now = new Date();
