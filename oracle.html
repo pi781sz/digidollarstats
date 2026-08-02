@@ -1,111 +1,334 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DigiDollar Oracle Watch — Live DGB/USD Price — DigiDollarStats</title>
-<meta name="description" content="Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.">
-<link rel="canonical" href="https://digidollarstats.com/oracle">
-<meta name="theme-color" content="#070E0A">
-<link rel="icon" href="/favicon.ico">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-<meta property="og:type" content="website">
-<meta property="og:url" content="https://digidollarstats.com/oracle">
-<meta property="og:title" content="DigiDollar Oracle Watch — Live DGB/USD Price">
-<meta property="og:description" content="The DigiDollar price feed in the open: consensus DGB/USD price, which oracles are reporting, and the quorum signing each on-chain bundle.">
-<meta property="og:image" content="https://digidollarstats.com/og-oracle.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:site_name" content="DigiDollarStats">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="DigiDollar Oracle Watch — Live DGB/USD Price">
-<meta name="twitter:description" content="The DigiDollar price feed in the open: consensus DGB/USD price, which oracles are reporting, and the quorum signing each on-chain bundle.">
-<meta name="twitter:image" content="https://digidollarstats.com/og-oracle.png">
+  <meta name="description" content="Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.">
+  <link rel="canonical" href="https://digidollarstats.com/oracle">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://digidollarstats.com/oracle">
+  <meta property="og:site_name" content="DigiDollarStats">
+  <meta property="og:title" content="DigiDollar Oracle Watch">
+  <meta property="og:description" content="Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.">
+  <meta property="og:image" content="https://digidollarstats.com/og-oracle.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DigiDollar Oracle Watch">
+  <meta name="twitter:description" content="The DigiDollar price feed in the open: consensus DGB/USD, which oracles are reporting, and the 7-of-35 MuSig2 quorum signing each bundle onto the chain.">
+  <meta name="twitter:image" content="https://digidollarstats.com/og-oracle.png">
+
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#1A1D1C" id="themeColor">
+<script>
+(function(){
+  var t=null;
+  try{ t=localStorage.getItem('dds-theme'); }catch(e){}
+  if(t!=='light'&&t!=='dark'){
+    t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';
+  }
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32-light.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16-light.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
-:root{--bg:#070E0A;--card:#0F1D15;--line:#193322;--ring:#2B5540;--mint:#8FD4B0;--amber:#D9B36C;--text:#E9F2EC;--muted:#9DB3A6;--dim:#5f7a6b}
-*{margin:0;padding:0;box-sizing:border-box}
-html{background:var(--bg)}
-body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;padding:20px 16px 48px}
-.wrap{max-width:820px;margin:0 auto}
-a{color:var(--mint);text-decoration:none}
-header{display:flex;align-items:center;gap:12px;padding:6px 0 22px}
-header img{width:40px;height:40px;border-radius:50%}
-header .name{font-size:19px;font-weight:700}
-header .name em{font-style:normal;color:var(--mint)}
-.crumb{margin-left:auto;font-size:13px;color:var(--muted)}
-h1{font-size:29px;font-weight:700;margin-bottom:6px}
-.tagline{color:var(--muted);font-size:14.5px;line-height:1.6;margin-bottom:18px;max-width:60ch}
-.badge{display:inline-block;font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.05em;padding:6px 12px;border-radius:8px;margin-bottom:16px}
-.badge.live{background:var(--ring);color:var(--text)}
-.badge.err{background:#5c2a2a;color:#f0d0d0}
-.statuspill{display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;letter-spacing:.05em;color:var(--mint);background:transparent;border:1px solid var(--line);border-radius:99px;padding:5px 11px;line-height:1.4;margin-bottom:16px}
-.statuspill .sdot{width:7px;height:7px;border-radius:50%;background:var(--mint);flex-shrink:0}
-.statuspill.err{color:#e69b9b;border-color:#5c2a2a}
-.statuspill.err .sdot{background:#e07b7b}
-@media (prefers-reduced-motion: no-preference){.statuspill.live .sdot{animation:opulse 2s infinite}@keyframes opulse{0%,100%{opacity:1}50%{opacity:.35}}}
+  :root{
+    /* ---- Ash · dark (default) ---- */
+    --field:#1A1D1C;
+    --panel:#232726;
+    --well:#151817;
+    --hover:#1F2322;
+    --rule:#333837;
+    --rule2:#4B5250;
+    --text:#E8ECEA;
+    --muted:#98A29F;
+    --dim:#6B7573;
+    --signal:#7FC9A4;
+    --amber:#D4A96A;
 
-.hero{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:14px;text-align:center}
-.hero .label{color:var(--muted);font-size:13px;letter-spacing:.05em;text-transform:uppercase}
-.hero .big{font-family:'JetBrains Mono',monospace;font-size:40px;font-weight:700;color:var(--mint);margin-top:6px}
-.hero .meta{color:var(--muted);font-size:12.5px;margin-top:8px;font-family:'JetBrains Mono',monospace}
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --sans:'IBM Plex Sans',system-ui,sans-serif;
 
-.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px}
-.stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:15px}
-.stat .k{color:var(--muted);font-size:12px;letter-spacing:.04em;text-transform:uppercase}
-.stat .v{font-family:'JetBrains Mono',monospace;font-size:22px;font-weight:700;margin-top:5px}
+    --t-hero:clamp(40px,13vw,68px);
+    --t-h1:clamp(23px,5.6vw,30px);
+    --t-h2:17px;
+    --t-body:15px;
+    --t-small:13px;
+    --t-micro:11px;
 
-.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:18px;margin-bottom:14px}
-.panel h2{font-size:12.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:500;margin-bottom:4px}
-.panel .note{color:var(--dim);font-size:12px;line-height:1.5;margin-bottom:12px}
+    --gap:26px;
+  }
+  /* ---- Ash · light ---- */
+  html[data-theme="light"]{
+    --field:#ECEEED;
+    --panel:#F8F9F9;
+    --well:#E0E4E2;
+    --hover:#E7EAE9;
+    --rule:#D6DAD9;
+    --rule2:#C1C6C4;
+    --text:#1D2823;
+    --muted:#5E6D69;
+    --dim:#909C99;
+    --signal:#2E694B;
+    --amber:#8B6328;
+  }
 
-.orow{display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid var(--line);font-size:14px}
-.orow:last-child{border-bottom:none}
-.oid{font-family:'JetBrains Mono',monospace;font-size:11px;color:var(--dim);width:26px;flex-shrink:0}
-.oname{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-.opill{font-family:'JetBrains Mono',monospace;font-size:10.5px;font-weight:700;letter-spacing:.03em;padding:3px 8px;border-radius:6px;flex-shrink:0}
-.p-onchain{background:var(--ring);color:var(--text)}
-.p-reporting{background:#2a3f31;color:var(--mint)}
-.p-nodata{background:#3a2323;color:#d69b9b}
-.oprice{font-family:'JetBrains Mono',monospace;font-size:12.5px;width:82px;text-align:right;flex-shrink:0;color:var(--muted)}
-.sig{display:inline-block;background:var(--ring);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:11px;font-weight:600;padding:4px 9px;border-radius:7px;margin:3px 4px 3px 0}
-.bundlehdr{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--muted);margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--line)}
-.bundlehdr:first-of-type{border-top:none;padding-top:0}
-.rostersum{font-family:'JetBrains Mono',monospace;font-size:12.5px;color:var(--mint);margin-bottom:10px}
-.rostersum span{color:var(--muted)}
-.bundlecap{color:var(--dim);font-size:11.5px;margin-top:12px;font-family:'JetBrains Mono',monospace}
-.bundlehdr b{color:var(--mint);font-weight:700}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--field)}
+  body{
+    background:var(--field);
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:var(--t-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:20px 18px 54px;
+  }
+  .wrap{width:100%;max-width:600px}
+  a{color:var(--signal)}
+  :focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 
-footer{color:var(--muted);font-size:12px;text-align:center;line-height:1.6;margin-top:26px;border-top:1px solid var(--line);padding-top:16px}
-@media(max-width:600px){.hero .big{font-size:34px}.grid{grid-template-columns:1fr 1fr}}
-@media(min-width:900px){body{padding:32px 24px 60px}}
-  /* footer nav + contact */
-  .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:13px;line-height:1.5}
-  .footnav a{color:var(--mint);text-decoration:none}
+  /* one label treatment for the whole page */
+  .eyebrow{
+    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  }
+
+  /* ---------- masthead ---------- */
+  .masthead{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:30px;
+  }
+  .homelink{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+  .logo{width:34px;height:34px;object-fit:cover;display:block}
+  html[data-theme="dark"]  .logo-lt{display:none}
+  html[data-theme="light"] .logo-dk{display:none}
+  .brand{font-family:var(--sans);font-weight:600;font-size:16px;letter-spacing:-.02em}
+  .brand em{font-style:normal;color:var(--muted)}
+  .status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+  .status .sdot{width:6px;height:6px;background:var(--signal);flex-shrink:0}
+  .controls{display:flex;align-items:center;gap:12px}
+  .themetoggle{
+    width:28px;height:28px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;border:1px solid var(--rule);color:var(--muted);
+    cursor:pointer;padding:0;
+  }
+  .themetoggle:hover{color:var(--signal);border-color:var(--rule2)}
+  .themetoggle svg{width:14px;height:14px}
+  html[data-theme="light"] .themetoggle .i-sun{display:none}
+  html[data-theme="dark"]  .themetoggle .i-moon{display:none}
+  .status.err{color:var(--amber)}
+  .status.err .sdot{background:var(--amber)}
+
+  /* ---------- hero ---------- */
+  h1{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-h1);
+    line-height:1.25;letter-spacing:-.02em;margin-bottom:10px;
+  }
+  .lede{color:var(--muted);font-size:var(--t-body);max-width:54ch;margin-bottom:28px}
+
+  .readout{
+    background:var(--panel);border:1px solid var(--rule);
+    padding:22px 20px 20px;position:relative;margin-bottom:var(--gap);
+  }
+  .readout .eyebrow{display:block;margin-bottom:12px}
+  .supply{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-hero);
+    line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums;
+    word-break:break-word;
+  }
+  .supply .unit{font-size:.26em;letter-spacing:0;color:var(--accent, var(--muted));margin-left:.4em;font-weight:400;white-space:nowrap}
+  .updated{color:var(--muted);font-size:var(--t-small);margin-top:14px;font-family:var(--mono)}
+
+  /* ---------- signature: collateral bar ---------- */
+  .backing{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+  .backingtop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px}
+  .backingval{font-family:var(--mono);font-weight:600;font-size:var(--t-h2);font-variant-numeric:tabular-nums}
+  .track{position:relative;height:12px;background:var(--well);border:1px solid var(--rule)}
+  .fill{position:absolute;inset:1px auto 1px 1px;width:0;background:var(--signal)}
+  @media (prefers-reduced-motion:no-preference){.fill{transition:width .5s ease-out}}
+  .fill.warn{background:var(--amber)}
+  .tick{position:absolute;top:-4px;bottom:-4px;left:25%;width:1px;background:var(--accent, var(--rule2))}
+  .scale{
+    display:flex;justify-content:space-between;margin-top:7px;
+    font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;
+  }
+  .scale .mid{position:absolute;left:25%;transform:translateX(-50%)}
+  .scalewrap{position:relative}
+  .backingnote{color:var(--muted);font-size:var(--t-small);margin-top:12px}
+
+  /* ---------- figures ---------- */
+  .figs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:var(--gap)}
+  .fig{background:var(--panel);border:1px solid var(--rule);padding:15px;position:relative}
+  .fig .sharebtn{top:10px;right:10px}
+  .fig.sharing .eyebrow{padding-right:26px}
+  a.fig{display:block;text-decoration:none;color:inherit}
+  a.fig .go{position:absolute;right:12px;bottom:11px;color:var(--rule2);font-family:var(--mono);font-size:var(--t-small);line-height:1}
+  a.fig:hover{border-color:var(--rule2)}
+  a.fig:hover .go{color:var(--accent, var(--signal))}
+  .fig .eyebrow{display:block;margin-bottom:8px}
+  .fig .eyebrow .coin{width:13px;height:13px;vertical-align:-2px;margin-right:6px}
+  .figv{
+    display:block;font-family:var(--mono);font-weight:600;font-size:var(--t-h2);
+    line-height:1.2;font-variant-numeric:tabular-nums;word-break:break-word;
+  }
+
+  /* ---------- status panel ---------- */
+  .panel{background:var(--panel);border:1px solid var(--rule);padding:16px;margin-bottom:var(--gap)}
+  .panel .eyebrow{display:block;margin-bottom:10px}
+  .srow{
+    display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+    padding:10px 0;border-bottom:1px solid var(--rule);
+  }
+  .srow .k{color:var(--muted);font-size:var(--t-small)}
+  .srow .v{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-small);
+    font-variant-numeric:tabular-nums;text-align:right;
+  }
+  .srow .v.warn{color:var(--amber)}
+
+  details.notes{margin-top:2px}
+  details.notes summary{
+    cursor:pointer;list-style:none;padding:12px 0;color:var(--muted);
+    font-size:var(--t-small);font-family:var(--mono);
+  }
+  details.notes summary::-webkit-details-marker{display:none}
+  details.notes summary::after{content:" [+]";color:var(--rule2)}
+  details.notes[open] summary::after{content:" [–]"}
+  details.notes ul{list-style:none;padding-bottom:8px}
+  details.notes li{color:var(--muted);font-size:var(--t-small);padding:7px 0;border-top:1px solid var(--rule)}
+  details.notes li b{color:var(--text);font-weight:600;font-family:var(--mono)}
+
+  /* ---------- tools ---------- */
+  .tools{border-top:1px solid var(--rule);margin-bottom:var(--gap)}
+  .tools .eyebrow{display:block;padding:16px 0 4px}
+  .tool{
+    display:block;text-decoration:none;color:inherit;
+    padding:15px 30px 15px 0;border-bottom:1px solid var(--rule);position:relative;
+  }
+  .tool h3{font-family:var(--mono);font-weight:600;font-size:var(--t-h2);letter-spacing:-.01em;margin-bottom:4px}
+  .tool p{color:var(--muted);font-size:var(--t-small);max-width:56ch}
+  .tool .go{position:absolute;right:2px;top:16px;color:var(--rule2);font-family:var(--mono)}
+  .tool:hover{background:var(--hover)}
+  .tool:hover .go{color:var(--accent, var(--signal))}
+  .tool:hover h3{color:var(--signal)}
+
+  /* ---------- house rules ---------- */
+  .house{
+    border-left:2px solid var(--rule2);padding:2px 0 2px 16px;
+    color:var(--muted);font-size:var(--t-small);margin-bottom:34px;
+  }
+  .house b{color:var(--text);font-weight:600;font-family:var(--mono)}
+
+  /* ---------- share ---------- */
+  .sharebtn{
+    position:absolute;top:16px;right:16px;width:28px;height:28px;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;border:1px solid var(--rule);color:var(--muted);
+    cursor:pointer;padding:0;
+  }
+  .sharebtn:hover{color:var(--signal);border-color:var(--rule2)}
+  .sharebtn svg{width:14px;height:14px}
+  .sharebtn.ok{color:var(--signal);border-color:var(--rule2)}
+
+  /* ---------- oracle page only ---------- */
+  .crumb{font-family:var(--mono);font-size:var(--t-small);color:var(--dim);margin-bottom:14px}
+  .crumb a{color:var(--muted);text-decoration:none}
+  .crumb a:hover{color:var(--signal)}
+  .pnote{color:var(--muted);font-size:var(--t-small);line-height:1.6;margin-bottom:14px}
+  .pnote b{color:var(--text);font-weight:600;font-family:var(--mono)}
+
+  .rostersum{font-family:var(--mono);font-size:var(--t-small);color:var(--signal);
+    margin-bottom:10px;font-variant-numeric:tabular-nums}
+  .rostersum span{color:var(--dim)}
+
+  .orow{display:flex;align-items:center;gap:10px;padding:9px 0;
+    border-bottom:1px solid var(--rule);font-size:var(--t-small)}
+  .orow:last-child{border-bottom:none}
+  .oid{font-family:var(--mono);font-size:var(--t-micro);color:var(--dim);width:26px;flex-shrink:0}
+  .oname{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .opill{font-family:var(--mono);font-size:var(--t-micro);font-weight:600;letter-spacing:.06em;
+    text-transform:uppercase;padding:2px 7px;border:1px solid;flex-shrink:0;line-height:1.5}
+  .p-onchain{color:var(--signal);border-color:var(--signal)}
+  .p-reporting{color:var(--muted);border-color:var(--rule2)}
+  .p-nodata{color:var(--amber);border-color:var(--amber)}
+  .oprice{font-family:var(--mono);font-size:var(--t-small);width:84px;text-align:right;
+    flex-shrink:0;color:var(--muted);font-variant-numeric:tabular-nums}
+
+  .bundlehdr{font-family:var(--mono);font-size:var(--t-small);color:var(--muted);
+    margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--rule)}
+  .bundlehdr:first-of-type{border-top:none;padding-top:0;margin-top:0}
+  .bundlehdr b{color:var(--signal);font-weight:600}
+  .sig{display:inline-block;background:var(--well);border:1px solid var(--rule);color:var(--text);
+    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;padding:4px 8px;margin:3px 4px 3px 0}
+  .bundlecap{color:var(--dim);font-size:var(--t-micro);margin-top:12px;font-family:var(--mono)}
+
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--rule);padding-top:20px;color:var(--muted);font-size:12px;line-height:1.75;text-align:center}
+  .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin-bottom:16px;font-size:var(--t-small)}
+  .footnav a{text-decoration:none}
   .footnav a:hover{text-decoration:underline}
-  .footcontact{margin-bottom:14px;font-size:13px;color:var(--muted)}
-  .footcontact a{color:var(--mint);text-decoration:none}
-  .footcontact a:hover{text-decoration:underline}
-  .footdonate{margin-bottom:14px;font-size:13px;color:var(--muted);line-height:1.8;font-weight:700}
-  .footdonate .fdlabel{color:var(--text);font-weight:700}
-  .footdonate .fdaddr{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11.5px;color:var(--mint);cursor:pointer;word-break:break-all;border-bottom:1px dotted var(--ring)}
-  .footdonate .fdaddr:hover{color:var(--text)}
-  .footdonate .fdhint{font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim,#5f7a6b);margin-left:6px;white-space:nowrap}
-  .footdonate .fdhint.ok{color:var(--mint)}
-  footer{border-top:1px solid var(--line);padding-top:18px}
+  .footcontact{margin-bottom:14px;font-size:var(--t-small)}
+  .footcontact a{text-decoration:none}
+  .footdonate{margin-bottom:16px;font-size:var(--t-small);line-height:1.9}
+  .footdonate .fdlabel{color:var(--text);font-weight:600;font-family:var(--mono)}
+  .fdaddr{
+    font-family:var(--mono);font-size:11.5px;color:var(--signal);cursor:pointer;
+    word-break:break-all;border-bottom:1px dotted var(--rule2);
+  }
+  .fdaddr:hover{color:var(--text)}
+  .fdhint{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-left:8px;white-space:nowrap}
+  .fdhint.ok{color:var(--signal)}
+  footer a{text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
+  /* ---------- desktop ---------- */
+  @media (min-width:900px){
+    body{padding:40px 24px 76px}
+    .wrap{max-width:860px}
+    .masthead{margin-bottom:40px}
+    .topgrid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-bottom:var(--gap)}
+    .topgrid .readout{margin-bottom:0}
+    .topgrid .figs{grid-template-columns:1fr;grid-template-rows:repeat(4,1fr);margin-bottom:0}
+    .fig{padding:16px}
+    .tools{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-items:start}
+    .tools .eyebrow{grid-column:1 / -1}
+  }
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "DigiDollarStats",
+  "alternateName": ["DigiDollar Stats", "digidollarstats.com"],
+  "url": "https://digidollarstats.com/"
+}
+</script>
 <script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "Dataset",
-  "name": "DigiDollar Oracle Price Feed",
-  "description": "Consensus DGB/USD oracle price, reporting oracle roster, and the MuSig2 quorum signing each on-chain price bundle.",
+  "name": "DigiDollar Oracle Network Status",
+  "description": "Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.",
   "url": "https://digidollarstats.com/oracle",
+  "keywords": ["DigiDollar", "DigiByte", "DGB", "oracle", "price feed", "MuSig2", "quorum", "DGB/USD"],
   "isAccessibleForFree": true,
   "creator": {
     "@type": "Organization",
@@ -119,44 +342,68 @@ footer{color:var(--muted);font-size:12px;text-align:center;line-height:1.6;margi
 </head>
 <body>
 <div class="wrap">
-<header>
-  <a href="/"><img src="/icon-192.png" alt="DigiDollarStats"></a>
-  <div class="name">DigiDollar<em>Stats</em></div>
-  <div class="crumb"><a href="/">home</a> · oracle watch</div>
-</header>
 
-<h1>Oracle Watch</h1>
-<p class="tagline">The DigiDollar price feed is out in the open. A distributed network of up to 35 community oracles reports DGB/USD; a 7-of-35 MuSig2 quorum signs each price bundle onto the chain. All data live from mainnet.</p>
+  <div class="masthead">
+    <a class="homelink" href="/" aria-label="DigiDollarStats home">
+      <img class="logo logo-dk" src="/icon-192-mint.png" alt="" width="192" height="192">
+      <img class="logo logo-lt" src="/icon-192-light.png" alt="" width="192" height="192">
+      <span class="brand">DigiDollar<em>Stats</em></span>
+    </a>
+    <span class="controls">
+      <span class="status eyebrow" id="liveBadge"><span class="sdot"></span><span id="liveTxt">Live</span></span>
+      <button class="themetoggle" id="themeToggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.2M19.4 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+      </button>
+    </span>
+  </div>
 
-<div id="badge" class="statuspill live"><span class="sdot"></span><span id="liveTxt">Live</span></div>
+  <p class="crumb"><a href="/">home</a> · oracle watch</p>
 
-<div class="hero">
-  <div class="label">Consensus DGB / USD price</div>
-  <div class="big" id="price">—</div>
-  <div class="meta" id="priceMeta"></div>
-</div>
+  <h1>Oracle Watch</h1>
+  <p class="lede">The DigiDollar price feed is out in the open. A distributed network of up to 35 community oracles reports DGB/USD; a 7-of-35 MuSig2 quorum signs each price bundle onto the chain. All data live from mainnet.</p>
 
-<div class="grid">
-  <div class="stat"><div class="k">Reporting oracles</div><div class="v" id="reporting">—</div></div>
-  <div class="stat"><div class="k">On-chain this bundle</div><div class="v" id="onchain">—</div></div>
-  <div class="stat"><div class="k">Quorum required</div><div class="v" id="required">—</div></div>
-  <div class="stat"><div class="k">Roster slots</div><div class="v" id="slots">—</div></div>
-</div>
+  <div class="topgrid">
+    <div class="readout">
+      <span class="eyebrow">Consensus DGB / USD price</span>
+      <div class="supply" id="price">—</div>
+      <div class="updated" id="priceMeta">connecting to live data…</div>
 
-<div class="panel">
-  <h2>Oracle roster</h2>
-  <div class="note">Every configured oracle slot and its current state. <b>On-chain</b> = its price is in the latest signed bundle · <b>Reporting</b> = live but not in the last bundle · <b>No data</b> = silent.</div>
-  <div class="rostersum" id="rosterSum"></div>
-  <div id="roster"></div>
-</div>
+      <div class="backing">
+        <div class="backingtop">
+          <span class="eyebrow">Signatures on latest bundle</span>
+          <span class="backingval" id="quorumVal">—</span>
+        </div>
+        <div class="track"><span class="fill" id="quorumFill"></span><span class="tick" id="quorumTick"></span></div>
+        <div class="scalewrap">
+          <div class="scale"><span>0</span><span class="mid" id="quorumMid">quorum</span><span id="quorumMax">—</span></div>
+        </div>
+        <p class="backingnote">How many oracles signed the most recent price bundle. The mark is the quorum needed to publish one.</p>
+      </div>
+    </div>
 
-<div class="panel">
-  <h2>Recent signed bundles</h2>
-  <div class="note">Each price bundle committed to the chain, with the quorum of oracles whose MuSig2 signatures signed it.</div>
-  <div id="bundles"></div>
-</div>
+    <div class="figs">
+      <div class="fig"><span class="eyebrow">Reporting oracles</span><span class="figv" id="reporting">—</span></div>
+      <div class="fig"><span class="eyebrow">On-chain this bundle</span><span class="figv" id="onchain">—</span></div>
+      <div class="fig"><span class="eyebrow">Quorum required</span><span class="figv" id="required">—</span></div>
+      <div class="fig"><span class="eyebrow">Roster slots</span><span class="figv" id="slots">—</span></div>
+    </div>
+  </div>
 
-<footer>
+  <div class="panel">
+    <h2 class="eyebrow">Oracle roster</h2>
+    <p class="pnote">Every configured oracle slot and its current state. <b>On-chain</b> = its price is in the latest signed bundle · <b>Reporting</b> = live but not in the last bundle · <b>No data</b> = silent.</p>
+    <div class="rostersum" id="rosterSum"></div>
+    <div id="roster"></div>
+  </div>
+
+  <div class="panel">
+    <h2 class="eyebrow">Recent signed bundles</h2>
+    <p class="pnote">Each price bundle committed to the chain, with the quorum of oracles whose MuSig2 signatures signed it.</p>
+    <div id="bundles"></div>
+  </div>
+
+  <footer>
     <nav class="footnav" aria-label="Footer">
       <a href="/">Home</a>
       <a href="/what-is-digidollar">What is DigiDollar?</a>
@@ -177,13 +424,13 @@ footer{color:var(--muted);font-size:12px;text-align:center;line-height:1.6;margi
   </footer>
 </div>
 
+
 <script>
 const PRICES_API  = 'https://digibyte.io/api/getalloracleprices';
 const SIGNERS_API = 'https://digibyte.io/api/getoraclesigners?blocks=300';
 const MAX_BUNDLES = 5;
 const REFRESH_SECONDS = 60;
 const $ = id => document.getElementById(id);
-const badge = $('badge');
 
 const usd6 = n => '$' + Number(n).toFixed(6);
 function ago(ts){
@@ -198,6 +445,10 @@ function pill(status, source){
   if (status === 'no_data')  return '<span class="opill p-nodata">no data</span>';
   return '<span class="opill p-reporting">reporting</span>';
 }
+function setBadge(cls, txt){
+  $('liveBadge').className = 'status eyebrow' + (cls ? ' ' + cls : '');
+  $('liveTxt').textContent = txt;
+}
 
 async function refresh(){
   try{
@@ -206,41 +457,56 @@ async function refresh(){
       fetch(SIGNERS_API,{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();}).catch(()=>null)
     ]);
 
-    // consensus price
     $('price').textContent = usd6(pr.consensus_price_usd || (pr.consensus_price_micro_usd||0)/1e6);
-    $('priceMeta').textContent = 'bundle #' + (pr.last_bundle_height||'—') +
-      ' · ' + ago(pr.last_bundle_time) + ' · updated ' + new Date().toLocaleTimeString();
+    $('priceMeta').textContent = 'bundle #' + (pr.last_bundle_height||'\u2014') +
+      ' \u00b7 ' + ago(pr.last_bundle_time) + ' \u00b7 updated ' + new Date().toLocaleTimeString();
 
-    // headline stats
     const oracles = pr.oracles || [];
     const reporting = oracles.filter(o=>o.status==='reporting').length;
     const onchain   = oracles.filter(o=>o.price_source==='on-chain').length;
     $('reporting').textContent = reporting + ' / ' + (pr.total_oracles||oracles.length);
     $('onchain').textContent   = onchain;
-    $('required').textContent  = (pr.required||'—') + ' of ' + (pr.total_oracles||'—');
+    $('required').textContent  = (pr.required||'\u2014') + ' of ' + (pr.total_oracles||'\u2014');
     $('slots').textContent     = (pr.total_oracles||oracles.length);
     const nodata = oracles.filter(o=>o.status==='no_data').length;
     const slots  = pr.total_oracles || oracles.length;
-    $('rosterSum').innerHTML = reporting + ' reporting <span>·</span> ' +
-      nodata + ' no data <span>·</span> ' + slots + ' slots';
+    $('rosterSum').innerHTML = reporting + ' reporting <span>\u00b7</span> ' +
+      nodata + ' no data <span>\u00b7</span> ' + slots + ' slots';
 
-    // roster
     $('roster').innerHTML = oracles.map(o =>
       '<div class="orow">' +
         '<span class="oid">'+o.oracle_id+'</span>' +
         '<span class="oname">'+(o.name||('Oracle '+o.oracle_id))+'</span>' +
         pill(o.status, o.price_source) +
-        '<span class="oprice">'+(o.price_usd?usd6(o.price_usd):'—')+'</span>' +
+        '<span class="oprice">'+(o.price_usd?usd6(o.price_usd):'\u2014')+'</span>' +
       '</div>').join('');
 
-    // bundles
+    // quorum bar — signatures on the newest bundle against the quorum threshold
+    const req = Number(pr.required) || null;
+    const latest = (sg && sg.bundles && sg.bundles.length) ? sg.bundles[0] : null;
+    const signed = latest ? Number(latest.signer_count) : null;
+    $('quorumMax').textContent = slots || '\u2014';
+    if (req && slots) {
+      const pct = Math.max(0, Math.min(100, req / slots * 100));
+      $('quorumTick').style.left = pct + '%';
+      $('quorumMid').style.left  = pct + '%';
+      $('quorumMid').textContent = req + ' required';
+    }
+    if (signed != null && slots) {
+      $('quorumVal').textContent  = signed + ' of ' + slots;
+      $('quorumFill').style.width = Math.max(0, Math.min(100, signed / slots * 100)) + '%';
+    } else {
+      $('quorumVal').textContent  = '\u2014';
+      $('quorumFill').style.width = '0';
+    }
+
     if (sg && sg.bundles && sg.bundles.length){
       const shown = sg.bundles.slice(0, MAX_BUNDLES);
       const total = sg.bundles.length;
       const rows = shown.map(b => {
-        const signers = (b.signers||[]).map(s=>'<span class="sig">'+(s.name||('#'+s.oracle_id))+'</span>').join('');
-        return '<div class="bundlehdr">block <b>#'+b.height+'</b> · '+usd6(b.price_usd)+
-               ' · '+(b.signer_count||0)+' signers · '+ago(b.timestamp)+'</div>'+
+        const signers = (b.signers||[]).map(x=>'<span class="sig">'+(x.name||('#'+x.oracle_id))+'</span>').join('');
+        return '<div class="bundlehdr">block <b>#'+b.height+'</b> \u00b7 '+usd6(b.price_usd)+
+               ' \u00b7 '+(b.signer_count||0)+' signers \u00b7 '+ago(b.timestamp)+'</div>'+
                '<div>'+signers+'</div>';
       }).join('');
       const cap = total > MAX_BUNDLES
@@ -248,34 +514,57 @@ async function refresh(){
         : total + ' bundle' + (total===1?'':'s') + ' published in the last 300 blocks.';
       $('bundles').innerHTML = rows + '<div class="bundlecap">' + cap + '</div>';
     } else {
-      $('bundles').innerHTML = '<div class="note">No price bundles in the last 300 blocks — the on-chain price simply hasn\'t changed enough to trigger a new one.</div>';
+      $('bundles').innerHTML = '<div class="bundlecap">No price bundles in the last 300 blocks \u2014 the on-chain price simply hasn\'t changed enough to trigger a new one.</div>';
     }
 
-    document.getElementById('liveTxt').textContent = 'Live';
-    badge.className = 'statuspill live';
+    setBadge('', 'Live');
   }catch(e){
-    document.getElementById('liveTxt').textContent = 'Source down';
-    badge.className = 'statuspill err';
+    setBadge('err', 'Source down');
+    $('priceMeta').textContent = 'no live data';
+    $('quorumVal').textContent = '\u2014';
+    $('quorumFill').style.width = '0';
   }
 }
 refresh();
 setInterval(refresh, REFRESH_SECONDS*1000);
-</script>
-<script>
+
 (function(){
-  var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
-  var fel = document.getElementById("fdDgb");
-  var fhint = document.getElementById("fdDgbHint");
-  if(!fel || !fhint) return;
-  function fcopy(){
-    navigator.clipboard.writeText(addr).then(function(){
-      fhint.classList.add("ok"); fhint.textContent = "copied \u2713";
-      setTimeout(function(){ fhint.classList.remove("ok"); fhint.textContent = "copy"; }, 1600);
-    }).catch(function(){});
-  }
-  fel.addEventListener("click", fcopy);
-  fel.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fcopy(); } });
-})();
+    var root = document.documentElement;
+    var meta = document.getElementById('themeColor');
+    var btn  = document.getElementById('themeToggle');
+    function sync(){
+      if (!meta) return;
+      var f = getComputedStyle(root).getPropertyValue('--field').trim();
+      if (f) meta.setAttribute('content', f);
+    }
+    window.ddsSyncThemeColor = sync;
+    function apply(t){
+      root.setAttribute('data-theme', t);
+      if (btn) btn.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      try{ localStorage.setItem('dds-theme', t); }catch(e){}
+      sync();
+    }
+    apply(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+    if (btn) btn.addEventListener('click', function(){
+      apply(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    });
+  })();
+
+  (function(){
+    var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
+    var fel = document.getElementById("fdDgb");
+    var fhint = document.getElementById("fdDgbHint");
+    function fcopy(){
+      navigator.clipboard.writeText(addr).then(function(){
+        fhint.classList.add("ok"); fhint.textContent = "copied \u2713";
+        setTimeout(function(){ fhint.classList.remove("ok"); fhint.textContent = "copy"; }, 1600);
+      }).catch(function(){});
+    }
+    if(fel){
+      fel.addEventListener("click", fcopy);
+      fel.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fcopy(); } });
+    }
+  })();
 </script>
 </body>
 </html>
