@@ -85,6 +85,8 @@
   html[data-theme="light"][data-palette-light="bone"]{--field:#F4F2EF; --panel:#FFFFFF; --well:#EAE6E1; --hover:#EDEAE6; --rule:#DBD5CE; --rule2:#ACA298; --text:#1C1512; --muted:#63574E; --dim:#97887C; --signal:#8C3A1E; --amber:#9B1B1B;}
   html[data-theme="light"][data-palette-light="paper"]{--field:#FFFFFF; --panel:#FFFFFF; --well:#F0F0F0; --hover:#F6F6F6; --rule:#E2E2E2; --rule2:#B4B4B4; --text:#000000; --muted:#5A5A5A; --dim:#909090; --signal:#006644; --amber:#8A5000;}
   html[data-theme="light"][data-palette-light="mist"]{--field:#EEF1F3; --panel:#F8FAFB; --well:#E2E7EA; --hover:#E7ECEF; --rule:#D2D9DE; --rule2:#A0AAB2; --text:#16202A; --muted:#55636E; --dim:#8B98A2; --signal:#0E6E7A; --amber:#8A5410;}
+  /* Ash, translated to paper — same hues, mirrored lightness */
+  html[data-theme="light"][data-palette-light="ashlt"]{--field:#ECEEED; --panel:#F8F9F9; --well:#E0E4E2; --hover:#E7EAE9; --rule:#D6DAD9; --rule2:#C1C6C4; --text:#1D2823; --muted:#5E6D69; --dim:#909C99; --signal:#2E694B; --amber:#8B6328;}
   /* ================= 8 DARK PALETTES ================== */
   html[data-theme="dark"][data-palette-dark="pine"]{--field:#070E0A; --panel:#0D1712; --well:#08120C; --hover:#0A130E; --rule:#1B2E23; --rule2:#2A4636; --text:#E7EFE9; --muted:#7E9689; --dim:#4E6558; --signal:#8FD4B0; --amber:#D9B36C;}
   html[data-theme="dark"][data-palette-dark="graphite"]{--field:#0D0D0E; --panel:#161618; --well:#0A0A0B; --hover:#131315; --rule:#262629; --rule2:#3D3D42; --text:#EDEDEF; --muted:#8E8E96; --dim:#5A5A61; --signal:#C9C9CE; --amber:#D9A85C;}
@@ -112,7 +114,7 @@
   .palettebar button[aria-pressed="true"]{background:var(--signal);color:var(--panel);border-color:var(--signal)}
   html[data-theme="dark"] #palLight{display:none}
   html[data-theme="light"] #palDark{display:none}
-  body{padding-bottom:152px}
+  body{padding-bottom:190px}
 
   *{box-sizing:border-box;margin:0;padding:0}
   html{background:var(--field)}
@@ -421,6 +423,7 @@
     <button type="button" data-p="bone">Bone</button>
     <button type="button" data-p="paper">Paper</button>
     <button type="button" data-p="mist">Mist</button>
+    <button type="button" data-p="ashlt">Ash</button>
   </div>
   <div class="pgroup" id="palDark">
     <button type="button" data-p="brand">Brand</button>
