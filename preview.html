@@ -254,7 +254,9 @@
     body{padding:40px 24px 76px}
     .wrap{max-width:860px}
     .masthead{margin-bottom:40px}
-    .figs{grid-template-columns:repeat(4,1fr)}
+    .topgrid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-bottom:var(--gap)}
+    .topgrid .readout{margin-bottom:0}
+    .topgrid .figs{grid-template-columns:1fr;grid-template-rows:repeat(4,1fr);margin-bottom:0}
     .fig{padding:16px}
     .tools{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-items:start}
     .tools .eyebrow{grid-column:1 / -1}
@@ -279,12 +281,10 @@
     </span>
   </div>
 
-  <div class="hero">
-    <div>
-      <h1>DigiDollar, in numbers.</h1>
-      <p class="lede">Independent statistics for DigiDollar — the USD stablecoin native to DigiByte.</p>
-    </div>
+  <h1>DigiDollar, in numbers.</h1>
+  <p class="lede">Independent statistics for DigiDollar — the USD stablecoin native to DigiByte.</p>
 
+  <div class="topgrid">
     <div class="readout">
       <button class="sharebtn" type="button" aria-label="Share the live supply figure" title="Share" onclick="shareStat('supply',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button>
       <span class="eyebrow">Circulating supply</span>
@@ -303,13 +303,13 @@
         <p class="backingnote">Total DGB locked vs total $DD owed. 100% = every $DD exactly covered; higher is safer.</p>
       </div>
     </div>
-  </div>
 
-  <div class="figs">
-    <div class="fig sharing"><button class="sharebtn" type="button" aria-label="Share the DGB locked figure" title="Share" onclick="shareStat('locked',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><span class="eyebrow"><img class="coin" src="/dgb-coin.png" alt="">DGB locked</span><span class="figv" id="locked">—</span></div>
-    <div class="fig"><span class="eyebrow">Active positions</span><span class="figv" id="positions">—</span></div>
-    <div class="fig"><span class="eyebrow">System health</span><span class="figv" id="health">—</span></div>
-    <a class="fig" href="/oracle" aria-label="Oracle DGB price — open Oracle Watch"><span class="go">→</span><span class="eyebrow">Oracle DGB price</span><span class="figv" id="oracle">—</span></a>
+    <div class="figs">
+      <div class="fig sharing"><button class="sharebtn" type="button" aria-label="Share the DGB locked figure" title="Share" onclick="shareStat('locked',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><span class="eyebrow"><img class="coin" src="/dgb-coin.png" alt="">DGB locked</span><span class="figv" id="locked">—</span></div>
+      <div class="fig"><span class="eyebrow">Active positions</span><span class="figv" id="positions">—</span></div>
+      <div class="fig"><span class="eyebrow">System health</span><span class="figv" id="health">—</span></div>
+      <a class="fig" href="/oracle" aria-label="Oracle DGB price — open Oracle Watch"><span class="go">→</span><span class="eyebrow">Oracle DGB price</span><span class="figv" id="oracle">—</span></a>
+    </div>
   </div>
 
   <div class="panel">
