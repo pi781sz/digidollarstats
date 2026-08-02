@@ -157,17 +157,15 @@
   .backingnote{color:var(--muted);font-size:var(--t-small);margin-top:12px}
 
   /* ---------- figures ---------- */
-  .figs{
-    display:grid;grid-template-columns:1fr 1fr;gap:1px;
-    background:var(--rule);border:1px solid var(--rule);margin-bottom:var(--gap);
-  }
-  .fig{background:var(--panel);padding:15px 14px 17px}
-  .fig .eyebrow{display:block;margin-bottom:9px}
+  .figs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:var(--gap)}
+  .fig{background:var(--panel);border:1px solid var(--rule);padding:15px;position:relative}
+  .fig .sharebtn{top:10px;right:10px}
+  .fig.sharing .eyebrow{padding-right:26px}
+  .fig .eyebrow{display:block;margin-bottom:8px}
   .fig .eyebrow .coin{width:13px;height:13px;vertical-align:-2px;margin-right:6px}
   .figv{
-    display:block;font-family:var(--mono);font-weight:600;
-    font-size:clamp(20px,5.2vw,24px);line-height:1.15;letter-spacing:-.02em;
-    font-variant-numeric:tabular-nums;word-break:break-word;
+    display:block;font-family:var(--mono);font-weight:600;font-size:var(--t-h2);
+    line-height:1.2;font-variant-numeric:tabular-nums;word-break:break-word;
   }
 
   /* ---------- ledger ---------- */
@@ -257,6 +255,7 @@
     .lede{margin-bottom:0}
     .readout{margin-bottom:0}
     .figs{grid-template-columns:repeat(4,1fr)}
+    .fig{padding:16px}
     .tools{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-items:start}
     .tools .eyebrow{grid-column:1 / -1}
   }
@@ -307,7 +306,7 @@
   </div>
 
   <div class="figs">
-    <div class="fig"><span class="eyebrow"><img class="coin" src="/dgb-coin.png" alt="">DGB locked</span><span class="figv" id="locked">—</span></div>
+    <div class="fig sharing"><button class="sharebtn" type="button" aria-label="Share the DGB locked figure" title="Share" onclick="shareStat('locked',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><span class="eyebrow"><img class="coin" src="/dgb-coin.png" alt="">DGB locked</span><span class="figv" id="locked">—</span></div>
     <div class="fig"><span class="eyebrow">Active positions</span><span class="figv" id="positions">—</span></div>
     <div class="fig"><span class="eyebrow">System health</span><span class="figv" id="health">—</span></div>
     <div class="fig"><span class="eyebrow">Oracle DGB price</span><span class="figv" id="oracle">—</span></div>
@@ -482,14 +481,21 @@
 </script>
 <script>
 function shareStat(kind, btn){
-  var el = document.getElementById('supply');
+  var el = document.getElementById(kind === 'locked' ? 'locked' : 'supply');
   var v = '';
   if (el) el.childNodes.forEach(function(n){ if (n.nodeType === 3) v += n.textContent; });
   v = v.trim();
   var has = v && v !== '\u2014';
-  var text = has
-    ? 'There are ' + v + ' $DD in circulation right now, each one backed by locked DGB. Real, verifiable, updated live:'
-    : 'Live DigiDollar ($DD) circulating supply, each unit backed by locked DGB. Real, verifiable, updated live:';
+  var text;
+  if (kind === 'locked'){
+    text = has
+      ? 'Right now, ' + v + " is locked as DigiDollar collateral \u2014 and every coin stays in its owner's wallet. Live from the chain:"
+      : "DGB locked as DigiDollar collateral \u2014 every coin stays in its owner's wallet. Live from the chain:";
+  } else {
+    text = has
+      ? 'There are ' + v + ' $DD in circulation right now, each one backed by locked DGB. Real, verifiable, updated live:'
+      : 'Live DigiDollar ($DD) circulating supply, each unit backed by locked DGB. Real, verifiable, updated live:';
+  }
   var url = 'https://digidollarstats.com/';
   if (matchMedia('(pointer: coarse)').matches && navigator.share){
     navigator.share({text: text, url: url}).catch(function(){});
