@@ -146,6 +146,8 @@
   }
   .homelink{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
   .logo{width:34px;height:34px;object-fit:cover;display:block}
+  html[data-theme="dark"]  .logo-lt{display:none}
+  html[data-theme="light"] .logo-dk{display:none}
   .brand{font-family:var(--mono);font-weight:600;font-size:16px;letter-spacing:-.01em}
   .brand em{font-style:normal;color:var(--muted)}
   .status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
@@ -298,7 +300,8 @@
 
   <div class="masthead">
     <a class="homelink" href="/" aria-label="DigiDollarStats home">
-      <img class="logo" src="/icon-192.png" alt="">
+      <img class="logo logo-dk" src="/icon-192-mint.png" alt="">
+      <img class="logo logo-lt" src="/icon-192.png" alt="">
       <span class="brand">DigiDollar<em>Stats</em></span>
     </a>
     <span class="controls">
