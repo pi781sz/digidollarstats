@@ -369,6 +369,18 @@
       <span class="eyebrow">Consensus DGB / USD price</span>
       <div class="supply" id="price">—</div>
       <div class="updated" id="priceMeta">connecting to live data…</div>
+
+      <div class="backing">
+        <div class="backingtop">
+          <span class="eyebrow">Signatures on latest bundle</span>
+          <span class="backingval" id="quorumVal">—</span>
+        </div>
+        <div class="track"><span class="fill" id="quorumFill"></span><span class="tick" id="quorumTick"></span></div>
+        <div class="scalewrap">
+          <div class="scale"><span>0</span><span class="mid" id="quorumMid">quorum</span><span id="quorumMax">—</span></div>
+        </div>
+        <p class="backingnote">How many oracles signed the most recent price bundle. The mark is the quorum needed to publish one.</p>
+      </div>
     </div>
 
     <div class="figs">
@@ -470,6 +482,25 @@ async function refresh(){
         '<span class="oprice">'+(o.price_usd?usd6(o.price_usd):'\u2014')+'</span>' +
       '</div>').join('');
 
+    // quorum bar — signatures on the newest bundle against the quorum threshold
+    const req = Number(pr.required) || null;
+    const latest = (sg && sg.bundles && sg.bundles.length) ? sg.bundles[0] : null;
+    const signed = latest ? Number(latest.signer_count) : null;
+    $('quorumMax').textContent = slots || '\u2014';
+    if (req && slots) {
+      const pct = Math.max(0, Math.min(100, req / slots * 100));
+      $('quorumTick').style.left = pct + '%';
+      $('quorumMid').style.left  = pct + '%';
+      $('quorumMid').textContent = req + ' required';
+    }
+    if (signed != null && slots) {
+      $('quorumVal').textContent  = signed + ' of ' + slots;
+      $('quorumFill').style.width = Math.max(0, Math.min(100, signed / slots * 100)) + '%';
+    } else {
+      $('quorumVal').textContent  = '\u2014';
+      $('quorumFill').style.width = '0';
+    }
+
     if (sg && sg.bundles && sg.bundles.length){
       const shown = sg.bundles.slice(0, MAX_BUNDLES);
       const total = sg.bundles.length;
@@ -491,6 +522,8 @@ async function refresh(){
   }catch(e){
     setBadge('err', 'Source down');
     $('priceMeta').textContent = 'no live data';
+    $('quorumVal').textContent = '\u2014';
+    $('quorumFill').style.width = '0';
   }
 }
 refresh();
