@@ -5,9 +5,24 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>DigiDollarStats — Live DigiDollar ($DD) Supply &amp; Stats</title>
   <meta name="description" content="Independent real-time stats for DigiDollar ($DD), the decentralized USD stablecoin on DigiByte: live supply, DGB locked, and system health from the chain.">
+  <link rel="canonical" href="https://digidollarstats.com/">
+
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://digidollarstats.com/">
+  <meta property="og:site_name" content="DigiDollarStats">
+  <meta property="og:title" content="DigiDollarStats — DigiDollar, in numbers.">
+  <meta property="og:description" content="Independent real-time stats for DigiDollar ($DD), the USD stablecoin native to DigiByte: live supply, DGB locked, collateral ratio and system health, read from the chain.">
+  <meta property="og:image" content="https://digidollarstats.com/og-home.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="DigiDollarStats — DigiDollar, in numbers.">
+  <meta name="twitter:description" content="Independent real-time stats for DigiDollar ($DD) on the DigiByte chain. Live supply, DGB locked, collateral ratio, system health.">
+  <meta name="twitter:image" content="https://digidollarstats.com/og-home.png">
+
   <!-- PREVIEW ONLY — keeps this page out of the index while we look at it. -->
   <meta name="robots" content="noindex, nofollow">
-  <meta name="theme-color" content="#070E0A" id="themeColor">
+  <meta name="theme-color" content="#1A1D1C" id="themeColor">
 <script>
 (function(){
   var t=null;
@@ -22,6 +37,7 @@
   <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
   <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
   <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -262,14 +278,42 @@
     .tools .eyebrow{grid-column:1 / -1}
   }
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "DigiDollarStats",
+  "alternateName": ["DigiDollar Stats", "digidollarstats.com"],
+  "url": "https://digidollarstats.com/"
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "Dataset",
+  "name": "DigiDollar ($DD) Live Statistics",
+  "description": "Independent real-time statistics for DigiDollar, the decentralized USD stablecoin native to the DigiByte blockchain: circulating supply, DGB locked as collateral, active positions, system health, and oracle price. Read live from the chain.",
+  "url": "https://digidollarstats.com/",
+  "keywords": ["DigiDollar", "DD", "DigiByte", "DGB", "stablecoin", "supply", "collateral", "oracle"],
+  "isAccessibleForFree": true,
+  "creator": {
+    "@type": "Organization",
+    "name": "DGB Signal",
+    "url": "https://x.com/dgb_signal"
+  },
+  "license": "https://creativecommons.org/licenses/by/4.0/",
+  "creditText": "Independent community project. Not an official DigiByte channel. Not financial advice."
+}
+</script>
 </head>
 <body>
 <div class="wrap">
 
   <div class="masthead">
     <a class="homelink" href="/" aria-label="DigiDollarStats home">
-      <img class="logo logo-dk" src="/icon-192-mint.png" alt="">
-      <img class="logo logo-lt" src="/icon-192-light.png" alt="">
+      <img class="logo logo-dk" src="/icon-192-mint.png" alt="" width="192" height="192">
+      <img class="logo logo-lt" src="/icon-192-light.png" alt="" width="192" height="192">
       <span class="brand">DigiDollar<em>Stats</em></span>
     </a>
     <span class="controls">
@@ -305,7 +349,7 @@
     </div>
 
     <div class="figs">
-      <div class="fig sharing"><button class="sharebtn" type="button" aria-label="Share the DGB locked figure" title="Share" onclick="shareStat('locked',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><span class="eyebrow"><img class="coin" src="/dgb-coin.png" alt="">DGB locked</span><span class="figv" id="locked">—</span></div>
+      <div class="fig sharing"><button class="sharebtn" type="button" aria-label="Share the DGB locked figure" title="Share" onclick="shareStat('locked',this)"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="3"/><circle cx="6" cy="12" r="3"/><circle cx="18" cy="19" r="3"/><line x1="8.59" y1="13.51" x2="15.42" y2="17.49"/><line x1="15.41" y1="6.51" x2="8.59" y2="10.49"/></svg></button><span class="eyebrow"><img class="coin" src="/dgb-coin.png" alt="" width="64" height="64">DGB locked</span><span class="figv" id="locked">—</span></div>
       <div class="fig"><span class="eyebrow">Active positions</span><span class="figv" id="positions">—</span></div>
       <div class="fig"><span class="eyebrow">System health</span><span class="figv" id="health">—</span></div>
       <a class="fig" href="/oracle" aria-label="Oracle DGB price — open Oracle Watch"><span class="go">→</span><span class="eyebrow">Oracle DGB price</span><span class="figv" id="oracle">—</span></a>
@@ -313,7 +357,7 @@
   </div>
 
   <div class="panel">
-    <span class="eyebrow">System status</span>
+    <h2 class="eyebrow">System status</h2>
     <div class="srow"><span class="k">Minting</span><span class="v" id="stMint">—</span></div>
     <div class="srow"><span class="k">Oracle feed</span><span class="v" id="stOracle">—</span></div>
     <div class="srow"><span class="k">Emergency mode</span><span class="v" id="stEmerg">—</span></div>
@@ -330,7 +374,7 @@
   </div>
 
   <div class="tools">
-    <span class="eyebrow">Data</span>
+    <h2 class="eyebrow">Data</h2>
 
     <a class="tool" href="/live"><span class="go">→</span>
       <h3>Live Stats</h3>
