@@ -3,24 +3,24 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>DigiDollar Oracle Watch — Live DGB/USD Price — DigiDollarStats</title>
-  <meta name="description" content="Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.">
-  <link rel="canonical" href="https://digidollarstats.com/oracle">
+<title>What Is DigiDollar? DigiByte's Stablecoin Explained</title>
+  <meta name="description" content="DigiDollar ($DD) is a decentralized USD stablecoin on DigiByte. You mint it by locking your own DGB — no bank, no custodian. A plain-English guide to how it works.">
+  <meta name="keywords" content="What is DigiDollar, DigiDollar, DD, DigiByte stablecoin, DGB, decentralized stablecoin, over-collateralized, UTXO stablecoin, mint DigiDollar">
+  <link rel="canonical" href="https://digidollarstats.com/what-is-digidollar">
 
-  <meta property="og:type" content="website">
-  <meta property="og:url" content="https://digidollarstats.com/oracle">
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://digidollarstats.com/what-is-digidollar">
   <meta property="og:site_name" content="DigiDollarStats">
-  <meta property="og:title" content="DigiDollar Oracle Watch">
-  <meta property="og:description" content="Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.">
-  <meta property="og:image" content="https://digidollarstats.com/og-oracle.png">
+  <meta property="og:title" content="What Is DigiDollar? The DigiByte Stablecoin, Explained">
+  <meta property="og:description" content="A plain-English guide to DigiDollar ($DD): a decentralized US-dollar stablecoin you mint by locking your own DGB. No bank, no custodian, no forced liquidations.">
+  <meta property="og:image" content="https://digidollarstats.com/og-what-is-digidollar.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="DigiDollar Oracle Watch">
-  <meta name="twitter:description" content="The DigiDollar price feed in the open: consensus DGB/USD, which oracles are reporting, and the 7-of-35 MuSig2 quorum signing each bundle onto the chain.">
-  <meta name="twitter:image" content="https://digidollarstats.com/og-oracle.png">
+  <meta name="twitter:title" content="What Is DigiDollar? The DigiByte Stablecoin, Explained">
+  <meta name="twitter:description" content="A plain-English guide to DigiDollar ($DD): a decentralized US-dollar stablecoin you mint by locking your own DGB.">
+  <meta name="twitter:image" content="https://digidollarstats.com/og-what-is-digidollar.png">
 
-  <!-- PREVIEW ONLY — keeps this draft out of the index while we look at it. -->
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#1A1D1C" id="themeColor">
 <script>
@@ -248,38 +248,118 @@
   .sharebtn svg{width:14px;height:14px}
   .sharebtn.ok{color:var(--signal);border-color:var(--rule2)}
 
-  /* ---------- oracle page only ---------- */
+  /* ---------- what-is-digidollar page only ---------- */
   .crumb{font-family:var(--mono);font-size:var(--t-small);color:var(--dim);margin-bottom:14px}
   .crumb a{color:var(--muted);text-decoration:none}
   .crumb a:hover{color:var(--signal)}
-  .pnote{color:var(--muted);font-size:var(--t-small);line-height:1.6;margin-bottom:14px}
-  .pnote b{color:var(--text);font-weight:600;font-family:var(--mono)}
 
-  .rostersum{font-family:var(--mono);font-size:var(--t-small);color:var(--signal);
-    margin-bottom:10px;font-variant-numeric:tabular-nums}
-  .rostersum span{color:var(--dim)}
+  .kicker{display:block;margin-bottom:12px}
+  .lede b{color:var(--text);font-weight:600}
 
-  .orow{display:flex;align-items:center;gap:10px;padding:9px 0;
-    border-bottom:1px solid var(--rule);font-size:var(--t-small)}
-  .orow:last-child{border-bottom:none}
-  .oid{font-family:var(--mono);font-size:var(--t-micro);color:var(--dim);width:26px;flex-shrink:0}
-  .oname{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-  .opill{font-family:var(--mono);font-size:var(--t-micro);font-weight:600;letter-spacing:.06em;
-    text-transform:uppercase;padding:2px 7px;border:1px solid;flex-shrink:0;line-height:1.5}
-  .p-onchain{color:var(--signal);border-color:var(--signal)}
-  .p-reporting{color:var(--muted);border-color:var(--rule2)}
-  .p-nodata{color:var(--amber);border-color:var(--amber)}
-  .oprice{font-family:var(--mono);font-size:var(--t-small);width:84px;text-align:right;
-    flex-shrink:0;color:var(--muted);font-variant-numeric:tabular-nums}
+  section{margin-bottom:var(--gap)}
+  h2{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-h2);
+    letter-spacing:-.01em;line-height:1.3;margin-bottom:10px;
+  }
+  p.body{color:var(--muted);font-size:var(--t-body);max-width:54ch;margin-bottom:12px}
+  p.body:last-child{margin-bottom:0}
+  p.body b{color:var(--text);font-weight:600}
+  .sub{color:var(--muted);font-size:var(--t-body);max-width:54ch;margin-bottom:16px}
+  .sub b{color:var(--text);font-weight:600}
 
-  .bundlehdr{font-family:var(--mono);font-size:var(--t-small);color:var(--muted);
-    margin:14px 0 8px;padding-top:12px;border-top:1px solid var(--rule)}
-  .bundlehdr:first-of-type{border-top:none;padding-top:0;margin-top:0}
-  .bundlehdr b{color:var(--signal);font-weight:600}
-  .sig{display:inline-block;background:var(--well);border:1px solid var(--rule);color:var(--text);
-    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;padding:4px 8px;margin:3px 4px 3px 0}
-  .bundlecap{color:var(--dim);font-size:var(--t-micro);margin-top:12px;font-family:var(--mono)}
+  /* diagram */
+  .diagram{background:var(--panel);border:1px solid var(--rule);padding:48px 14px 18px;margin-bottom:var(--gap)}
+  .dgm-row{display:flex;align-items:center;justify-content:center;gap:10px;max-width:430px;margin:0 auto}
+  .coin{
+    position:relative;flex:0 0 auto;width:86px;height:86px;
+    background:var(--well);border:1px solid var(--rule2);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;
+  }
+  .coin-logo{
+    position:absolute;left:50%;bottom:100%;margin-bottom:11px;transform:translateX(-50%);
+    width:34px;height:34px;object-fit:cover;display:block;
+  }
+  .coin-t{font-family:var(--mono);font-weight:600;font-size:18px;line-height:1;color:var(--amber)}
+  .coin.dd .coin-t{color:var(--signal)}
+  .coin-s{font-family:var(--mono);font-size:10px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:7px}
+  .dgm-mid{flex:1 1 auto;min-width:56px;max-width:170px}
+  .dgm-lbl{font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.1em;color:var(--signal);white-space:nowrap;text-align:center}
+  .dgm-lbl.muted{color:var(--muted)}
+  .dgm-line{position:relative;height:1px;background:var(--signal);margin:8px 0}
+  .dgm-line.muted{background:var(--rule2)}
+  .dgm-line .head{position:absolute;top:50%;transform:translateY(-50%);width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent}
+  .dgm-line.right .head{right:0;border-left:6px solid var(--signal)}
+  .dgm-line.left .head{left:0;border-right:6px solid var(--rule2)}
+  .dgm-cap{color:var(--muted);font-size:var(--t-small);line-height:1.6;max-width:52ch;margin:20px auto 0;text-align:center}
+  .dgm-cap b{color:var(--text);font-weight:600}
 
+  /* step flow */
+  .flow{display:grid;grid-template-columns:1fr;gap:12px}
+  .step{background:var(--panel);border:1px solid var(--rule);padding:15px}
+  .step .n{
+    display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+    background:var(--well);border:1px solid var(--rule2);color:var(--muted);
+    font-family:var(--mono);font-size:12px;font-weight:600;margin-bottom:10px;
+  }
+  .step h3{font-family:var(--mono);font-weight:600;font-size:var(--t-body);letter-spacing:-.01em;margin-bottom:5px}
+  .step p{color:var(--muted);font-size:var(--t-small)}
+
+  /* bullet list */
+  .blist{list-style:none;max-width:54ch}
+  .blist li{position:relative;padding-left:18px;margin-bottom:11px;color:var(--muted);font-size:var(--t-body)}
+  .blist li:last-child{margin-bottom:0}
+  .blist li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;background:var(--signal)}
+  .blist li b{color:var(--text);font-weight:600}
+
+  /* table */
+  .tablewrap{background:var(--panel);border:1px solid var(--rule);overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:var(--t-small)}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule)}
+  th{
+    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);vertical-align:bottom;
+  }
+  td{font-family:var(--mono);color:var(--text);font-variant-numeric:tabular-nums}
+  td:first-child{font-family:var(--sans);color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .tnote{color:var(--muted);font-size:var(--t-small);max-width:54ch;margin-top:12px}
+  .tnote b{color:var(--text);font-weight:600}
+
+  /* callout */
+  .callout{
+    background:var(--panel);border:1px solid var(--rule);border-left:2px solid var(--amber);
+    padding:15px 18px;margin-bottom:var(--gap);
+  }
+  .callout .h{
+    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:8px;
+  }
+  .callout p{color:var(--muted);font-size:var(--t-small);max-width:54ch}
+  .callout b{color:var(--text);font-weight:600}
+
+  #explore .tools{margin-bottom:0}
+
+  /* FAQ */
+  .faq details{background:var(--panel);border:1px solid var(--rule);margin-bottom:10px}
+  .faq details:last-child{margin-bottom:0}
+  .faq summary{
+    cursor:pointer;list-style:none;padding:13px 15px;font-weight:600;font-size:var(--t-body);
+    display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+  }
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"[+]";color:var(--rule2);font-family:var(--mono);font-size:var(--t-small);flex-shrink:0}
+  .faq details[open] summary::after{content:"[–]"}
+  .faq summary:hover{color:var(--signal)}
+  .faq .a{padding:0 15px 14px;color:var(--muted);font-size:var(--t-small);max-width:56ch}
+
+  @media (min-width:900px){
+    .diagram{padding:54px 24px 20px}
+    .dgm-row{gap:16px}
+    .coin{width:100px;height:100px}
+    .coin-logo{width:40px;height:40px;margin-bottom:13px}
+    .coin-t{font-size:20px}
+    .flow{grid-template-columns:1fr 1fr;gap:14px}
+  }
   /* ---------- footer ---------- */
   footer{border-top:1px solid var(--rule);padding-top:20px;color:var(--muted);font-size:12px;line-height:1.75;text-align:center}
   .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin-bottom:16px;font-size:var(--t-small)}
@@ -304,9 +384,7 @@
     body{padding:40px 24px 76px}
     .wrap{max-width:860px}
     .masthead{margin-bottom:40px}
-    .topgrid{display:grid;grid-template-columns:1.4fr 1fr;gap:20px;margin-bottom:var(--gap)}
-    .topgrid .readout{margin-bottom:0}
-    .topgrid .figs{grid-template-columns:1fr;grid-template-rows:repeat(4,1fr);margin-bottom:0}
+    .figs{grid-template-columns:repeat(4,1fr)}
     .fig{padding:16px}
     .tools{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-items:start}
     .tools .eyebrow{grid-column:1 / -1}
@@ -324,20 +402,31 @@
 </script>
 <script type="application/ld+json">
 {
-  "@context": "https://schema.org",
-  "@type": "Dataset",
-  "name": "DigiDollar Oracle Network Status",
-  "description": "Live status of the DigiDollar oracle network: consensus DGB/USD price, reporting oracles, and the 7-of-35 MuSig2 signers of the latest on-chain price bundles.",
-  "url": "https://digidollarstats.com/oracle",
-  "keywords": ["DigiDollar", "DigiByte", "DGB", "oracle", "price feed", "MuSig2", "quorum", "DGB/USD"],
-  "isAccessibleForFree": true,
-  "creator": {
-    "@type": "Organization",
-    "name": "DGB Signal",
-    "url": "https://x.com/dgb_signal"
-  },
-  "license": "https://creativecommons.org/licenses/by/4.0/",
-  "creditText": "Independent community project. Not an official DigiByte channel. Not financial advice."
+  "@context":"https://schema.org",
+  "@type":"Article",
+  "headline":"What Is DigiDollar? DigiByte's Decentralized Stablecoin, Explained",
+  "description":"DigiDollar ($DD) is a decentralized US-dollar stablecoin native to the DigiByte blockchain. You mint it by locking your own DGB as collateral — no bank, no company, no loss of custody.",
+  "about":["DigiDollar","DigiByte","stablecoin","DGB"],
+  "inLanguage":"en",
+  "isAccessibleForFree":true,
+  "url":"https://digidollarstats.com/what-is-digidollar",
+  "mainEntityOfPage":"https://digidollarstats.com/what-is-digidollar",
+  "author":{"@type":"Organization","name":"DGB Signal","url":"https://x.com/dgb_signal"},
+  "publisher":{"@type":"Organization","name":"DigiDollarStats","url":"https://digidollarstats.com/"}
+}
+</script>
+<script type="application/ld+json">
+{
+  "@context":"https://schema.org",
+  "@type":"FAQPage",
+  "mainEntity":[
+    {"@type":"Question","name":"Is DigiDollar a real stablecoin?","acceptedAnswer":{"@type":"Answer","text":"Yes. Each DigiDollar ($DD) targets a value of one US dollar and is backed by DGB that has been over-collateralized and locked on the DigiByte blockchain."}},
+    {"@type":"Question","name":"Who controls DigiDollar?","acceptedAnswer":{"@type":"Answer","text":"No one. There is no issuing company or custodian. DigiDollar is part of the DigiByte protocol itself and runs entirely on self-custodied wallets."}},
+    {"@type":"Question","name":"Do I lose my DGB when I mint DigiDollar?","acceptedAnswer":{"@type":"Answer","text":"No. Your DGB is time-locked inside your own wallet and returns to you in full when you redeem your DigiDollar."}},
+    {"@type":"Question","name":"Can a DigiDollar position be liquidated?","acceptedAnswer":{"@type":"Answer","text":"No. Collateral is time-locked, so there are no margin calls or forced liquidations. A position simply rides out its full term."}},
+    {"@type":"Question","name":"How is the price kept at one dollar?","acceptedAnswer":{"@type":"Answer","text":"A decentralized network of up to 35 oracle slots reports the DGB/USD price, and a quorum of seven signs each price bundle onto the chain using MuSig2 aggregate signatures. No single oracle sets the price."}},
+    {"@type":"Question","name":"Where does DigiDollar run?","acceptedAnswer":{"@type":"Answer","text":"Entirely inside DigiByte Core — the same wallet you already use for DGB. There is no third-party service to sign up for."}}
+  ]
 }
 </script>
 </head>
@@ -351,7 +440,6 @@
       <span class="brand">DigiDollar<em>Stats</em></span>
     </a>
     <span class="controls">
-      <span class="status eyebrow" id="liveBadge"><span class="sdot"></span><span id="liveTxt">Live</span></span>
       <button class="themetoggle" id="themeToggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
         <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
         <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.2M19.4 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
@@ -359,50 +447,162 @@
     </span>
   </div>
 
-  <p class="crumb"><a href="/">home</a> · oracle watch</p>
+  <p class="crumb"><a href="/">home</a> · what is DigiDollar</p>
 
-  <h1>Oracle Watch</h1>
-  <p class="lede">The DigiDollar price feed is out in the open. A distributed network of up to 35 community oracles reports DGB/USD; a 7-of-35 MuSig2 quorum signs each price bundle onto the chain. All data live from mainnet.</p>
+  <span class="eyebrow kicker">DigiByte · Stablecoin</span>
+  <h1>What is DigiDollar?</h1>
+  <p class="lede">DigiDollar (<b>$DD</b>) is a decentralized US-dollar stablecoin built directly into the DigiByte blockchain. You create it by locking your own DGB as collateral — there is no bank, no company, and you keep control of your private keys the entire time.</p>
 
-  <div class="topgrid">
-    <div class="readout">
-      <span class="eyebrow">Consensus DGB / USD price</span>
-      <div class="supply" id="price">—</div>
-      <div class="updated" id="priceMeta">connecting to live data…</div>
-
-      <div class="backing">
-        <div class="backingtop">
-          <span class="eyebrow">Signatures on latest bundle</span>
-          <span class="backingval" id="quorumVal">—</span>
-        </div>
-        <div class="track"><span class="fill" id="quorumFill"></span><span class="tick" id="quorumTick"></span></div>
-        <div class="scalewrap">
-          <div class="scale"><span>0</span><span class="mid" id="quorumMid">quorum</span><span id="quorumMax">—</span></div>
-        </div>
-        <p class="backingnote">How many oracles signed the most recent price bundle. The mark is the quorum needed to publish one.</p>
+  <div class="diagram">
+    <div class="dgm-row">
+      <div class="coin dgb">
+        <img class="coin-logo" src="/dgb-coin.png" alt="DigiByte logo" width="64" height="64">
+        <span class="coin-t">DGB</span>
+        <span class="coin-s">collateral</span>
+      </div>
+      <div class="dgm-mid">
+        <div class="dgm-lbl">LOCK &amp; MINT</div>
+        <div class="dgm-line right"><span class="head"></span></div>
+        <div class="dgm-line left muted"><span class="head"></span></div>
+        <div class="dgm-lbl muted">BURN &amp; UNLOCK</div>
+      </div>
+      <div class="coin dd">
+        <img class="coin-logo logo-dk" src="/icon-192-mint.png" alt="DigiDollar logo" width="192" height="192">
+        <img class="coin-logo logo-lt" src="/icon-192-light.png" alt="DigiDollar logo" width="192" height="192">
+        <span class="coin-t">$DD</span>
+        <span class="coin-s">= $1.00</span>
       </div>
     </div>
+    <div class="dgm-cap">Lock DGB as collateral and the protocol mints <b>$DD</b> worth one dollar each. Later, burn the $DD to unlock your DGB. It's fully reversible — and your coins never leave your wallet.</div>
+  </div>
 
-    <div class="figs">
-      <div class="fig"><span class="eyebrow">Reporting oracles</span><span class="figv" id="reporting">—</span></div>
-      <div class="fig"><span class="eyebrow">On-chain this bundle</span><span class="figv" id="onchain">—</span></div>
-      <div class="fig"><span class="eyebrow">Quorum required</span><span class="figv" id="required">—</span></div>
-      <div class="fig"><span class="eyebrow">Roster slots</span><span class="figv" id="slots">—</span></div>
+  <section id="in-short">
+    <h2>The short version</h2>
+    <p class="body">DigiDollar lets you draw stable, dollar-denominated spending power from DGB you already hold — without selling it, and without handing your coins to anyone. You lock DGB, mint $DD, spend or hold it, and later return the $DD to release your DGB. You're borrowing against your own coins, not selling them.</p>
+    <p class="body">Unlike stablecoins backed by a company's bank account, DigiDollar has no issuer to trust. It's enforced by DigiByte's own transaction rules — a stablecoin native to the chain, not a smart contract, a bridge, or an ERC-20 token layered on top.</p>
+  </section>
+
+  <section id="how-it-works">
+    <h2>How it works</h2>
+    <p class="sub">Four steps, all happening inside DigiByte Core:</p>
+    <div class="flow">
+      <div class="step">
+        <span class="n">1</span>
+        <h3>Lock your DGB</h3>
+        <p>You commit DGB into a time-locked output in your own wallet. It's locked, not sent — it stays under your keys the whole time.</p>
+      </div>
+      <div class="step">
+        <span class="n">2</span>
+        <h3>Mint DigiDollar</h3>
+        <p>Based on the value of the DGB you locked and the current DGB/USD price, the protocol mints $DD to you. Each one is worth a dollar.</p>
+      </div>
+      <div class="step">
+        <span class="n">3</span>
+        <h3>Use it</h3>
+        <p>Send, receive, or hold $DD like any DigiByte transaction — but with a steady dollar value instead of a floating one.</p>
+      </div>
+      <div class="step">
+        <span class="n">4</span>
+        <h3>Redeem</h3>
+        <p>When your lock period ends, burn the $DD to release your collateral. Your DGB unlocks in full and returns to you.</p>
+      </div>
     </div>
+  </section>
+
+  <section id="different">
+    <h2>What makes it different</h2>
+    <ul class="blist">
+      <li><b>Genuinely decentralized.</b> No issuer, no custodian, no bank behind it — it lives in the DigiByte protocol itself.</li>
+      <li><b>Self-custody throughout.</b> Your DGB never leaves your wallet. You hold your own keys from start to finish.</li>
+      <li><b>No forced liquidations.</b> Because collateral is time-locked, positions are never margin-called. They ride out the term.</li>
+      <li><b>Native to a UTXO chain.</b> Built into DigiByte's transaction rules using Taproot outputs — not layered on via contracts.</li>
+    </ul>
+  </section>
+
+  <section id="collateral">
+    <h2>Collateral &amp; lock periods</h2>
+    <p class="sub">DigiDollar is <b>over-collateralized</b>: you always lock more DGB than the dollars you mint. How much more depends on how long you lock — shorter locks require more collateral, longer locks require less. There are ten tiers, from one hour to ten years.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Lock period</th><th>Collateral ratio</th><th>To mint $100 of DD</th></tr></thead>
+        <tbody>
+          <tr><td>1 hour</td><td>1000%</td><td>lock $1,000 of DGB</td></tr>
+          <tr><td>30 days</td><td>500%</td><td>lock $500 of DGB</td></tr>
+          <tr><td>1 year</td><td>300%</td><td>lock $300 of DGB</td></tr>
+          <tr><td>5 years</td><td>225%</td><td>lock $225 of DGB</td></tr>
+          <tr><td>10 years</td><td>200%</td><td>lock $200 of DGB</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="tnote">A representative selection of the ten tiers. Amounts are the <b>dollar value</b> of DGB you lock, not a number of coins — how many DGB that works out to depends on the DGB price at the moment you mint. The <a href="/calculator">mint calculator</a> does that conversion at the live price; the <a href="/planner">position planner</a> maps out a lock and its unlock date.</p>
+  </section>
+
+  <section id="price">
+    <h2>How the price stays near a dollar</h2>
+    <p class="body">DigiDollar reads the DGB/USD price from a decentralized oracle network — up to 35 independent oracle slots that draw from major exchange feeds. A quorum of seven signs each price bundle onto the chain using MuSig2 aggregate signatures, so no single oracle sets the price. You can watch the feed live on <a href="/oracle">Oracle Watch</a>.</p>
+  </section>
+
+  <section id="stability">
+    <h2>What keeps the system stable</h2>
+    <p class="sub">With no liquidations to fall back on, DigiDollar relies on layered safeguards instead:</p>
+    <ul class="blist">
+      <li><b>Over-collateralization.</b> Every position starts with a buffer against DGB price drops — larger for short locks.</li>
+      <li><b>Dynamic adjustment.</b> Collateral requirements tighten automatically if overall system health falls.</li>
+      <li><b>Emergency redemption.</b> Under stress, redeeming can require burning a little more $DD — but you always get 100% of your collateral back.</li>
+      <li><b>Volatility freezes.</b> Minting can pause during extreme price moves to protect the system, then resume.</li>
+    </ul>
+  </section>
+
+  <div class="callout">
+    <div class="h">The honest part</div>
+    <p>DigiDollar is liquidity against your own locked DGB — <b>not free money</b>. The debt is fixed in US dollars, and time-locks have <b>no early exit</b>: once you lock, that DGB is committed for the full term. Decide carefully. Nothing here is financial advice.</p>
   </div>
 
-  <div class="panel">
-    <h2 class="eyebrow">Oracle roster</h2>
-    <p class="pnote">Every configured oracle slot and its current state. <b>On-chain</b> = its price is in the latest signed bundle · <b>Reporting</b> = live but not in the last bundle · <b>No data</b> = silent.</p>
-    <div class="rostersum" id="rosterSum"></div>
-    <div id="roster"></div>
-  </div>
+  <section id="status">
+    <h2>Where things stand</h2>
+    <p class="body">DigiDollar is <b>live on DigiByte mainnet</b>, shipped in DigiByte Core v9.26.2. Everything — minting, holding, redeeming, and the oracle price feed — runs inside DigiByte Core, with no third-party service required.</p>
+  </section>
 
-  <div class="panel">
-    <h2 class="eyebrow">Recent signed bundles</h2>
-    <p class="pnote">Each price bundle committed to the chain, with the quorum of oracles whose MuSig2 signatures signed it.</p>
-    <div id="bundles"></div>
-  </div>
+  <section id="faq">
+    <h2>Frequently asked</h2>
+    <div class="faq">
+      <details>
+        <summary>Is DigiDollar a real stablecoin?</summary>
+        <div class="a">Yes. Each $DD targets a value of one US dollar and is backed by DGB that's been over-collateralized and locked on-chain.</div>
+      </details>
+      <details>
+        <summary>Who controls DigiDollar?</summary>
+        <div class="a">No one. There's no issuing company or custodian — it's part of the DigiByte protocol and runs on self-custodied wallets.</div>
+      </details>
+      <details>
+        <summary>Do I lose my DGB when I mint DigiDollar?</summary>
+        <div class="a">No. Your DGB is time-locked inside your own wallet and returns to you in full when you redeem.</div>
+      </details>
+      <details>
+        <summary>Can my position be liquidated?</summary>
+        <div class="a">No. Collateral is time-locked, so there are no margin calls or forced liquidations. A position simply rides out its full term.</div>
+      </details>
+      <details>
+        <summary>How is the price kept at a dollar?</summary>
+        <div class="a">A decentralized network of up to 35 oracle slots reports DGB/USD, and a 7-signature MuSig2 quorum signs each price onto the chain. See <a href="/oracle">Oracle Watch</a>.</div>
+      </details>
+      <details>
+        <summary>Where does DigiDollar run?</summary>
+        <div class="a">Entirely inside DigiByte Core — the same wallet you already use for DGB. There's nothing extra to sign up for. New to nodes? See <a href="/node">Run a Node</a>.</div>
+      </details>
+    </div>
+  </section>
+
+  <section id="explore">
+    <h2>Explore the numbers</h2>
+    <p class="sub">This site tracks DigiDollar live from the chain. A few places to start:</p>
+    <div class="tools">
+      <a class="tool" href="/live"><span class="go">→</span><h3>Live Stats</h3><p>Circulating supply, DGB locked, positions, and system health — updated from mainnet.</p></a>
+      <a class="tool" href="/oracle"><span class="go">→</span><h3>Oracle Watch</h3><p>The consensus DGB/USD price and the oracles signing it onto the chain.</p></a>
+      <a class="tool" href="/calculator"><span class="go">→</span><h3>Mint Calculator</h3><p>See how much $DD a given amount of DGB mints at each lock tier.</p></a>
+      <a class="tool" href="/planner"><span class="go">→</span><h3>Position Planner</h3><p>Map out a lock, its backing, and its unlock date — with a calendar reminder.</p></a>
+    </div>
+  </section>
 
   <footer>
     <nav class="footnav" aria-label="Footer">
@@ -425,110 +625,7 @@
   </footer>
 </div>
 
-
 <script>
-const PRICES_API  = 'https://digibyte.io/api/getalloracleprices';
-const SIGNERS_API = 'https://digibyte.io/api/getoraclesigners?blocks=300';
-const MAX_BUNDLES = 5;
-const REFRESH_SECONDS = 60;
-const $ = id => document.getElementById(id);
-
-const usd6 = n => '$' + Number(n).toFixed(6);
-function ago(ts){
-  if (!ts) return '';
-  const s = Math.max(0, Math.floor(Date.now()/1000 - ts));
-  if (s < 60) return s + 's ago';
-  if (s < 3600) return Math.floor(s/60) + 'm ago';
-  return Math.floor(s/3600) + 'h ago';
-}
-function pill(status, source){
-  if (source === 'on-chain') return '<span class="opill p-onchain">on-chain</span>';
-  if (status === 'no_data')  return '<span class="opill p-nodata">no data</span>';
-  return '<span class="opill p-reporting">reporting</span>';
-}
-function setBadge(cls, txt){
-  $('liveBadge').className = 'status eyebrow' + (cls ? ' ' + cls : '');
-  $('liveTxt').textContent = txt;
-}
-
-async function refresh(){
-  try{
-    const [pr, sg] = await Promise.all([
-      fetch(PRICES_API, {cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();}),
-      fetch(SIGNERS_API,{cache:'no-store'}).then(r=>{if(!r.ok)throw 0;return r.json();}).catch(()=>null)
-    ]);
-
-    $('price').textContent = usd6(pr.consensus_price_usd || (pr.consensus_price_micro_usd||0)/1e6);
-    $('priceMeta').textContent = 'bundle #' + (pr.last_bundle_height||'\u2014') +
-      ' \u00b7 ' + ago(pr.last_bundle_time) + ' \u00b7 updated ' + new Date().toLocaleTimeString();
-
-    const oracles = pr.oracles || [];
-    const reporting = oracles.filter(o=>o.status==='reporting').length;
-    const onchain   = oracles.filter(o=>o.price_source==='on-chain').length;
-    $('reporting').textContent = reporting + ' / ' + (pr.total_oracles||oracles.length);
-    $('onchain').textContent   = onchain;
-    $('required').textContent  = (pr.required||'\u2014') + ' of ' + (pr.total_oracles||'\u2014');
-    $('slots').textContent     = (pr.total_oracles||oracles.length);
-    const nodata = oracles.filter(o=>o.status==='no_data').length;
-    const slots  = pr.total_oracles || oracles.length;
-    $('rosterSum').innerHTML = reporting + ' reporting <span>\u00b7</span> ' +
-      nodata + ' no data <span>\u00b7</span> ' + slots + ' slots';
-
-    $('roster').innerHTML = oracles.map(o =>
-      '<div class="orow">' +
-        '<span class="oid">'+o.oracle_id+'</span>' +
-        '<span class="oname">'+(o.name||('Oracle '+o.oracle_id))+'</span>' +
-        pill(o.status, o.price_source) +
-        '<span class="oprice">'+(o.price_usd?usd6(o.price_usd):'\u2014')+'</span>' +
-      '</div>').join('');
-
-    // quorum bar — signatures on the newest bundle against the quorum threshold
-    const req = Number(pr.required) || null;
-    const latest = (sg && sg.bundles && sg.bundles.length) ? sg.bundles[0] : null;
-    const signed = latest ? Number(latest.signer_count) : null;
-    $('quorumMax').textContent = slots || '\u2014';
-    if (req && slots) {
-      const pct = Math.max(0, Math.min(100, req / slots * 100));
-      $('quorumTick').style.left = pct + '%';
-      $('quorumMid').style.left  = pct + '%';
-      $('quorumMid').textContent = req + ' required';
-    }
-    if (signed != null && slots) {
-      $('quorumVal').textContent  = signed + ' of ' + slots;
-      $('quorumFill').style.width = Math.max(0, Math.min(100, signed / slots * 100)) + '%';
-    } else {
-      $('quorumVal').textContent  = '\u2014';
-      $('quorumFill').style.width = '0';
-    }
-
-    if (sg && sg.bundles && sg.bundles.length){
-      const shown = sg.bundles.slice(0, MAX_BUNDLES);
-      const total = sg.bundles.length;
-      const rows = shown.map(b => {
-        const signers = (b.signers||[]).map(x=>'<span class="sig">'+(x.name||('#'+x.oracle_id))+'</span>').join('');
-        return '<div class="bundlehdr">block <b>#'+b.height+'</b> \u00b7 '+usd6(b.price_usd)+
-               ' \u00b7 '+(b.signer_count||0)+' signers \u00b7 '+ago(b.timestamp)+'</div>'+
-               '<div>'+signers+'</div>';
-      }).join('');
-      const cap = total > MAX_BUNDLES
-        ? 'Showing the latest ' + MAX_BUNDLES + ' of ' + total + ' bundles from the last 300 blocks.'
-        : total + ' bundle' + (total===1?'':'s') + ' published in the last 300 blocks.';
-      $('bundles').innerHTML = rows + '<div class="bundlecap">' + cap + '</div>';
-    } else {
-      $('bundles').innerHTML = '<div class="bundlecap">No price bundles in the last 300 blocks \u2014 the on-chain price simply hasn\'t changed enough to trigger a new one.</div>';
-    }
-
-    setBadge('', 'Live');
-  }catch(e){
-    setBadge('err', 'Source down');
-    $('priceMeta').textContent = 'no live data';
-    $('quorumVal').textContent = '\u2014';
-    $('quorumFill').style.width = '0';
-  }
-}
-refresh();
-setInterval(refresh, REFRESH_SECONDS*1000);
-
 (function(){
     var root = document.documentElement;
     var meta = document.getElementById('themeColor');
