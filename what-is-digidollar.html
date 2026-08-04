@@ -1,166 +1,420 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>What Is DigiDollar? DigiByte's Stablecoin Explained</title>
-<meta name="description" content="DigiDollar ($DD) is a decentralized USD stablecoin on DigiByte. You mint it by locking your own DGB — no bank, no custodian. A plain-English guide to how it works.">
-<meta name="keywords" content="What is DigiDollar, DigiDollar, DD, DigiByte stablecoin, DGB, decentralized stablecoin, over-collateralized, UTXO stablecoin, mint DigiDollar">
-<link rel="canonical" href="https://digidollarstats.com/what-is-digidollar">
-<meta name="robots" content="index, follow">
-<meta name="theme-color" content="#070E0A">
-<!-- favicons -->
-<link rel="icon" href="/favicon.ico" sizes="any">
-<link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
-<link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
-<link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
-<link rel="manifest" href="/site.webmanifest">
-<!-- Open Graph -->
-<meta property="og:type" content="article">
-<meta property="og:url" content="https://digidollarstats.com/what-is-digidollar">
-<meta property="og:title" content="What Is DigiDollar? The DigiByte Stablecoin, Explained">
-<meta property="og:description" content="A plain-English guide to DigiDollar ($DD): a decentralized US-dollar stablecoin you mint by locking your own DGB. No bank, no custodian, no forced liquidations.">
-<meta property="og:image" content="https://digidollarstats.com/og-what-is-digidollar.png">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta property="og:site_name" content="DigiDollarStats">
-<!-- Twitter -->
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="What Is DigiDollar? The DigiByte Stablecoin, Explained">
-<meta name="twitter:description" content="A plain-English guide to DigiDollar ($DD): a decentralized US-dollar stablecoin you mint by locking your own DGB.">
-<meta name="twitter:image" content="https://digidollarstats.com/og-what-is-digidollar.png">
+  <meta name="description" content="DigiDollar ($DD) is a decentralized USD stablecoin on DigiByte. You mint it by locking your own DGB — no bank, no custodian. A plain-English guide to how it works.">
+  <meta name="keywords" content="What is DigiDollar, DigiDollar, DD, DigiByte stablecoin, DGB, decentralized stablecoin, over-collateralized, UTXO stablecoin, mint DigiDollar">
+  <link rel="canonical" href="https://digidollarstats.com/what-is-digidollar">
+
+  <meta property="og:type" content="article">
+  <meta property="og:url" content="https://digidollarstats.com/what-is-digidollar">
+  <meta property="og:site_name" content="DigiDollarStats">
+  <meta property="og:title" content="What Is DigiDollar? The DigiByte Stablecoin, Explained">
+  <meta property="og:description" content="A plain-English guide to DigiDollar ($DD): a decentralized US-dollar stablecoin you mint by locking your own DGB. No bank, no custodian, no forced liquidations.">
+  <meta property="og:image" content="https://digidollarstats.com/og-what-is-digidollar.png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="What Is DigiDollar? The DigiByte Stablecoin, Explained">
+  <meta name="twitter:description" content="A plain-English guide to DigiDollar ($DD): a decentralized US-dollar stablecoin you mint by locking your own DGB.">
+  <meta name="twitter:image" content="https://digidollarstats.com/og-what-is-digidollar.png">
+
+  <meta name="robots" content="index, follow">
+  <meta name="theme-color" content="#1A1D1C" id="themeColor">
+<script>
+(function(){
+  var t=null;
+  try{ t=localStorage.getItem('dds-theme'); }catch(e){}
+  if(t!=='light'&&t!=='dark'){
+    t=(window.matchMedia&&window.matchMedia('(prefers-color-scheme: light)').matches)?'light':'dark';
+  }
+  document.documentElement.setAttribute('data-theme',t);
+})();
+</script>
+  <link rel="icon" href="/favicon.ico" sizes="any">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32-light.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16-light.png" media="(prefers-color-scheme: light)">
+  <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png">
+  <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png">
+  <link rel="manifest" href="/site.webmanifest">
+
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;600&family=IBM+Plex+Sans:wght@400;600&display=swap" rel="stylesheet">
+
 <style>
-:root{--bg:#070E0A;--card:#0F1D15;--line:#193322;--ring:#2B5540;--mint:#8FD4B0;--amber:#D9B36C;--text:#E9F2EC;--muted:#9DB3A6;--dim:#5f7a6b}
-*{margin:0;padding:0;box-sizing:border-box}
-html{background:var(--bg)}
-body{background:var(--bg);color:var(--text);font-family:'Space Grotesk',system-ui,sans-serif;min-height:100vh;padding:20px 16px 48px;line-height:1.5}
-.wrap{max-width:820px;margin:0 auto}
-a{color:var(--mint);text-decoration:none}
-a:hover{text-decoration:underline}
+  :root{
+    /* ---- Ash · dark (default) ---- */
+    --field:#1A1D1C;
+    --panel:#232726;
+    --well:#151817;
+    --hover:#1F2322;
+    --rule:#333837;
+    --rule2:#4B5250;
+    --text:#E8ECEA;
+    --muted:#98A29F;
+    --dim:#6B7573;
+    --signal:#7FC9A4;
+    --amber:#D4A96A;
 
-header{display:flex;align-items:center;gap:12px;padding:6px 0 22px}
-header img{width:40px;height:40px;border-radius:50%;object-fit:cover}
-header .name{font-size:19px;font-weight:700}
-header .name em{font-style:normal;color:var(--mint)}
-.crumb{margin-left:auto;font-size:13px;color:var(--muted)}
-.crumb a{color:var(--mint)}
+    --mono:'IBM Plex Mono',ui-monospace,monospace;
+    --sans:'IBM Plex Sans',system-ui,sans-serif;
 
-.eyebrow{font-family:'JetBrains Mono',monospace;font-size:12px;font-weight:700;letter-spacing:.12em;text-transform:uppercase;color:var(--amber);margin-bottom:10px}
-h1{font-size:32px;font-weight:700;line-height:1.15;margin-bottom:14px}
-.lead{color:var(--muted);font-size:16.5px;line-height:1.6;max-width:60ch}
-.lead b{color:var(--text)}
+    --t-hero:clamp(40px,13vw,68px);
+    --t-h1:clamp(23px,5.6vw,30px);
+    --t-h2:17px;
+    --t-body:15px;
+    --t-small:13px;
+    --t-micro:11px;
 
-/* diagram */
-.diagram{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:54px 14px 20px;margin:22px 0 8px}
-.dgm-row{display:flex;align-items:center;justify-content:center;gap:8px;max-width:440px;margin:0 auto}
-.coin{position:relative;flex:0 0 auto;width:84px;height:84px;border-radius:50%;border:2.5px solid var(--amber);display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center}
-.coin.dd{border-color:var(--mint)}
-.coin-logo{position:absolute;left:50%;bottom:100%;margin-bottom:11px;transform:translateX(-50%);width:38px;height:38px;border-radius:50%;display:block}
-.coin-t{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:19px;line-height:1;color:var(--amber)}
-.coin.dd .coin-t{color:var(--mint)}
-.coin-s{font-size:11px;color:var(--muted);margin-top:5px}
-.dgm-mid{flex:1 1 auto;min-width:60px;max-width:180px}
-.dgm-lbl{font-family:'JetBrains Mono',monospace;font-size:10px;font-weight:700;color:var(--mint);white-space:nowrap;text-align:center}
-.dgm-lbl.muted{color:var(--muted)}
-.dgm-line{position:relative;height:2px;background:var(--mint);margin:7px 0}
-.dgm-line.muted{background:var(--dim)}
-.dgm-line .head{position:absolute;top:50%;transform:translateY(-50%);width:0;height:0;border-top:5px solid transparent;border-bottom:5px solid transparent}
-.dgm-line.right .head{right:-1px;border-left:7px solid var(--mint)}
-.dgm-line.left .head{left:-1px;border-right:7px solid var(--dim)}
-.dgm-cap{color:var(--muted);font-size:13.5px;line-height:1.55;max-width:52ch;margin:18px auto 0;text-align:center}
-.dgm-cap b{color:var(--text)}
-@media(min-width:900px){
-  .diagram{padding:60px 24px 22px}
-  .dgm-row{gap:14px}
-  .coin{width:104px;height:104px}
-  .coin-logo{width:46px;height:46px;margin-bottom:13px}
-  .coin-t{font-size:22px}
-  .coin-s{font-size:12px}
-  .dgm-lbl{font-size:11px}
-}
+    --gap:26px;
+  }
+  /* ---- Ash · light ---- */
+  html[data-theme="light"]{
+    --field:#ECEEED;
+    --panel:#F8F9F9;
+    --well:#E0E4E2;
+    --hover:#E7EAE9;
+    --rule:#D6DAD9;
+    --rule2:#C1C6C4;
+    --text:#1D2823;
+    --muted:#5E6D69;
+    --dim:#909C99;
+    --signal:#2E694B;
+    --amber:#8B6328;
+  }
 
-section{margin-top:34px}
-h2{font-size:21px;font-weight:700;margin-bottom:6px}
-.sub{color:var(--muted);font-size:15px;line-height:1.6;margin-bottom:14px;max-width:64ch}
-.sub b{color:var(--text)}
-p.body{color:var(--muted);font-size:15px;line-height:1.65;max-width:64ch;margin-bottom:12px}
-p.body b{color:var(--text)}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{background:var(--field)}
+  body{
+    background:var(--field);
+    color:var(--text);
+    font-family:var(--sans);
+    font-size:var(--t-body);
+    line-height:1.6;
+    -webkit-font-smoothing:antialiased;
+    min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;
+    padding:20px 18px 54px;
+  }
+  .wrap{width:100%;max-width:600px}
+  a{color:var(--signal)}
+  :focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 
-/* step flow */
-.flow{display:grid;grid-template-columns:1fr;gap:12px}
-.step{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 16px 16px;position:relative}
-.step .n{display:inline-flex;align-items:center;justify-content:center;width:26px;height:26px;border-radius:50%;background:var(--ring);color:var(--text);font-family:'JetBrains Mono',monospace;font-size:13px;font-weight:700;margin-bottom:9px}
-.step h3{font-size:15.5px;font-weight:600;margin-bottom:5px}
-.step p{color:var(--muted);font-size:13.5px;line-height:1.55}
+  /* one label treatment for the whole page */
+  .eyebrow{
+    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);
+  }
 
-/* feature list */
-.blist{list-style:none;margin:2px 0 0;padding:0;max-width:64ch}
-.blist li{position:relative;padding-left:20px;margin-bottom:11px;color:var(--muted);font-size:15px;line-height:1.6}
-.blist li:last-child{margin-bottom:0}
-.blist li::before{content:"";position:absolute;left:1px;top:9px;width:7px;height:7px;border-radius:50%;background:var(--mint)}
-.blist li b{color:var(--text);font-weight:600}
+  /* ---------- masthead ---------- */
+  .masthead{
+    display:flex;align-items:center;justify-content:space-between;gap:14px;
+    padding-bottom:14px;border-bottom:1px solid var(--rule);margin-bottom:30px;
+  }
+  .homelink{display:flex;align-items:center;gap:10px;text-decoration:none;color:inherit}
+  .logo{width:34px;height:34px;object-fit:cover;display:block}
+  html[data-theme="dark"]  .logo-lt{display:none}
+  html[data-theme="light"] .logo-dk{display:none}
+  .brand{font-family:var(--sans);font-weight:600;font-size:16px;letter-spacing:-.02em}
+  .brand em{font-style:normal;color:var(--muted)}
+  .status{display:inline-flex;align-items:center;gap:7px;white-space:nowrap}
+  .status .sdot{width:6px;height:6px;background:var(--signal);flex-shrink:0}
+  .controls{display:flex;align-items:center;gap:12px}
+  .themetoggle{
+    width:28px;height:28px;flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;border:1px solid var(--rule);color:var(--muted);
+    cursor:pointer;padding:0;
+  }
+  .themetoggle:hover{color:var(--signal);border-color:var(--rule2)}
+  .themetoggle svg{width:14px;height:14px}
+  html[data-theme="light"] .themetoggle .i-sun{display:none}
+  html[data-theme="dark"]  .themetoggle .i-moon{display:none}
+  .status.err{color:var(--amber)}
+  .status.err .sdot{background:var(--amber)}
 
-/* table */
-.tablewrap{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:6px 4px;overflow-x:auto}
-table{width:100%;border-collapse:collapse;font-size:14px}
-th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line)}
-th{color:var(--muted);font-weight:600;font-size:12px;letter-spacing:.03em;text-transform:uppercase}
-td{font-family:'JetBrains Mono',monospace;color:var(--text)}
-td:first-child{font-family:'Space Grotesk',sans-serif}
-tr:last-child td{border-bottom:none}
-.tnote{color:var(--dim);font-size:12.5px;line-height:1.5;margin-top:10px}
-.tnote a{color:var(--mint)}
+  /* ---------- hero ---------- */
+  h1{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-h1);
+    line-height:1.25;letter-spacing:-.02em;margin-bottom:10px;
+  }
+  .lede{color:var(--muted);font-size:var(--t-body);max-width:54ch;margin-bottom:28px}
 
-/* callout */
-.callout{background:#1a1508;border:1px solid #4a3c1f;border-radius:14px;padding:16px 18px;margin-top:18px}
-.callout .h{color:var(--amber);font-weight:700;font-size:14.5px;margin-bottom:5px}
-.callout p{color:#d8c9a4;font-size:14px;line-height:1.6}
-.callout b{color:#f0e4c8}
+  .readout{
+    background:var(--panel);border:1px solid var(--rule);
+    padding:22px 20px 20px;position:relative;margin-bottom:var(--gap);
+  }
+  .readout .eyebrow{display:block;margin-bottom:12px}
+  .supply{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-hero);
+    line-height:1;letter-spacing:-.035em;font-variant-numeric:tabular-nums;
+    word-break:break-word;
+  }
+  .supply .unit{font-size:.26em;letter-spacing:0;color:var(--accent, var(--muted));margin-left:.4em;font-weight:400;white-space:nowrap}
+  .updated{color:var(--muted);font-size:var(--t-small);margin-top:14px;font-family:var(--mono)}
 
-/* FAQ */
-.faq details{background:var(--card);border:1px solid var(--line);border-radius:12px;margin-bottom:10px;overflow:hidden}
-.faq summary{cursor:pointer;padding:14px 16px;font-weight:600;font-size:15px;list-style:none;display:flex;justify-content:space-between;align-items:center;gap:12px}
-.faq summary::-webkit-details-marker{display:none}
-.faq summary::after{content:"+";color:var(--mint);font-family:'JetBrains Mono',monospace;font-size:18px;flex-shrink:0}
-.faq details[open] summary::after{content:"–"}
-.faq .a{padding:0 16px 15px;color:var(--muted);font-size:14px;line-height:1.65}
-.faq .a a{color:var(--mint)}
+  /* ---------- signature: collateral bar ---------- */
+  .backing{margin-top:20px;padding-top:18px;border-top:1px solid var(--rule)}
+  .backingtop{display:flex;justify-content:space-between;align-items:baseline;gap:12px;margin-bottom:9px}
+  .backingval{font-family:var(--mono);font-weight:600;font-size:var(--t-h2);font-variant-numeric:tabular-nums}
+  .track{position:relative;height:12px;background:var(--well);border:1px solid var(--rule)}
+  .fill{position:absolute;inset:1px auto 1px 1px;width:0;background:var(--signal)}
+  @media (prefers-reduced-motion:no-preference){.fill{transition:width .5s ease-out}}
+  .fill.warn{background:var(--amber)}
+  .tick{position:absolute;top:-4px;bottom:-4px;left:25%;width:1px;background:var(--accent, var(--rule2))}
+  .scale{
+    display:flex;justify-content:space-between;margin-top:7px;
+    font-family:var(--mono);font-size:10px;color:var(--muted);letter-spacing:.04em;
+  }
+  .scale .mid{position:absolute;left:25%;transform:translateX(-50%)}
+  .scalewrap{position:relative}
+  .backingnote{color:var(--muted);font-size:var(--t-small);margin-top:12px}
 
-/* tool links */
-.tools{display:grid;grid-template-columns:1fr;gap:11px}
-.tool{display:block;background:var(--card);border:1px solid var(--line);border-radius:12px;padding:15px 16px;color:var(--text)}
-.tool:hover{border-color:var(--ring);text-decoration:none}
-.tool .t{font-weight:600;font-size:15px;color:var(--mint);margin-bottom:3px}
-.tool .t:after{content:" →";color:var(--muted)}
-.tool .d{color:var(--muted);font-size:13.5px;line-height:1.5}
+  /* ---------- figures ---------- */
+  .figs{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:var(--gap)}
+  .fig{background:var(--panel);border:1px solid var(--rule);padding:15px;position:relative}
+  .fig .sharebtn{top:10px;right:10px}
+  .fig.sharing .eyebrow{padding-right:26px}
+  a.fig{display:block;text-decoration:none;color:inherit}
+  a.fig .go{position:absolute;right:12px;bottom:11px;color:var(--rule2);font-family:var(--mono);font-size:var(--t-small);line-height:1}
+  a.fig:hover{border-color:var(--rule2)}
+  a.fig:hover .go{color:var(--accent, var(--signal))}
+  .fig .eyebrow{display:block;margin-bottom:8px}
+  .fig .eyebrow .coin{width:13px;height:13px;vertical-align:-2px;margin-right:6px}
+  .figv{
+    display:block;font-family:var(--mono);font-weight:600;font-size:var(--t-h2);
+    line-height:1.2;font-variant-numeric:tabular-nums;word-break:break-word;
+  }
 
-/* footer nav + contact */
-footer{color:var(--muted);font-size:12.5px;text-align:center;line-height:1.7;margin-top:40px;border-top:1px solid var(--line);padding-top:18px}
-footer a{color:var(--mint)}
-.footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px 16px;margin-bottom:12px;font-size:13px;line-height:1.5}
-.footnav a{color:var(--mint);text-decoration:none}
-.footnav a:hover{text-decoration:underline}
-.footcontact{margin-bottom:14px;font-size:13px;color:var(--muted)}
-.footcontact a{color:var(--mint);text-decoration:none}
-.footcontact a:hover{text-decoration:underline}
-.footdonate{margin-bottom:14px;font-size:13px;color:var(--muted);line-height:1.8;font-weight:700}
-.footdonate .fdlabel{color:var(--text);font-weight:700}
-.footdonate .fdaddr{font-family:'JetBrains Mono',monospace;font-weight:700;font-size:11.5px;color:var(--mint);cursor:pointer;word-break:break-all;border-bottom:1px dotted var(--ring)}
-.footdonate .fdaddr:hover{color:var(--text)}
-.footdonate .fdhint{font-weight:700;font-size:10.5px;letter-spacing:.05em;text-transform:uppercase;color:var(--dim,#5f7a6b);margin-left:6px;white-space:nowrap}
-.footdonate .fdhint.ok{color:var(--mint)}
+  /* ---------- status panel ---------- */
+  .panel{background:var(--panel);border:1px solid var(--rule);padding:16px;margin-bottom:var(--gap)}
+  .panel .eyebrow{display:block;margin-bottom:10px}
+  .srow{
+    display:flex;justify-content:space-between;align-items:baseline;gap:16px;
+    padding:10px 0;border-bottom:1px solid var(--rule);
+  }
+  .srow .k{color:var(--muted);font-size:var(--t-small)}
+  .srow .v{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-small);
+    font-variant-numeric:tabular-nums;text-align:right;
+  }
+  .srow .v.warn{color:var(--amber)}
 
-@media(min-width:900px){
-  body{padding:40px 24px 70px}
-  h1{font-size:42px}
-  .lead{font-size:18px}
-  .flow{grid-template-columns:1fr 1fr}
-  .tools{grid-template-columns:1fr 1fr}
-}
+  details.notes{margin-top:2px}
+  details.notes summary{
+    cursor:pointer;list-style:none;padding:12px 0;color:var(--muted);
+    font-size:var(--t-small);font-family:var(--mono);
+  }
+  details.notes summary::-webkit-details-marker{display:none}
+  details.notes summary::after{content:" [+]";color:var(--rule2)}
+  details.notes[open] summary::after{content:" [–]"}
+  details.notes ul{list-style:none;padding-bottom:8px}
+  details.notes li{color:var(--muted);font-size:var(--t-small);padding:7px 0;border-top:1px solid var(--rule)}
+  details.notes li b{color:var(--text);font-weight:600;font-family:var(--mono)}
+
+  /* ---------- tools ---------- */
+  .tools{border-top:1px solid var(--rule);margin-bottom:var(--gap)}
+  .tools .eyebrow{display:block;padding:16px 0 4px}
+  .tool{
+    display:block;text-decoration:none;color:inherit;
+    padding:15px 30px 15px 0;border-bottom:1px solid var(--rule);position:relative;
+  }
+  .tool h3{font-family:var(--mono);font-weight:600;font-size:var(--t-h2);letter-spacing:-.01em;margin-bottom:4px}
+  .tool p{color:var(--muted);font-size:var(--t-small);max-width:56ch}
+  .tool .go{position:absolute;right:2px;top:16px;color:var(--rule2);font-family:var(--mono)}
+  .tool:hover{background:var(--hover)}
+  .tool:hover .go{color:var(--accent, var(--signal))}
+  .tool:hover h3{color:var(--signal)}
+
+  /* ---------- house rules ---------- */
+  .house{
+    border-left:2px solid var(--rule2);padding:2px 0 2px 16px;
+    color:var(--muted);font-size:var(--t-small);margin-bottom:34px;
+  }
+  .house b{color:var(--text);font-weight:600;font-family:var(--mono)}
+
+  /* ---------- share ---------- */
+  .sharebtn{
+    position:absolute;top:16px;right:16px;width:28px;height:28px;
+    display:flex;align-items:center;justify-content:center;
+    background:transparent;border:1px solid var(--rule);color:var(--muted);
+    cursor:pointer;padding:0;
+  }
+  .sharebtn:hover{color:var(--signal);border-color:var(--rule2)}
+  .sharebtn svg{width:14px;height:14px}
+  .sharebtn.ok{color:var(--signal);border-color:var(--rule2)}
+
+  /* ---------- what-is-digidollar page only ---------- */
+  .crumb{font-family:var(--mono);font-size:var(--t-small);color:var(--dim);margin-bottom:14px}
+  .crumb a{color:var(--muted);text-decoration:none}
+  .crumb a:hover{color:var(--signal)}
+
+  .kicker{display:block;margin-bottom:12px}
+  .lede{max-width:none}
+  .lede b{color:var(--text);font-weight:600}
+
+  section{margin-bottom:var(--gap)}
+  h2{
+    font-family:var(--mono);font-weight:600;font-size:var(--t-h2);
+    letter-spacing:-.01em;line-height:1.3;margin-bottom:10px;
+  }
+  p.body{color:var(--muted);font-size:var(--t-body);margin-bottom:12px}
+  p.body:last-child{margin-bottom:0}
+  p.body b{color:var(--text);font-weight:600}
+  .sub{color:var(--muted);font-size:var(--t-body);margin-bottom:16px}
+  .sub b{color:var(--text);font-weight:600}
+
+  /* exchange band */
+  .xband{
+    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
+    padding:30px 0 26px;margin-bottom:var(--gap);
+  }
+  .xrow{display:flex;align-items:center;justify-content:center;gap:12px;max-width:460px;margin:0 auto}
+  .xend{flex:0 0 auto;text-align:center}
+  .xsym{
+    display:block;font-family:var(--mono);font-weight:600;font-size:24px;
+    line-height:1;letter-spacing:-.02em;color:var(--amber);
+  }
+  .xend.dd .xsym{color:var(--signal)}
+  .xcap{
+    display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted);margin-top:10px;white-space:nowrap;
+  }
+  .xtrack{display:block;flex:1 1 auto;min-width:92px;max-width:190px}
+  .xlbl{
+    display:block;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;
+    text-transform:uppercase;text-align:center;white-space:nowrap;color:var(--signal);
+  }
+  .xlbl.back{color:var(--muted)}
+  .xline{display:block;position:relative;height:1px;background:var(--signal);margin:8px 0 14px}
+  .xline.back{background:var(--rule2);margin:14px 0 8px}
+  .xtick{position:absolute;top:-3px;width:1px;height:7px;background:var(--signal)}
+  .xline.back .xtick{background:var(--rule2);right:0}
+  .xline.fwd .xtick{left:0}
+  .xline::after{
+    content:"";position:absolute;top:50%;transform:translateY(-50%);
+    width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;
+  }
+  .xline.fwd::after{right:0;border-left:6px solid var(--signal)}
+  .xline.back::after{left:0;border-right:6px solid var(--rule2)}
+  .xnote{
+    color:var(--muted);font-size:var(--t-small);line-height:1.65;
+    max-width:50ch;margin:24px auto 0;text-align:center;
+  }
+  .xnote b{color:var(--text);font-weight:600}
+
+  /* step flow */
+  .flow{display:grid;grid-template-columns:1fr;gap:12px}
+  .step{background:var(--panel);border:1px solid var(--rule);padding:15px}
+  .step .n{
+    display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+    background:var(--well);border:1px solid var(--rule2);color:var(--muted);
+    font-family:var(--mono);font-size:12px;font-weight:600;margin-bottom:10px;
+  }
+  .step h3{font-family:var(--mono);font-weight:600;font-size:var(--t-body);letter-spacing:-.01em;margin-bottom:5px}
+  .step p{color:var(--muted);font-size:var(--t-small)}
+
+  /* bullet list */
+  .blist{list-style:none}
+  .blist li{position:relative;padding-left:18px;margin-bottom:11px;color:var(--muted);font-size:var(--t-body)}
+  .blist li:last-child{margin-bottom:0}
+  .blist li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;background:var(--signal)}
+  .blist li b{color:var(--text);font-weight:600}
+
+  /* table */
+  .tablewrap{background:var(--panel);border:1px solid var(--rule);overflow-x:auto}
+  table{width:100%;border-collapse:collapse;font-size:var(--t-small)}
+  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule)}
+  th{
+    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);vertical-align:bottom;
+  }
+  td{font-family:var(--mono);color:var(--text);font-variant-numeric:tabular-nums}
+  td:first-child{font-family:var(--sans);color:var(--muted)}
+  tr:last-child td{border-bottom:none}
+  .tnote{color:var(--muted);font-size:var(--t-small);margin-top:12px}
+  .tnote b{color:var(--text);font-weight:600}
+
+  /* callout */
+  .callout{
+    background:var(--panel);border:1px solid var(--rule);border-left:2px solid var(--amber);
+    padding:15px 18px;margin-bottom:var(--gap);
+  }
+  .callout .h{
+    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;
+    letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:8px;
+  }
+  .callout p{color:var(--muted);font-size:var(--t-small)}
+  .callout b{color:var(--text);font-weight:600}
+
+  #explore .tools{margin-bottom:0}
+
+  /* FAQ */
+  .faq details{background:var(--panel);border:1px solid var(--rule);margin-bottom:10px}
+  .faq details:last-child{margin-bottom:0}
+  .faq summary{
+    cursor:pointer;list-style:none;padding:13px 15px;font-weight:600;font-size:var(--t-body);
+    display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+  }
+  .faq summary::-webkit-details-marker{display:none}
+  .faq summary::after{content:"[+]";color:var(--rule2);font-family:var(--mono);font-size:var(--t-small);flex-shrink:0}
+  .faq details[open] summary::after{content:"[–]"}
+  .faq summary:hover{color:var(--signal)}
+  .faq .a{padding:0 15px 14px;color:var(--muted);font-size:var(--t-small)}
+
+  @media (min-width:900px){
+    .xband{padding:38px 0 32px}
+    .xrow{gap:22px;max-width:520px}
+    .xsym{font-size:30px}
+    .xcap{font-size:var(--t-micro);letter-spacing:.1em}
+    .xlbl{font-size:var(--t-micro);letter-spacing:.14em}
+    .xtrack{min-width:120px;max-width:230px}
+    .flow{grid-template-columns:1fr 1fr;gap:14px}
+  }
+  /* ---------- footer ---------- */
+  footer{border-top:1px solid var(--rule);padding-top:20px;color:var(--muted);font-size:12px;line-height:1.75;text-align:center}
+  .footnav{display:flex;flex-wrap:wrap;justify-content:center;gap:6px 18px;margin-bottom:16px;font-size:var(--t-small)}
+  .footnav a{text-decoration:none}
+  .footnav a:hover{text-decoration:underline}
+  .footcontact{margin-bottom:14px;font-size:var(--t-small)}
+  .footcontact a{text-decoration:none}
+  .footdonate{margin-bottom:16px;font-size:var(--t-small);line-height:1.9}
+  .footdonate .fdlabel{color:var(--text);font-weight:600;font-family:var(--mono)}
+  .fdaddr{
+    font-family:var(--mono);font-size:11.5px;color:var(--signal);cursor:pointer;
+    word-break:break-all;border-bottom:1px dotted var(--rule2);
+  }
+  .fdaddr:hover{color:var(--text)}
+  .fdhint{font-family:var(--mono);font-size:10px;letter-spacing:.08em;text-transform:uppercase;color:var(--dim);margin-left:8px;white-space:nowrap}
+  .fdhint.ok{color:var(--signal)}
+  footer a{text-decoration:none}
+  footer a:hover{text-decoration:underline}
+
+  /* ---------- desktop ---------- */
+  @media (min-width:900px){
+    body{padding:40px 24px 76px}
+    .wrap{max-width:860px}
+    .masthead{margin-bottom:40px}
+    .figs{grid-template-columns:repeat(4,1fr)}
+    .fig{padding:16px}
+    .tools{display:grid;grid-template-columns:1fr 1fr;gap:0 40px;align-items:start}
+    .tools .eyebrow{grid-column:1 / -1}
+  }
 </style>
+
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "name": "DigiDollarStats",
+  "alternateName": ["DigiDollar Stats", "digidollarstats.com"],
+  "url": "https://digidollarstats.com/"
+}
+</script>
 <script type="application/ld+json">
 {
   "@context":"https://schema.org",
@@ -194,167 +448,169 @@ footer a{color:var(--mint)}
 <body>
 <div class="wrap">
 
-<header>
-  <a href="/"><img src="/icon-192.png" alt="DigiDollarStats"></a>
-  <div class="name">DigiDollar<em>Stats</em></div>
-  <div class="crumb"><a href="/">home</a> · what is DigiDollar</div>
-</header>
-
-<div class="eyebrow">DigiByte · Stablecoin</div>
-<h1>What is DigiDollar?</h1>
-<p class="lead">DigiDollar (<b>$DD</b>) is a decentralized US-dollar stablecoin built directly into the DigiByte blockchain. You create it by locking your own DGB as collateral — there is no bank, no company, and you keep control of your private keys the entire time.</p>
-
-<div class="diagram">
-  <div class="dgm-row">
-    <div class="coin dgb">
-      <img class="coin-logo" src="/dgb-coin.png" alt="DigiByte logo">
-      <span class="coin-t">DGB</span>
-      <span class="coin-s">collateral</span>
-    </div>
-    <div class="dgm-mid">
-      <div class="dgm-lbl">LOCK &amp; MINT</div>
-      <div class="dgm-line right"><span class="head"></span></div>
-      <div class="dgm-line left muted"><span class="head"></span></div>
-      <div class="dgm-lbl muted">BURN &amp; UNLOCK</div>
-    </div>
-    <div class="coin dd">
-      <img class="coin-logo" src="/icon-192.png" alt="DigiDollar logo">
-      <span class="coin-t">$DD</span>
-      <span class="coin-s">= $1.00</span>
-    </div>
+  <div class="masthead">
+    <a class="homelink" href="/" aria-label="DigiDollarStats home">
+      <img class="logo logo-dk" src="/icon-192-mint.png" alt="" width="192" height="192">
+      <img class="logo logo-lt" src="/icon-192-light.png" alt="" width="192" height="192">
+      <span class="brand">DigiDollar<em>Stats</em></span>
+    </a>
+    <span class="controls">
+      <button class="themetoggle" id="themeToggle" type="button" aria-label="Switch colour theme" title="Switch colour theme">
+        <svg class="i-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+        <svg class="i-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4.2"/><path d="M12 2.4v2.2M12 19.4v2.2M4.2 4.2l1.6 1.6M18.2 18.2l1.6 1.6M2.4 12h2.2M19.4 12h2.2M4.2 19.8l1.6-1.6M18.2 5.8l1.6-1.6"/></svg>
+      </button>
+    </span>
   </div>
-  <div class="dgm-cap">Lock DGB as collateral and the protocol mints <b>$DD</b> worth one dollar each. Later, burn the $DD to unlock your DGB. It's fully reversible — and your coins never leave your wallet.</div>
-</div>
 
-<section id="in-short">
-  <h2>The short version</h2>
-  <p class="body">DigiDollar lets you draw stable, dollar-denominated spending power from DGB you already hold — without selling it, and without handing your coins to anyone. You lock DGB, mint $DD, spend or hold it, and later return the $DD to release your DGB. You're borrowing against your own coins, not selling them.</p>
-  <p class="body">Unlike stablecoins backed by a company's bank account, DigiDollar has no issuer to trust. It's enforced by DigiByte's own transaction rules — a stablecoin native to the chain, not a smart contract, a bridge, or an ERC-20 token layered on top.</p>
-</section>
+  <p class="crumb"><a href="/">home</a> · what is DigiDollar</p>
 
-<section id="how-it-works">
-  <h2>How it works</h2>
-  <p class="sub">Four steps, all happening inside DigiByte Core:</p>
-  <div class="flow">
-    <div class="step">
-      <span class="n">1</span>
-      <h3>Lock your DGB</h3>
-      <p>You commit DGB into a time-locked output in your own wallet. It's locked, not sent — it stays under your keys the whole time.</p>
+  <span class="eyebrow kicker">DigiByte · Stablecoin</span>
+  <h1>What is DigiDollar?</h1>
+  <p class="lede">DigiDollar (<b>$DD</b>) is a decentralized US-dollar stablecoin built directly into the DigiByte blockchain. You create it by locking your own DGB as collateral — there is no bank, no company, and you keep control of your private keys the entire time.</p>
+
+  <div class="xband">
+    <div class="xrow">
+      <span class="xend dgb"><span class="xsym">DGB</span><span class="xcap">time-locked</span></span>
+      <span class="xtrack">
+        <span class="xlbl">Lock &amp; mint</span>
+        <span class="xline fwd"><i class="xtick"></i></span>
+        <span class="xline back"><i class="xtick"></i></span>
+        <span class="xlbl back">Burn &amp; unlock</span>
+      </span>
+      <span class="xend dd"><span class="xsym">$DD</span><span class="xcap">worth $1.00</span></span>
     </div>
-    <div class="step">
-      <span class="n">2</span>
-      <h3>Mint DigiDollar</h3>
-      <p>Based on the value of the DGB you locked and the current DGB/USD price, the protocol mints $DD to you. Each one is worth a dollar.</p>
+    <p class="xnote">Lock DGB as collateral and the protocol mints <b>$DD</b> worth one dollar each. Later, burn the $DD to unlock your DGB. It's fully reversible — and your coins never leave your wallet.</p>
+  </div>
+
+  <section id="in-short">
+    <h2>The short version</h2>
+    <p class="body">DigiDollar lets you draw stable, dollar-denominated spending power from DGB you already hold — without selling it, and without handing your coins to anyone. You lock DGB, mint $DD, spend or hold it, and later return the $DD to release your DGB. You're borrowing against your own coins, not selling them.</p>
+    <p class="body">Unlike stablecoins backed by a company's bank account, DigiDollar has no issuer to trust. It's enforced by DigiByte's own transaction rules — a stablecoin native to the chain, not a smart contract, a bridge, or an ERC-20 token layered on top.</p>
+  </section>
+
+  <section id="how-it-works">
+    <h2>How it works</h2>
+    <p class="sub">Four steps, all happening inside DigiByte Core:</p>
+    <div class="flow">
+      <div class="step">
+        <span class="n">1</span>
+        <h3>Lock your DGB</h3>
+        <p>You commit DGB into a time-locked output in your own wallet. It's locked, not sent — it stays under your keys the whole time.</p>
+      </div>
+      <div class="step">
+        <span class="n">2</span>
+        <h3>Mint DigiDollar</h3>
+        <p>Based on the value of the DGB you locked and the current DGB/USD price, the protocol mints $DD to you. Each one is worth a dollar.</p>
+      </div>
+      <div class="step">
+        <span class="n">3</span>
+        <h3>Use it</h3>
+        <p>Send, receive, or hold $DD like any DigiByte transaction — but with a steady dollar value instead of a floating one.</p>
+      </div>
+      <div class="step">
+        <span class="n">4</span>
+        <h3>Redeem</h3>
+        <p>When your lock period ends, burn the $DD to release your collateral. Your DGB unlocks in full and returns to you.</p>
+      </div>
     </div>
-    <div class="step">
-      <span class="n">3</span>
-      <h3>Use it</h3>
-      <p>Send, receive, or hold $DD like any DigiByte transaction — but with a steady dollar value instead of a floating one.</p>
+  </section>
+
+  <section id="different">
+    <h2>What makes it different</h2>
+    <ul class="blist">
+      <li><b>Genuinely decentralized.</b> No issuer, no custodian, no bank behind it — it lives in the DigiByte protocol itself.</li>
+      <li><b>Self-custody throughout.</b> Your DGB never leaves your wallet. You hold your own keys from start to finish.</li>
+      <li><b>No forced liquidations.</b> Because collateral is time-locked, positions are never margin-called. They ride out the term.</li>
+      <li><b>Native to a UTXO chain.</b> Built into DigiByte's transaction rules using Taproot outputs — not layered on via contracts.</li>
+    </ul>
+  </section>
+
+  <section id="collateral">
+    <h2>Collateral &amp; lock periods</h2>
+    <p class="sub">DigiDollar is <b>over-collateralized</b>: you always lock more DGB than the dollars you mint. How much more depends on how long you lock — shorter locks require more collateral, longer locks require less. There are ten tiers, from one hour to ten years.</p>
+    <div class="tablewrap">
+      <table>
+        <thead><tr><th>Lock period</th><th>Collateral ratio</th><th>To mint $100 of DD</th></tr></thead>
+        <tbody>
+          <tr><td>1 hour</td><td>1000%</td><td>lock $1,000 of DGB</td></tr>
+          <tr><td>30 days</td><td>500%</td><td>lock $500 of DGB</td></tr>
+          <tr><td>1 year</td><td>300%</td><td>lock $300 of DGB</td></tr>
+          <tr><td>5 years</td><td>225%</td><td>lock $225 of DGB</td></tr>
+          <tr><td>10 years</td><td>200%</td><td>lock $200 of DGB</td></tr>
+        </tbody>
+      </table>
     </div>
-    <div class="step">
-      <span class="n">4</span>
-      <h3>Redeem</h3>
-      <p>When your lock period ends, burn the $DD to release your collateral. Your DGB unlocks in full and returns to you.</p>
+    <p class="tnote">A representative selection of the ten tiers. Amounts are the <b>dollar value</b> of DGB you lock, not a number of coins — how many DGB that works out to depends on the DGB price at the moment you mint. The <a href="/calculator">mint calculator</a> does that conversion at the live price; the <a href="/planner">position planner</a> maps out a lock and its unlock date.</p>
+  </section>
+
+  <section id="price">
+    <h2>How the price stays near a dollar</h2>
+    <p class="body">DigiDollar reads the DGB/USD price from a decentralized oracle network — up to 35 independent oracle slots that draw from major exchange feeds. A quorum of seven signs each price bundle onto the chain using MuSig2 aggregate signatures, so no single oracle sets the price. You can watch the feed live on <a href="/oracle">Oracle Watch</a>.</p>
+  </section>
+
+  <section id="stability">
+    <h2>What keeps the system stable</h2>
+    <p class="sub">With no liquidations to fall back on, DigiDollar relies on layered safeguards instead:</p>
+    <ul class="blist">
+      <li><b>Over-collateralization.</b> Every position starts with a buffer against DGB price drops — larger for short locks.</li>
+      <li><b>Dynamic adjustment.</b> Collateral requirements tighten automatically if overall system health falls.</li>
+      <li><b>Emergency redemption.</b> Under stress, redeeming can require burning a little more $DD — but you always get 100% of your collateral back.</li>
+      <li><b>Volatility freezes.</b> Minting can pause during extreme price moves to protect the system, then resume.</li>
+    </ul>
+  </section>
+
+  <div class="callout">
+    <div class="h">The honest part</div>
+    <p>DigiDollar is liquidity against your own locked DGB — <b>not free money</b>. The debt is fixed in US dollars, and time-locks have <b>no early exit</b>: once you lock, that DGB is committed for the full term. Decide carefully. Nothing here is financial advice.</p>
+  </div>
+
+  <section id="status">
+    <h2>Where things stand</h2>
+    <p class="body">DigiDollar is <b>live on DigiByte mainnet</b>, shipped in DigiByte Core v9.26.2. Everything — minting, holding, redeeming, and the oracle price feed — runs inside DigiByte Core, with no third-party service required.</p>
+  </section>
+
+  <section id="faq">
+    <h2>Frequently asked</h2>
+    <div class="faq">
+      <details>
+        <summary>Is DigiDollar a real stablecoin?</summary>
+        <div class="a">Yes. Each $DD targets a value of one US dollar and is backed by DGB that's been over-collateralized and locked on-chain.</div>
+      </details>
+      <details>
+        <summary>Who controls DigiDollar?</summary>
+        <div class="a">No one. There's no issuing company or custodian — it's part of the DigiByte protocol and runs on self-custodied wallets.</div>
+      </details>
+      <details>
+        <summary>Do I lose my DGB when I mint DigiDollar?</summary>
+        <div class="a">No. Your DGB is time-locked inside your own wallet and returns to you in full when you redeem.</div>
+      </details>
+      <details>
+        <summary>Can my position be liquidated?</summary>
+        <div class="a">No. Collateral is time-locked, so there are no margin calls or forced liquidations. A position simply rides out its full term.</div>
+      </details>
+      <details>
+        <summary>How is the price kept at a dollar?</summary>
+        <div class="a">A decentralized network of up to 35 oracle slots reports DGB/USD, and a 7-signature MuSig2 quorum signs each price onto the chain. See <a href="/oracle">Oracle Watch</a>.</div>
+      </details>
+      <details>
+        <summary>Where does DigiDollar run?</summary>
+        <div class="a">Entirely inside DigiByte Core — the same wallet you already use for DGB. There's nothing extra to sign up for. New to nodes? See <a href="/node">Run a Node</a>.</div>
+      </details>
     </div>
-  </div>
-</section>
+  </section>
 
-<section id="different">
-  <h2>What makes it different</h2>
-  <ul class="blist">
-    <li><b>Genuinely decentralized.</b> No issuer, no custodian, no bank behind it — it lives in the DigiByte protocol itself.</li>
-    <li><b>Self-custody throughout.</b> Your DGB never leaves your wallet. You hold your own keys from start to finish.</li>
-    <li><b>No forced liquidations.</b> Because collateral is time-locked, positions are never margin-called. They ride out the term.</li>
-    <li><b>Native to a UTXO chain.</b> Built into DigiByte's transaction rules using Taproot outputs — not layered on via contracts.</li>
-  </ul>
-</section>
+  <section id="explore">
+    <h2>Explore the numbers</h2>
+    <p class="sub">This site tracks DigiDollar live from the chain. A few places to start:</p>
+    <div class="tools">
+      <a class="tool" href="/live"><span class="go">→</span><h3>Live Stats</h3><p>Circulating supply, DGB locked, positions, and system health — updated from mainnet.</p></a>
+      <a class="tool" href="/oracle"><span class="go">→</span><h3>Oracle Watch</h3><p>The consensus DGB/USD price and the oracles signing it onto the chain.</p></a>
+      <a class="tool" href="/calculator"><span class="go">→</span><h3>Mint Calculator</h3><p>See how much $DD a given amount of DGB mints at each lock tier.</p></a>
+      <a class="tool" href="/planner"><span class="go">→</span><h3>Position Planner</h3><p>Map out a lock, its backing, and its unlock date — with a calendar reminder.</p></a>
+    </div>
+  </section>
 
-<section id="collateral">
-  <h2>Collateral &amp; lock periods</h2>
-  <p class="sub">DigiDollar is <b>over-collateralized</b>: you always lock more DGB than the dollars you mint. How much more depends on how long you lock — shorter locks require more collateral, longer locks require less. There are ten tiers, from one hour to ten years.</p>
-  <div class="tablewrap">
-    <table>
-      <thead><tr><th>Lock period</th><th>Collateral ratio</th><th>To mint $100 of DD</th></tr></thead>
-      <tbody>
-        <tr><td>1 hour</td><td>1000%</td><td>lock $1,000 of DGB</td></tr>
-        <tr><td>30 days</td><td>500%</td><td>lock $500 of DGB</td></tr>
-        <tr><td>1 year</td><td>300%</td><td>lock $300 of DGB</td></tr>
-        <tr><td>5 years</td><td>225%</td><td>lock $225 of DGB</td></tr>
-        <tr><td>10 years</td><td>200%</td><td>lock $200 of DGB</td></tr>
-      </tbody>
-    </table>
-  </div>
-  <p class="tnote">A representative selection of the ten tiers. Amounts are the <b>dollar value</b> of DGB you lock, not a number of coins — how many DGB that works out to depends on the DGB price at the moment you mint. The <a href="/calculator">mint calculator</a> does that conversion at the live price; the <a href="/planner">position planner</a> maps out a lock and its unlock date.</p>
-</section>
-
-<section id="price">
-  <h2>How the price stays near a dollar</h2>
-  <p class="body">DigiDollar reads the DGB/USD price from a decentralized oracle network — up to 35 independent oracle slots that draw from major exchange feeds. A quorum of seven signs each price bundle onto the chain using MuSig2 aggregate signatures, so no single oracle sets the price. You can watch the feed live on <a href="/oracle">Oracle Watch</a>.</p>
-</section>
-
-<section id="stability">
-  <h2>What keeps the system stable</h2>
-  <p class="sub">With no liquidations to fall back on, DigiDollar relies on layered safeguards instead:</p>
-  <ul class="blist">
-    <li><b>Over-collateralization.</b> Every position starts with a buffer against DGB price drops — larger for short locks.</li>
-    <li><b>Dynamic adjustment.</b> Collateral requirements tighten automatically if overall system health falls.</li>
-    <li><b>Emergency redemption.</b> Under stress, redeeming can require burning a little more $DD — but you always get 100% of your collateral back.</li>
-    <li><b>Volatility freezes.</b> Minting can pause during extreme price moves to protect the system, then resume.</li>
-  </ul>
-</section>
-
-<div class="callout">
-  <div class="h">The honest part</div>
-  <p>DigiDollar is liquidity against your own locked DGB — <b>not free money</b>. The debt is fixed in US dollars, and time-locks have <b>no early exit</b>: once you lock, that DGB is committed for the full term. Decide carefully. Nothing here is financial advice.</p>
-</div>
-
-<section id="status">
-  <h2>Where things stand</h2>
-  <p class="body">DigiDollar is <b>live on DigiByte mainnet</b>, shipped in DigiByte Core v9.26.2. Everything — minting, holding, redeeming, and the oracle price feed — runs inside DigiByte Core, with no third-party service required.</p>
-</section>
-
-<section id="faq">
-  <h2>Frequently asked</h2>
-  <div class="faq">
-    <details>
-      <summary>Is DigiDollar a real stablecoin?</summary>
-      <div class="a">Yes. Each $DD targets a value of one US dollar and is backed by DGB that's been over-collateralized and locked on-chain.</div>
-    </details>
-    <details>
-      <summary>Who controls DigiDollar?</summary>
-      <div class="a">No one. There's no issuing company or custodian — it's part of the DigiByte protocol and runs on self-custodied wallets.</div>
-    </details>
-    <details>
-      <summary>Do I lose my DGB when I mint DigiDollar?</summary>
-      <div class="a">No. Your DGB is time-locked inside your own wallet and returns to you in full when you redeem.</div>
-    </details>
-    <details>
-      <summary>Can my position be liquidated?</summary>
-      <div class="a">No. Collateral is time-locked, so there are no margin calls or forced liquidations. A position simply rides out its full term.</div>
-    </details>
-    <details>
-      <summary>How is the price kept at a dollar?</summary>
-      <div class="a">A decentralized network of up to 35 oracle slots reports DGB/USD, and a 7-signature MuSig2 quorum signs each price onto the chain. See <a href="/oracle">Oracle Watch</a>.</div>
-    </details>
-    <details>
-      <summary>Where does DigiDollar run?</summary>
-      <div class="a">Entirely inside DigiByte Core — the same wallet you already use for DGB. There's nothing extra to sign up for. New to nodes? See <a href="/node">Run a Node</a>.</div>
-    </details>
-  </div>
-</section>
-
-<section id="explore">
-  <h2>Explore the numbers</h2>
-  <p class="sub">This site tracks DigiDollar live from the chain. A few places to start:</p>
-  <div class="tools">
-    <a class="tool" href="/live"><div class="t">Live Stats</div><div class="d">Circulating supply, DGB locked, positions, and system health — updated from mainnet.</div></a>
-    <a class="tool" href="/oracle"><div class="t">Oracle Watch</div><div class="d">The consensus DGB/USD price and the oracles signing it onto the chain.</div></a>
-    <a class="tool" href="/calculator"><div class="t">Mint Calculator</div><div class="d">See how much $DD a given amount of DGB mints at each lock tier.</div></a>
-    <a class="tool" href="/planner"><div class="t">Position Planner</div><div class="d">Map out a lock, its backing, and its unlock date — with a calendar reminder.</div></a>
-  </div>
-</section>
-
-<footer>
+  <footer>
     <nav class="footnav" aria-label="Footer">
       <a href="/">Home</a>
       <a href="/what-is-digidollar">What is DigiDollar?</a>
@@ -374,21 +630,45 @@ footer a{color:var(--mint)}
     Data source: digibyte.io public API · verify independently · not financial advice
   </footer>
 </div>
+
 <script>
 (function(){
-  var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
-  var fel = document.getElementById("fdDgb");
-  var fhint = document.getElementById("fdDgbHint");
-  if(!fel || !fhint) return;
-  function fcopy(){
-    navigator.clipboard.writeText(addr).then(function(){
-      fhint.classList.add("ok"); fhint.textContent = "copied \u2713";
-      setTimeout(function(){ fhint.classList.remove("ok"); fhint.textContent = "copy"; }, 1600);
-    }).catch(function(){});
-  }
-  fel.addEventListener("click", fcopy);
-  fel.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fcopy(); } });
-})();
+    var root = document.documentElement;
+    var meta = document.getElementById('themeColor');
+    var btn  = document.getElementById('themeToggle');
+    function sync(){
+      if (!meta) return;
+      var f = getComputedStyle(root).getPropertyValue('--field').trim();
+      if (f) meta.setAttribute('content', f);
+    }
+    window.ddsSyncThemeColor = sync;
+    function apply(t){
+      root.setAttribute('data-theme', t);
+      if (btn) btn.setAttribute('aria-label', t === 'dark' ? 'Switch to light theme' : 'Switch to dark theme');
+      try{ localStorage.setItem('dds-theme', t); }catch(e){}
+      sync();
+    }
+    apply(root.getAttribute('data-theme') === 'light' ? 'light' : 'dark');
+    if (btn) btn.addEventListener('click', function(){
+      apply(root.getAttribute('data-theme') === 'light' ? 'dark' : 'light');
+    });
+  })();
+
+  (function(){
+    var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
+    var fel = document.getElementById("fdDgb");
+    var fhint = document.getElementById("fdDgbHint");
+    function fcopy(){
+      navigator.clipboard.writeText(addr).then(function(){
+        fhint.classList.add("ok"); fhint.textContent = "copied \u2713";
+        setTimeout(function(){ fhint.classList.remove("ok"); fhint.textContent = "copy"; }, 1600);
+      }).catch(function(){});
+    }
+    if(fel){
+      fel.addEventListener("click", fcopy);
+      fel.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fcopy(); } });
+    }
+  })();
 </script>
 </body>
 </html>
