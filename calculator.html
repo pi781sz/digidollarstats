@@ -67,7 +67,10 @@
   }
   input[type=text]:focus,input[type=date]:focus{outline:none;border-color:var(--signal)}
   input::placeholder{color:var(--dim);font-weight:400}
-  input[type=date]{color-scheme:dark}
+  input[type=date]{
+    -webkit-appearance:none;appearance:none;min-width:0;max-width:100%;
+    text-align:left;color-scheme:dark;
+  }
   html[data-theme="light"] input[type=date]{color-scheme:light}
 
   input[type=range]{
