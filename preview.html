@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>What Is DigiDollar? DigiByte's Stablecoin Explained</title>
-  <meta name="description" content="DigiDollar ($DD) is a decentralized USD stablecoin on DigiByte. You mint it by locking your own DGB — no bank, no custodian. A plain-English guide to how it works.">
-  <meta name="keywords" content="What is DigiDollar, DigiDollar, DD, DigiByte stablecoin, DGB, decentralized stablecoin, over-collateralized, UTXO stablecoin, mint DigiDollar">
-  <link rel="canonical" href="https://digidollarstats.com/what-is-digidollar">
+<title>Run a DigiByte Node — DigiDollarStats</title>
+  <meta name="description" content="Plain-English guide to running your own DigiByte Core node: pick your OS, check the minimum requirements, and follow the exact steps. Pruned mode needs under 3 GB.">
+  <meta name="keywords" content="run DigiByte node, DigiByte Core, full node, pruned node, digibyte.conf, Raspberry Pi node, DGB node setup">
+  <link rel="canonical" href="https://digidollarstats.com/node">
 
   <meta property="og:type" content="article">
-  <meta property="og:url" content="https://digidollarstats.com/what-is-digidollar">
+  <meta property="og:url" content="https://digidollarstats.com/node">
   <meta property="og:site_name" content="DigiDollarStats">
-  <meta property="og:title" content="What Is DigiDollar? The DigiByte Stablecoin, Explained">
-  <meta property="og:description" content="A plain-English guide to DigiDollar ($DD): a decentralized US-dollar stablecoin you mint by locking your own DGB. No bank, no custodian, no forced liquidations.">
-  <meta property="og:image" content="https://digidollarstats.com/og-what-is-digidollar.png">
+  <meta property="og:title" content="Run a DigiByte Node — DigiDollarStats">
+  <meta property="og:description" content="Pick your OS, get minimum specs and the exact steps to run DigiByte Core. Pruned mode needs under 3 GB.">
+  <meta property="og:image" content="https://digidollarstats.com/og-node.png">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="630">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="What Is DigiDollar? The DigiByte Stablecoin, Explained">
-  <meta name="twitter:description" content="A plain-English guide to DigiDollar ($DD): a decentralized US-dollar stablecoin you mint by locking your own DGB.">
-  <meta name="twitter:image" content="https://digidollarstats.com/og-what-is-digidollar.png">
+  <meta name="twitter:title" content="Run a DigiByte Node — DigiDollarStats">
+  <meta name="twitter:description" content="Plain-English guide to running DigiByte Core. Pick your OS, see minimum requirements, and get the exact steps. Pruned mode needs under 3 GB.">
+  <meta name="twitter:image" content="https://digidollarstats.com/og-node.png">
 
   <meta name="robots" content="noindex, nofollow">
   <meta name="theme-color" content="#1A1D1C" id="themeColor">
@@ -248,7 +248,7 @@
   .sharebtn svg{width:14px;height:14px}
   .sharebtn.ok{color:var(--signal);border-color:var(--rule2)}
 
-  /* ---------- what-is-digidollar page only ---------- */
+  /* ---------- node page only ---------- */
   .crumb{font-family:var(--mono);font-size:var(--t-small);color:var(--dim);margin-bottom:14px}
   .crumb a{color:var(--muted);text-decoration:none}
   .crumb a:hover{color:var(--signal)}
@@ -257,123 +257,63 @@
   .lede{max-width:none}
   .lede b{color:var(--text);font-weight:600}
 
-  section{margin-bottom:var(--gap)}
-  h2{
-    font-family:var(--mono);font-weight:600;font-size:var(--t-h2);
-    letter-spacing:-.01em;line-height:1.3;margin-bottom:10px;
-  }
-  p.body{color:var(--muted);font-size:var(--t-body);margin-bottom:12px}
-  p.body:last-child{margin-bottom:0}
-  p.body b{color:var(--text);font-weight:600}
-  .sub{color:var(--muted);font-size:var(--t-body);margin-bottom:16px}
-  .sub b{color:var(--text);font-weight:600}
-
-  /* exchange band */
-  .xband{
-    border-top:1px solid var(--rule);border-bottom:1px solid var(--rule);
-    padding:30px 0 26px;margin-bottom:var(--gap);
-  }
-  .xrow{display:flex;align-items:center;justify-content:center;gap:12px;max-width:460px;margin:0 auto}
-  .xend{flex:0 0 auto;text-align:center}
-  .xsym{
-    display:block;font-family:var(--mono);font-weight:600;font-size:24px;
-    line-height:1;letter-spacing:-.02em;color:var(--amber);
-  }
-  .xend.dd .xsym{color:var(--signal)}
-  .xcap{
-    display:block;font-family:var(--mono);font-size:10px;letter-spacing:.08em;
-    text-transform:uppercase;color:var(--muted);margin-top:10px;white-space:nowrap;
-  }
-  .xtrack{display:block;flex:1 1 auto;min-width:92px;max-width:190px}
-  .xlbl{
-    display:block;font-family:var(--mono);font-size:10px;font-weight:600;letter-spacing:.12em;
-    text-transform:uppercase;text-align:center;white-space:nowrap;color:var(--signal);
-  }
-  .xlbl.back{color:var(--muted)}
-  .xline{display:block;position:relative;height:1px;background:var(--signal);margin:8px 0 14px}
-  .xline.back{background:var(--rule2);margin:14px 0 8px}
-  .xtick{position:absolute;top:-3px;width:1px;height:7px;background:var(--signal)}
-  .xline.back .xtick{background:var(--rule2);right:0}
-  .xline.fwd .xtick{left:0}
-  .xline::after{
-    content:"";position:absolute;top:50%;transform:translateY(-50%);
-    width:0;height:0;border-top:4px solid transparent;border-bottom:4px solid transparent;
-  }
-  .xline.fwd::after{right:0;border-left:6px solid var(--signal)}
-  .xline.back::after{left:0;border-right:6px solid var(--rule2)}
-  .xnote{
-    color:var(--muted);font-size:var(--t-small);line-height:1.65;
-    max-width:50ch;margin:24px auto 0;text-align:center;
-  }
-  .xnote b{color:var(--text);font-weight:600}
-
-  /* step flow */
-  .flow{display:grid;grid-template-columns:1fr;gap:12px}
-  .step{background:var(--panel);border:1px solid var(--rule);padding:15px}
-  .step .n{
-    display:inline-flex;align-items:center;justify-content:center;width:24px;height:24px;
+  /* OS selector */
+  .os{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+  .osbtn{
     background:var(--well);border:1px solid var(--rule2);color:var(--muted);
-    font-family:var(--mono);font-size:12px;font-weight:600;margin-bottom:10px;
+    font-family:var(--mono);font-size:var(--t-small);font-weight:600;
+    letter-spacing:.02em;padding:13px 8px;text-align:center;cursor:pointer;
   }
-  .step h3{font-family:var(--mono);font-weight:600;font-size:var(--t-body);letter-spacing:-.01em;margin-bottom:5px}
-  .step p{color:var(--muted);font-size:var(--t-small)}
+  .osbtn:hover{color:var(--text);border-color:var(--muted)}
+  .osbtn.on{border-color:var(--signal);color:var(--signal);background:var(--panel)}
+  .osbtn:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
 
-  /* bullet list */
-  .blist{list-style:none}
-  .blist li{position:relative;padding-left:18px;margin-bottom:11px;color:var(--muted);font-size:var(--t-body)}
-  .blist li:last-child{margin-bottom:0}
-  .blist li::before{content:"";position:absolute;left:0;top:9px;width:6px;height:6px;background:var(--signal)}
-  .blist li b{color:var(--text);font-weight:600}
+  /* spec rows reuse .srow; just close the last border */
+  .srow:last-child{border-bottom:none}
 
-  /* table */
-  .tablewrap{background:var(--panel);border:1px solid var(--rule);overflow-x:auto}
-  table{width:100%;border-collapse:collapse;font-size:var(--t-small)}
-  th,td{text-align:left;padding:11px 14px;border-bottom:1px solid var(--rule)}
-  th{
-    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;
-    letter-spacing:.14em;text-transform:uppercase;color:var(--muted);vertical-align:bottom;
+  /* steps */
+  ol.steps{list-style:none;counter-reset:s}
+  ol.steps li{
+    counter-increment:s;position:relative;padding:0 0 18px 38px;
+    color:var(--muted);font-size:var(--t-body);
   }
-  td{font-family:var(--mono);color:var(--text);font-variant-numeric:tabular-nums}
-  td:first-child{font-family:var(--sans);color:var(--muted)}
-  tr:last-child td{border-bottom:none}
-  .tnote{color:var(--muted);font-size:var(--t-small);margin-top:12px}
-  .tnote b{color:var(--text);font-weight:600}
-
-  /* callout */
-  .callout{
-    background:var(--panel);border:1px solid var(--rule);border-left:2px solid var(--amber);
-    padding:15px 18px;margin-bottom:var(--gap);
+  ol.steps li:last-child{padding-bottom:0}
+  ol.steps li::before{
+    content:counter(s);position:absolute;left:0;top:-1px;
+    width:24px;height:24px;background:var(--well);border:1px solid var(--rule2);
+    color:var(--muted);font-family:var(--mono);font-size:12px;font-weight:600;
+    display:flex;align-items:center;justify-content:center;
   }
-  .callout .h{
-    font-family:var(--mono);font-size:var(--t-micro);font-weight:600;
-    letter-spacing:.14em;text-transform:uppercase;color:var(--amber);margin-bottom:8px;
-  }
-  .callout p{color:var(--muted);font-size:var(--t-small)}
-  .callout b{color:var(--text);font-weight:600}
+  ol.steps b{color:var(--text);font-weight:600}
+  ol.steps a{color:var(--signal)}
 
-  #explore .tools{margin-bottom:0}
-
-  /* FAQ */
-  .faq details{background:var(--panel);border:1px solid var(--rule);margin-bottom:10px}
-  .faq details:last-child{margin-bottom:0}
-  .faq summary{
-    cursor:pointer;list-style:none;padding:13px 15px;font-weight:600;font-size:var(--t-body);
-    display:flex;justify-content:space-between;align-items:baseline;gap:14px;
+  /* code */
+  code{
+    display:block;font-family:var(--mono);font-size:var(--t-small);
+    background:var(--well);border:1px solid var(--rule);
+    padding:9px 11px;margin-top:8px;color:var(--signal);
+    word-break:break-all;white-space:pre-wrap;
   }
-  .faq summary::-webkit-details-marker{display:none}
-  .faq summary::after{content:"[+]";color:var(--rule2);font-family:var(--mono);font-size:var(--t-small);flex-shrink:0}
-  .faq details[open] summary::after{content:"[–]"}
-  .faq summary:hover{color:var(--signal)}
-  .faq .a{padding:0 15px 14px;color:var(--muted);font-size:var(--t-small)}
+  code.inline{display:inline;padding:1px 6px;margin:0;word-break:normal}
+
+  /* notes reuse .house */
+  .panel .house{margin:16px 0 0}
+  .house.mint{border-left-color:var(--signal)}
+  .house.mint b{color:var(--signal)}
+  .house.amber{border-left-color:var(--amber)}
+  .house.amber b{color:var(--amber)}
+
+  /* OS panel switching — JS toggles .on only, all content stays in the HTML */
+  .ospanel{display:none}
+  .ospanel.on{display:block}
+  .osname{
+    position:absolute;width:1px;height:1px;padding:0;margin:-1px;
+    overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0;
+  }
 
   @media (min-width:900px){
-    .xband{padding:38px 0 32px}
-    .xrow{gap:22px;max-width:520px}
-    .xsym{font-size:30px}
-    .xcap{font-size:var(--t-micro);letter-spacing:.1em}
-    .xlbl{font-size:var(--t-micro);letter-spacing:.14em}
-    .xtrack{min-width:120px;max-width:230px}
-    .flow{grid-template-columns:1fr 1fr;gap:14px}
+    .os{grid-template-columns:repeat(4,1fr);gap:10px}
+    .osbtn{padding:15px 10px}
   }
   /* ---------- footer ---------- */
   footer{border-top:1px solid var(--rule);padding-top:20px;color:var(--muted);font-size:12px;line-height:1.75;text-align:center}
@@ -417,31 +357,25 @@
 </script>
 <script type="application/ld+json">
 {
-  "@context":"https://schema.org",
-  "@type":"Article",
-  "headline":"What Is DigiDollar? DigiByte's Decentralized Stablecoin, Explained",
-  "description":"DigiDollar ($DD) is a decentralized US-dollar stablecoin native to the DigiByte blockchain. You mint it by locking your own DGB as collateral — no bank, no company, no loss of custody.",
-  "about":["DigiDollar","DigiByte","stablecoin","DGB"],
-  "inLanguage":"en",
-  "isAccessibleForFree":true,
-  "url":"https://digidollarstats.com/what-is-digidollar",
-  "mainEntityOfPage":"https://digidollarstats.com/what-is-digidollar",
-  "author":{"@type":"Organization","name":"DGB Signal","url":"https://x.com/dgb_signal"},
-  "publisher":{"@type":"Organization","name":"DigiDollarStats","url":"https://digidollarstats.com/"}
-}
-</script>
-<script type="application/ld+json">
-{
-  "@context":"https://schema.org",
-  "@type":"FAQPage",
-  "mainEntity":[
-    {"@type":"Question","name":"Is DigiDollar a real stablecoin?","acceptedAnswer":{"@type":"Answer","text":"Yes. Each DigiDollar ($DD) targets a value of one US dollar and is backed by DGB that has been over-collateralized and locked on the DigiByte blockchain."}},
-    {"@type":"Question","name":"Who controls DigiDollar?","acceptedAnswer":{"@type":"Answer","text":"No one. There is no issuing company or custodian. DigiDollar is part of the DigiByte protocol itself and runs entirely on self-custodied wallets."}},
-    {"@type":"Question","name":"Do I lose my DGB when I mint DigiDollar?","acceptedAnswer":{"@type":"Answer","text":"No. Your DGB is time-locked inside your own wallet and returns to you in full when you redeem your DigiDollar."}},
-    {"@type":"Question","name":"Can a DigiDollar position be liquidated?","acceptedAnswer":{"@type":"Answer","text":"No. Collateral is time-locked, so there are no margin calls or forced liquidations. A position simply rides out its full term."}},
-    {"@type":"Question","name":"How is the price kept at one dollar?","acceptedAnswer":{"@type":"Answer","text":"A decentralized network of up to 35 oracle slots reports the DGB/USD price, and a quorum of seven signs each price bundle onto the chain using MuSig2 aggregate signatures. No single oracle sets the price."}},
-    {"@type":"Question","name":"Where does DigiDollar run?","acceptedAnswer":{"@type":"Answer","text":"Entirely inside DigiByte Core — the same wallet you already use for DGB. There is no third-party service to sign up for."}}
-  ]
+  "@context": "https://schema.org",
+  "@type": "TechArticle",
+  "headline": "Run a DigiByte Node",
+  "description": "Step-by-step guide to running DigiByte Core on Windows, macOS, Linux or Raspberry Pi, including minimum specs and pruned-mode requirements.",
+  "url": "https://digidollarstats.com/node",
+  "mainEntityOfPage": "https://digidollarstats.com/node",
+  "inLanguage": "en",
+  "author": {
+    "@type": "Organization",
+    "name": "DGB Signal",
+    "url": "https://x.com/dgb_signal"
+  },
+  "publisher": {
+    "@type": "Organization",
+    "name": "DigiDollarStats",
+    "url": "https://digidollarstats.com/"
+  },
+  "isAccessibleForFree": true,
+  "creditText": "Independent community project. Not an official DigiByte channel. Not financial advice."
 }
 </script>
 </head>
@@ -462,153 +396,36 @@
     </span>
   </div>
 
-  <p class="crumb"><a href="/">home</a> · what is DigiDollar</p>
+  <p class="crumb"><a href="/">home</a> · run a node</p>
 
-  <span class="eyebrow kicker">DigiByte · Stablecoin</span>
-  <h1>What is DigiDollar?</h1>
-  <p class="lede">DigiDollar (<b>$DD</b>) is a decentralized US-dollar stablecoin built directly into the DigiByte blockchain. You create it by locking your own DGB as collateral — there is no bank, no company, and you keep control of your private keys the entire time.</p>
+  <span class="eyebrow kicker">DigiByte · Self-hosting</span>
+  <h1>Run your own node.</h1>
+  <p class="lede">A full DigiByte Core node validates the whole chain yourself — no trust required — and it's what you'll need to use DigiDollar, which is live on mainnet. Pick your system for the minimum specs and exact steps.</p>
 
-  <div class="xband">
-    <div class="xrow">
-      <span class="xend dgb"><span class="xsym">DGB</span><span class="xcap">time-locked</span></span>
-      <span class="xtrack">
-        <span class="xlbl">Lock &amp; mint</span>
-        <span class="xline fwd"><i class="xtick"></i></span>
-        <span class="xline back"><i class="xtick"></i></span>
-        <span class="xlbl back">Burn &amp; unlock</span>
-      </span>
-      <span class="xend dd"><span class="xsym">$DD</span><span class="xcap">worth $1.00</span></span>
+  <div class="panel">
+    <h2 class="eyebrow">1 · Choose your system</h2>
+    <div class="os" role="tablist">
+      <button class="osbtn on" data-os="win" role="tab" aria-selected="true" type="button">Windows</button>
+      <button class="osbtn" data-os="mac" role="tab" aria-selected="false" type="button">macOS</button>
+      <button class="osbtn" data-os="linux" role="tab" aria-selected="false" type="button">Linux</button>
+      <button class="osbtn" data-os="pi" role="tab" aria-selected="false" type="button">Raspberry Pi</button>
     </div>
-    <p class="xnote">Lock DGB as collateral and the protocol mints <b>$DD</b> worth one dollar each. Later, burn the $DD to unlock your DGB. It's fully reversible — and your coins never leave your wallet.</p>
   </div>
 
-  <section id="in-short">
-    <h2>The short version</h2>
-    <p class="body">DigiDollar lets you draw stable, dollar-denominated spending power from DGB you already hold — without selling it, and without handing your coins to anyone. You lock DGB, mint $DD, spend or hold it, and later return the $DD to release your DGB. You're borrowing against your own coins, not selling them.</p>
-    <p class="body">Unlike stablecoins backed by a company's bank account, DigiDollar has no issuer to trust. It's enforced by DigiByte's own transaction rules — a stablecoin native to the chain, not a smart contract, a bridge, or an ERC-20 token layered on top.</p>
-  </section>
-
-  <section id="how-it-works">
-    <h2>How it works</h2>
-    <p class="sub">Four steps, all happening inside DigiByte Core:</p>
-    <div class="flow">
-      <div class="step">
-        <span class="n">1</span>
-        <h3>Lock your DGB</h3>
-        <p>You commit DGB into a time-locked output in your own wallet. It's locked, not sent — it stays under your keys the whole time.</p>
-      </div>
-      <div class="step">
-        <span class="n">2</span>
-        <h3>Mint DigiDollar</h3>
-        <p>Based on the value of the DGB you locked and the current DGB/USD price, the protocol mints $DD to you. Each one is worth a dollar.</p>
-      </div>
-      <div class="step">
-        <span class="n">3</span>
-        <h3>Use it</h3>
-        <p>Send, receive, or hold $DD like any DigiByte transaction — but with a steady dollar value instead of a floating one.</p>
-      </div>
-      <div class="step">
-        <span class="n">4</span>
-        <h3>Redeem</h3>
-        <p>When your lock period ends, burn the $DD to release your collateral. Your DGB unlocks in full and returns to you.</p>
-      </div>
-    </div>
-  </section>
-
-  <section id="different">
-    <h2>What makes it different</h2>
-    <ul class="blist">
-      <li><b>Genuinely decentralized.</b> No issuer, no custodian, no bank behind it — it lives in the DigiByte protocol itself.</li>
-      <li><b>Self-custody throughout.</b> Your DGB never leaves your wallet. You hold your own keys from start to finish.</li>
-      <li><b>No forced liquidations.</b> Because collateral is time-locked, positions are never margin-called. They ride out the term.</li>
-      <li><b>Native to a UTXO chain.</b> Built into DigiByte's transaction rules using Taproot outputs — not layered on via contracts.</li>
-    </ul>
-  </section>
-
-  <section id="collateral">
-    <h2>Collateral &amp; lock periods</h2>
-    <p class="sub">DigiDollar is <b>over-collateralized</b>: you always lock more DGB than the dollars you mint. How much more depends on how long you lock — shorter locks require more collateral, longer locks require less. There are ten tiers, from one hour to ten years.</p>
-    <div class="tablewrap">
-      <table>
-        <thead><tr><th>Lock period</th><th>Collateral ratio</th><th>To mint $100 of DD</th></tr></thead>
-        <tbody>
-          <tr><td>1 hour</td><td>1000%</td><td>lock $1,000 of DGB</td></tr>
-          <tr><td>30 days</td><td>500%</td><td>lock $500 of DGB</td></tr>
-          <tr><td>1 year</td><td>300%</td><td>lock $300 of DGB</td></tr>
-          <tr><td>5 years</td><td>225%</td><td>lock $225 of DGB</td></tr>
-          <tr><td>10 years</td><td>200%</td><td>lock $200 of DGB</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <p class="tnote">A representative selection of the ten tiers. Amounts are the <b>dollar value</b> of DGB you lock, not a number of coins — how many DGB that works out to depends on the DGB price at the moment you mint. The <a href="/calculator">mint calculator</a> does that conversion at the live price; the <a href="/planner">position planner</a> maps out a lock and its unlock date.</p>
-  </section>
-
-  <section id="price">
-    <h2>How the price stays near a dollar</h2>
-    <p class="body">DigiDollar reads the DGB/USD price from a decentralized oracle network — up to 35 independent oracle slots that draw from major exchange feeds. A quorum of seven signs each price bundle onto the chain using MuSig2 aggregate signatures, so no single oracle sets the price. You can watch the feed live on <a href="/oracle">Oracle Watch</a>.</p>
-  </section>
-
-  <section id="stability">
-    <h2>What keeps the system stable</h2>
-    <p class="sub">With no liquidations to fall back on, DigiDollar relies on layered safeguards instead:</p>
-    <ul class="blist">
-      <li><b>Over-collateralization.</b> Every position starts with a buffer against DGB price drops — larger for short locks.</li>
-      <li><b>Dynamic adjustment.</b> Collateral requirements tighten automatically if overall system health falls.</li>
-      <li><b>Emergency redemption.</b> Under stress, redeeming can require burning a little more $DD — but you always get 100% of your collateral back.</li>
-      <li><b>Volatility freezes.</b> Minting can pause during extreme price moves to protect the system, then resume.</li>
-    </ul>
-  </section>
-
-  <div class="callout">
-    <div class="h">The honest part</div>
-    <p>DigiDollar is liquidity against your own locked DGB — <b>not free money</b>. The debt is fixed in US dollars, and time-locks have <b>no early exit</b>: once you lock, that DGB is committed for the full term. Decide carefully. Nothing here is financial advice.</p>
+  <div class="panel">
+    <h2 class="eyebrow">2 · Minimum requirements</h2>
+    <div id="reqs"><div class="ospanel on" data-os="win"><h3 class="osname">Windows</h3><div class="srow"><span class="k">OS</span><span class="v">Windows 10 / 11 (64-bit)</span></div><div class="srow"><span class="k">RAM</span><span class="v">4 GB (8 GB better)</span></div><div class="srow"><span class="k">Disk</span><span class="v">Under 3 GB pruned · ~40 GB full</span></div><div class="srow"><span class="k">Download</span><span class="v">win64 setup .exe</span></div></div><div class="ospanel" data-os="mac"><h3 class="osname">macOS</h3><div class="srow"><span class="k">OS</span><span class="v">macOS (Apple Silicon or Intel)</span></div><div class="srow"><span class="k">RAM</span><span class="v">4 GB (8 GB better)</span></div><div class="srow"><span class="k">Disk</span><span class="v">Under 3 GB pruned · ~40 GB full</span></div><div class="srow"><span class="k">Download</span><span class="v">.zip for your chip</span></div></div><div class="ospanel" data-os="linux"><h3 class="osname">Linux</h3><div class="srow"><span class="k">OS</span><span class="v">64-bit Linux (Ubuntu, Debian, etc.)</span></div><div class="srow"><span class="k">RAM</span><span class="v">4 GB (8 GB better)</span></div><div class="srow"><span class="k">Disk</span><span class="v">Under 3 GB pruned · ~40 GB full</span></div><div class="srow"><span class="k">Download</span><span class="v">x86_64 tarball</span></div></div><div class="ospanel" data-os="pi"><h3 class="osname">Raspberry Pi</h3><div class="srow"><span class="k">Board</span><span class="v">Raspberry Pi 4 / 5 (4 GB+)</span></div><div class="srow"><span class="k">Storage</span><span class="v">SSD strongly recommended</span></div><div class="srow"><span class="k">Disk</span><span class="v">Under 3 GB pruned · ~40 GB full</span></div><div class="srow"><span class="k">Mode</span><span class="v">Pruned — ideal for Pi</span></div></div></div>
+    <div class="house mint"><b>Tip — pruned mode.</b> Adding <code class="inline">prune=2000</code> to your config keeps only a few GB of recent blocks instead of the full ~40 GB history, while still fully validating. It runs everything DigiDollar needs. Great for laptops and small machines.</div>
   </div>
 
-  <section id="status">
-    <h2>Where things stand</h2>
-    <p class="body">DigiDollar is <b>live on DigiByte mainnet</b>, shipped in DigiByte Core v9.26.2. Everything — minting, holding, redeeming, and the oracle price feed — runs inside DigiByte Core, with no third-party service required.</p>
-  </section>
-
-  <section id="faq">
-    <h2>Frequently asked</h2>
-    <div class="faq">
-      <details>
-        <summary>Is DigiDollar a real stablecoin?</summary>
-        <div class="a">Yes. Each $DD targets a value of one US dollar and is backed by DGB that's been over-collateralized and locked on-chain.</div>
-      </details>
-      <details>
-        <summary>Who controls DigiDollar?</summary>
-        <div class="a">No one. There's no issuing company or custodian — it's part of the DigiByte protocol and runs on self-custodied wallets.</div>
-      </details>
-      <details>
-        <summary>Do I lose my DGB when I mint DigiDollar?</summary>
-        <div class="a">No. Your DGB is time-locked inside your own wallet and returns to you in full when you redeem.</div>
-      </details>
-      <details>
-        <summary>Can my position be liquidated?</summary>
-        <div class="a">No. Collateral is time-locked, so there are no margin calls or forced liquidations. A position simply rides out its full term.</div>
-      </details>
-      <details>
-        <summary>How is the price kept at a dollar?</summary>
-        <div class="a">A decentralized network of up to 35 oracle slots reports DGB/USD, and a 7-signature MuSig2 quorum signs each price onto the chain. See <a href="/oracle">Oracle Watch</a>.</div>
-      </details>
-      <details>
-        <summary>Where does DigiDollar run?</summary>
-        <div class="a">Entirely inside DigiByte Core — the same wallet you already use for DGB. There's nothing extra to sign up for. New to nodes? See <a href="/node">Run a Node</a>.</div>
-      </details>
-    </div>
-  </section>
-
-  <section id="explore">
-    <h2>Explore the numbers</h2>
-    <p class="sub">This site tracks DigiDollar live from the chain. A few places to start:</p>
-    <div class="tools">
-      <a class="tool" href="/live"><span class="go">→</span><h3>Live Stats</h3><p>Circulating supply, DGB locked, positions, and system health — updated from mainnet.</p></a>
-      <a class="tool" href="/oracle"><span class="go">→</span><h3>Oracle Watch</h3><p>The consensus DGB/USD price and the oracles signing it onto the chain.</p></a>
-      <a class="tool" href="/calculator"><span class="go">→</span><h3>Mint Calculator</h3><p>See how much $DD a given amount of DGB mints at each lock tier.</p></a>
-      <a class="tool" href="/planner"><span class="go">→</span><h3>Position Planner</h3><p>Map out a lock, its backing, and its unlock date — with a calendar reminder.</p></a>
-    </div>
-  </section>
+  <div class="panel">
+    <h2 class="eyebrow">3 · Steps</h2>
+    <div id="steps"><div class="ospanel on" data-os="win"><h3 class="osname">Windows</h3><ol class="steps"><li>Go to the official <a href="https://github.com/DigiByte-Core/digibyte/releases" target="_blank" rel="noopener">DigiByte Core releases</a> and download the <b>v9.26.5 win64 setup</b> (.exe).</li><li>Run the installer and open DigiByte Core.</li><li>Open the config folder: press <b>Win + R</b>, type the path below, Enter. Create a file named <b>digibyte.conf</b> (no .txt).<code>%APPDATA%\DigiByte</code></li><li>For a light footprint, put this in digibyte.conf and save:<code>prune=2000</code></li><li>Restart DigiByte Core and let it sync (a few hours, one time).</li><li><b>Encrypt the wallet</b> (Settings → Encrypt Wallet) and back up your recovery info. Done — you’re validating the chain yourself.</li></ol></div><div class="ospanel" data-os="mac"><h3 class="osname">macOS</h3><ol class="steps"><li>Go to the official <a href="https://github.com/DigiByte-Core/digibyte/releases" target="_blank" rel="noopener">DigiByte Core releases</a> and download the <b>v9.26.5 .zip</b> matching your Mac (Apple Silicon or Intel).</li><li>Unzip it and drag <b>DigiByte-Qt</b> into Applications, then launch it. If macOS warns, right-click the app → Open.</li><li>Open the config folder in Finder: <b>Go → Go to Folder</b>, paste the path below. Create <b>digibyte.conf</b>.<code>~/Library/Application Support/DigiByte</code></li><li>For a light footprint, put this in digibyte.conf and save:<code>prune=2000</code></li><li>Restart DigiByte Core and let it sync (a few hours, one time).</li><li><b>Encrypt the wallet</b> and back up your recovery info. Done — your own validating node.</li></ol></div><div class="ospanel" data-os="linux"><h3 class="osname">Linux</h3><ol class="steps"><li>Download the <b>v9.26.5 x86_64-linux</b> tarball from the official <a href="https://github.com/DigiByte-Core/digibyte/releases" target="_blank" rel="noopener">releases page</a>, then extract it.</li><li>Create the data directory and a config file:<code>mkdir -p ~/.digibyte
+nano ~/.digibyte/digibyte.conf</code></li><li>For a light footprint, add this line and save:<code>prune=2000</code></li><li>Start the node (GUI or daemon):<code>./digibyte-qt        # GUI
+./digibyted -daemon   # headless</code></li><li>Let it sync (a few hours, one time). Check progress with:<code>./digibyte-cli getblockchaininfo</code></li><li><b>Encrypt the wallet</b> and back up your recovery info. Done — full validation on your terms.</li></ol></div><div class="ospanel" data-os="pi"><h3 class="osname">Raspberry Pi</h3><ol class="steps"><li>Use a <b>64-bit Raspberry Pi OS</b> on a Pi 4 or 5, ideally booting from an SSD (SD cards are slow and wear out).</li><li>Download the <b>v9.26.5 aarch64-linux</b> (ARM 64-bit) build from the official <a href="https://github.com/DigiByte-Core/digibyte/releases" target="_blank" rel="noopener">releases page</a> and extract it.</li><li>Create the config with pruning on — this is what makes a Pi practical:<code>mkdir -p ~/.digibyte
+echo "prune=2000" > ~/.digibyte/digibyte.conf</code></li><li>Run headless:<code>./digibyted -daemon</code></li><li>Let it sync (longer on a Pi; be patient). Check with:<code>./digibyte-cli getblockchaininfo</code></li><li><b>Encrypt the wallet</b> and back up your recovery info. A tiny always-on node that strengthens the network. 🥧</li></ol></div></div>
+    <div class="house amber"><b>Stay safe:</b> download only from the official GitHub releases — fake wallet downloads are a common theft vector. After install, encrypt your wallet and back up your recovery info. Verify the version number once it's running.</div>
+  </div>
 
   <footer>
     <nav class="footnav" aria-label="Footer">
@@ -654,20 +471,39 @@
     });
   })();
 
+  // All four OS guides are in the HTML so they are readable without JavaScript
+  // and by search engines; this only toggles which one is on screen.
+  (function(){
+    var btns = document.querySelectorAll('.osbtn');
+    function show(os){
+      document.querySelectorAll('.ospanel').forEach(function(p){
+        p.classList.toggle('on', p.dataset.os === os);
+      });
+      btns.forEach(function(b){
+        var sel = b.dataset.os === os;
+        b.classList.toggle('on', sel);
+        b.setAttribute('aria-selected', sel ? 'true' : 'false');
+      });
+    }
+    btns.forEach(function(b){
+      b.addEventListener('click', function(){ show(b.dataset.os); });
+    });
+    show('win');
+  })();
+
   (function(){
     var addr = "dgb1quseft49m09u03lwz3lmvj9srlneqe9enmej9vz";
     var fel = document.getElementById("fdDgb");
     var fhint = document.getElementById("fdDgbHint");
+    if(!fel || !fhint) return;
     function fcopy(){
       navigator.clipboard.writeText(addr).then(function(){
         fhint.classList.add("ok"); fhint.textContent = "copied \u2713";
         setTimeout(function(){ fhint.classList.remove("ok"); fhint.textContent = "copy"; }, 1600);
       }).catch(function(){});
     }
-    if(fel){
-      fel.addEventListener("click", fcopy);
-      fel.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fcopy(); } });
-    }
+    fel.addEventListener("click", fcopy);
+    fel.addEventListener("keydown", function(e){ if(e.key==="Enter"||e.key===" "){ e.preventDefault(); fcopy(); } });
   })();
 </script>
 </body>
